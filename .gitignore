@@ -3,3 +3,7 @@ tmp/
 .depend
 cscope.files
 cscope.out
+bin
+*.class
+gen
+
