@@ -40,6 +40,7 @@ bmoon.index = {
         o.e_saddr = $('#saddr');
         o.e_eaddr = $('#eaddr');
         o.e_km = $('#km');
+        o.e_maphint = $('#map-hint');
 
         o.e_submit = $('#submit');
 
@@ -458,7 +459,7 @@ bmoon.index = {
             o.g_infow.setContent(o._formInfoContent(result));
 
             marker.openInfoWindow(o.g_infow);
-            setTimeout(function() {marker.closeInfoWindow();}, 3000);
+            //setTimeout(function() {marker.closeInfoWindow();}, 3000);
         });
     },
     
@@ -472,6 +473,8 @@ bmoon.index = {
 
         if (x == 'e') {
             marker = o.g_emarker;
+        } else {
+            o.e_maphint.fadeIn();
         }
 
         o.g_geocode.getPoint(s, function(point) {
@@ -484,7 +487,7 @@ bmoon.index = {
             o.g_infow.setContent(o._strFromPoi(res.item.value));
 
             marker.openInfoWindow(o.g_infow);
-            setTimeout(function() {marker.closeInfoWindow();}, 2000);
+            //setTimeout(function() {marker.closeInfoWindow();}, 2000);
         }, o.city);
 
         o.upPlan(x, res.item.value);
