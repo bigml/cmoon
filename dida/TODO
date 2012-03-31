@@ -1,5 +1,5 @@
+用户 dashboard
 爬虫后台/批量化
-inbox 的展现
 统计
 
 (plan clean) plan edata, etime 去掉
@@ -24,3 +24,4 @@ DONE (member有效化) plan 自带联系方式，这样不必每个plan注册一
 DONE email 支持 html
 DONE urls.txt 参数明确 (plan/leave 时无 scityid 不应报错)
 DONE 加速地图载入（baidu）
+DONE inbox 的展现

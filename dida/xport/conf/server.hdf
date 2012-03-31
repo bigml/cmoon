@@ -201,6 +201,7 @@ Plugin {
             }
             inbox {
             	mid [type=int, require=true] = mid
+                type [type=int] = type
                 fresh [type=int] = fresh
                 fmid [type=int, require=true] = fmid
                 fnick [maxlen=256, require=true] = fnick

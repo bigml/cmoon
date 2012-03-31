@@ -2,6 +2,8 @@
 #include "lheads.h"
 #include "oinbox.h"
 
+#define SET_MY_ACTION(out) hdf_set_value(out, PRE_WALK_SACTION".0", "actions_1");
+
 NEOERR* inbox_multi_add(HDF *datanode, HASH *evth, char *inboxtype)
 {
     mevent_t *evt;
@@ -31,6 +33,43 @@ NEOERR* inbox_multi_add(HDF *datanode, HASH *evth, char *inboxtype)
 	if (err != STATUS_OK) return nerr_pass(err);
     
     MEVENT_TRIGGER(evt, NULL, REQ_CMD_AUX_INBOX_ADD, FLAGS_NONE);
+
+    return STATUS_OK;
+}
+
+NEOERR* inbox_system_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mevent_t *evt = hash_lookup(evth, "aux");
+    char *mname;
+    NEOERR *err;
+
+    MCS_NOT_NULLB(cgi->hdf, evt);
+    
+    MEMBER_CHECK_LOGIN();
+    SET_MY_ACTION(cgi->hdf);
+
+    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+    hdf_set_value(evt->hdfsnd, "mname", mname);
+    MEVENT_TRIGGER(evt, mname, REQ_CMD_AUX_INBOX_GET, FLAGS_SYNC);
+    hdf_copy(cgi->hdf, PRE_OUTPUT, evt->hdfrcv);
+    
+    return STATUS_OK;
+}
+
+NEOERR* inbox_data_del(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mevent_t *evt = hash_lookup(evth, "aux");
+    char *mname;
+    NEOERR *err;
+
+    MCS_NOT_NULLB(cgi->hdf, evt);
+    
+    MEMBER_CHECK_LOGIN();
+
+    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+    hdf_set_value(evt->hdfsnd, "mname", mname);
+
+    MEVENT_TRIGGER(evt, NULL, REQ_CMD_AUX_INBOX_DEL, FLAGS_NONE);
 
     return STATUS_OK;
 }

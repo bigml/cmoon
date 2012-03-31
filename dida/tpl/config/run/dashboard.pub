@@ -1,0 +1,16 @@
+Dataset.Layout {
+    actions_1 {
+        0 {
+            name = 我的线路
+            href = /plan/mine
+        }
+        1 {
+            name = 帐号信息
+            href = /member/account
+        }
+        2 {
+            name = 站内通知
+            href = /inbox/system
+        }
+    }
+}

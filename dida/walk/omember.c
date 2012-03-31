@@ -2,6 +2,8 @@
 #include "lheads.h"
 #include "omember.h"
 
+#define SET_MY_ACTION(out) hdf_set_value(out, PRE_WALK_SACTION".0", "actions_1");
+
 static void member_after_login(CGI *cgi, HASH *evth, char *mname, char *mnick)
 {
     char tm[LEN_TM_GMT], *p, mmsn[LEN_CK];
@@ -252,6 +254,7 @@ NEOERR* member_check_login_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *
     char *mmsndb = hdf_get_value(evt->hdfrcv, "mmsn", NULL);
     if (mmsndb) {
         if (!strcmp(mmsndb, mmsn)) {
+            hdf_copy(cgi->hdf, PRE_OUTPUT".member", evt->hdfrcv);
             return STATUS_OK;
         }
     }
@@ -293,7 +296,7 @@ NEOERR* member_reset_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     return STATUS_OK;
 }
 
-NEOERR* member_pass_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+NEOERR* member_account_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = (mevent_t*)hash_lookup(evth, "member");
     char *mnick, *mname, *rlink;
@@ -315,15 +318,15 @@ NEOERR* member_pass_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
             return nerr_raise(LERR_USERINPUT, "验证码错误");
 
         member_after_login(cgi, evth, mname, mnick);
-        
-        hdf_set_value(cgi->hdf, PRE_OUTPUT".mname", mname);
 
-        return STATUS_OK;
+        hdf_set_value(evt->hdfsnd, "mname", mname);
+        MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_GET, FLAGS_SYNC);
+        hdf_copy(cgi->hdf, PRE_OUTPUT".member", evt->hdfrcv);
+    } else {
+        MEMBER_CHECK_LOGIN();
     }
 
-    MEMBER_CHECK_LOGIN();
-
-    hdf_set_value(cgi->hdf, PRE_OUTPUT".mname", mname);
+    SET_MY_ACTION(cgi->hdf);
     
     return STATUS_OK;
 }

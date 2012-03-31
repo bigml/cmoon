@@ -1,13 +1,14 @@
-member_pass {
+member_account [merge=dashboard.pub] {
     Layout = layout.html
     Dataset {
         Layout {
-            css = <link rel="stylesheet" type="text/css" href="/css/b/member/pass.css" />
-            js = <script type="text/javascript" src="/js/b/member/pass.js"></script>
-            title = 修改密码
+            css = <link rel="stylesheet" type="text/css" href="/css/b/member/account.css" />
+            js = <script type="text/javascript" src="/js/b/member/account.js"></script>
+            title = 帐号信息
+            actionpart = 1
         }
         Include {
-            content = member/pass.html
+            content = member/account.html
         }
     }
 }

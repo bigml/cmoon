@@ -146,6 +146,7 @@ NEOERR* member_logout_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  * Request: mname* - 用户邮箱，cookie或query中自带均可
  *          mmsn* - 登录时返回的 mmsn，临时token，一周内有效，cooke或query中自带均可
  * Returns: {errcode: 25, errmsg: '请登录后操作'}
+ *          登录用户的用户信息写到 cgi->hdf 的 Output.member 中
  */
 NEOERR* member_check_login_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
@@ -157,14 +158,14 @@ NEOERR* member_check_login_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *
 NEOERR* member_reset_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 /*
- * Description: 修改用户密码页面（登录用户，或者通过重置邮件跳转）
+ * Description: 用户帐号信息页面（登录用户，或者通过重置邮件跳转）
  * Request: LOGIN - see MEMBER_CHECK_LOGIN() of omember.h
  *          mname - 用户邮箱
  *          rlink - 重置密码时，系统生成的验证码
  *          (LOGIN，或者mname,rlink 二选一必填)
  * Returns: None
  */
-NEOERR* member_pass_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+NEOERR* member_account_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 __END_DECLS
 #endif /* __OMEMBER_H__ */

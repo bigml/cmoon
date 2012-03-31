@@ -2,6 +2,8 @@
 #include "lheads.h"
 #include "oplan.h"
 
+#define SET_MY_ACTION(out) hdf_set_value(out, PRE_WALK_SACTION".0", "actions_1");
+
 NEOERR* plan_match_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = hash_lookup(evth, "plan");
@@ -193,6 +195,25 @@ NEOERR* plan_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
                                                      "14.")),
                                   &ses->data);
     if (err != STATUS_OK) return nerr_pass(err);
+    
+    return STATUS_OK;
+}
+
+NEOERR* plan_mine_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mevent_t *evt = hash_lookup(evth, "plan");
+    char *mname;
+    int mid = 0;
+    NEOERR *err;
+
+    MCS_NOT_NULLB(cgi->hdf, evt);
+
+    HDF_FETCH_INT(cgi->hdf, PRE_QUERY".mid", mid);
+
+    if (mid == 0) {
+        MEMBER_CHECK_LOGIN();
+        SET_MY_ACTION(cgi->hdf);
+    }
     
     return STATUS_OK;
 }

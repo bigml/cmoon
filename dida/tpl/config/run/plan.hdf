@@ -11,3 +11,18 @@ plan_info {
         }
     }
 }
+
+plan_mine [merge=dashboard.pub] {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            css = <link rel="stylesheet" type="text/css" href="/css/b/plan/mine.css" />
+            js = <script type="text/javascript" src="/js/b/plan/mine.js"></script>
+            title = 我的线路
+            actionpart = 0
+        }
+        Include {
+            content = plan/mine.html
+        }
+    }
+}

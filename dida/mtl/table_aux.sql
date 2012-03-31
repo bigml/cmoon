@@ -66,6 +66,8 @@ CREATE AGGREGATE str_concat(
 
 CREATE TABLE inbox (
 	id SERIAL,
+    type smallint NOT NULL DEFAULT 0, -- 0 system, 1 private
+    statu smallint NOT NULL DEFAULT 0,
     mid int NOT NULL DEFAULT 0,
     fresh smallint NOT NULL DEFAULT 1,
     fmid int NOT NULL DEFAULT 0,

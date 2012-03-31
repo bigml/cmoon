@@ -1,0 +1,15 @@
+inbox_system [merge="dashboard.pub,inbox.pub"] {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            css = <link rel="stylesheet" type="text/css" href="/css/b/inbox/system.css" />
+            js = <script type="text/javascript" src="/js/b/inbox/system.js"></script>
+            title = 站内通知
+            actionpart = 2
+            subnavpart = 0
+        }
+        Include {
+            content = inbox/system.html
+        }
+    }
+}

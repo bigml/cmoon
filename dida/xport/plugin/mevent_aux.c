@@ -1,4 +1,5 @@
 #include "mevent_plugin.h"
+#include "mevent_member.h"
 #include "mevent_aux.h"
 
 #define PLUGIN_NAME    "aux"
@@ -257,16 +258,72 @@ insert:
     return STATUS_OK;
 }
 
+static NEOERR* aux_cmd_inboxget(struct aux_entry *e, QueueEntry *q)
+{
+    unsigned char *val = NULL; size_t vsize = 0;
+    int count, offset;
+    int mid, type = 0;
+    NEOERR *err;
+
+    struct cache *cd = e->cd;
+    mdb_conn *db = e->db;
+
+    MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
+    REQ_FETCH_PARAM_INT(q->hdfrcv, "type", type);
+
+    mdb_pagediv(q->hdfrcv, NULL, &count, &offset, NULL, q->hdfsnd);
+
+    if (cache_getf(cd, &val, &vsize, PREFIX_INBOX"%d_%d_%d", mid, type, offset)) {
+        unpack_hdf(val, vsize, &q->hdfsnd);
+    } else {
+        MDB_PAGEDIV_SET_N(q->hdfsnd, db, "inbox", "type=%d AND statu=%d AND mid=%d",
+                          NULL, type, INBOX_ST_NORMAL, mid);
+        MDB_QUERY_RAW(db, "inbox", _COL_INBOX, "type=%d AND statu=%d AND mid=%d "
+                      " ORDER BY intime DESC LIMIT %d OFFSET %d",
+                      NULL, type, INBOX_ST_NORMAL, mid, count, offset);
+        err = mdb_set_rows(q->hdfsnd, db, _COL_INBOX, "inbox", NULL);
+        nerr_handle(&err, NERR_NOT_FOUND);
+        if (err != STATUS_OK) return nerr_pass(err);
+
+        /*
+         * update fresh
+         */
+        HDF *node = hdf_get_child(q->hdfsnd, "inbox");
+        int fresh, id;
+        bool uped = false;
+        while (node) {
+            id = hdf_get_int_value(node, "id", 0);
+            fresh = hdf_get_int_value(node, "fresh", 0);
+            if (fresh && id) {
+                uped = true;
+                MDB_EXEC(db, NULL, "UPDATE inbox SET fresh=0 WHERE id=%d", NULL, id);
+            }
+            node = hdf_obj_next(node);
+        }
+
+        if (!uped) {
+            CACHE_HDF(q->hdfsnd, INBOX_CC_SEC, PREFIX_INBOX"%d_%d_%d",
+                      mid, type, offset);
+        }
+    }
+
+    return STATUS_OK;
+}
+
 static NEOERR* aux_cmd_inboxadd(struct aux_entry *e, QueueEntry *q)
 {
     STRING str; string_init(&str);
-    NEOERR *err;
+    struct cache *cd = e->cd;
     mdb_conn *db = e->db;
+    int type = 0;
+    NEOERR *err;
 
     HDF *node = hdf_get_child(q->hdfrcv, "mmid");
 
 insert:
     if (node) hdf_set_value(q->hdfrcv, "mid", hdf_obj_value(node));
+
+    REQ_FETCH_PARAM_INT(q->hdfrcv, "type", type);
     
     err = mdb_build_incol(q->hdfrcv,
                           hdf_get_obj(g_cfg, CONFIG_PATH".InsertCol.inbox"),
@@ -276,11 +333,35 @@ insert:
     MDB_EXEC(db, NULL, "INSERT INTO inbox %s", NULL, str.buf);
     string_clear(&str);
 
+    cache_delf(cd, PREFIX_INBOX"%d_%d_0",
+               hdf_get_int_value(q->hdfrcv, "mid", 0), type);
+
     if (node) {
         node = hdf_obj_next(node);
         if (node) goto insert;
     }
 
+    return STATUS_OK;
+}
+
+static NEOERR* aux_cmd_inboxdel(struct aux_entry *e, QueueEntry *q)
+{
+    int id, mid, type;
+    NEOERR *err;
+
+    MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
+    REQ_GET_PARAM_INT(q->hdfrcv, "id", id);
+    REQ_GET_PARAM_INT(q->hdfrcv, "type", type);
+
+    struct cache *cd = e->cd;
+    mdb_conn *db = e->db;
+
+    MDB_EXEC(db, NULL, "UPDATE inbox SET statu=%d WHERE id=%d "
+             " AND mid=%d AND type=%d",
+             NULL, INBOX_ST_DEL, id, mid, type);
+    
+    cache_delf(cd, PREFIX_INBOX"%d_%d_0", mid, type);
+    
     return STATUS_OK;
 }
 
@@ -318,8 +399,14 @@ static void aux_process_driver(EventEntry *entry, QueueEntry *q)
     case REQ_CMD_AUX_EMAIL_ADD:
         err = aux_cmd_emailadd(e, q);
         break;
+    case REQ_CMD_AUX_INBOX_GET:
+        err = aux_cmd_inboxget(e, q);
+        break;
     case REQ_CMD_AUX_INBOX_ADD:
         err = aux_cmd_inboxadd(e, q);
+        break;
+    case REQ_CMD_AUX_INBOX_DEL:
+        err = aux_cmd_inboxdel(e, q);
         break;
     case REQ_CMD_STATS:
         st->msg_stats++;
