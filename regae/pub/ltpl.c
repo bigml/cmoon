@@ -1,7 +1,7 @@
 #include "mheads.h"
 #include "lheads.h"
 
-static int tpl_config(const struct dirent *ent)
+int ltpl_config(const struct dirent *ent)
 {
     if (reg_search(".*.hdf", ent->d_name))
         return 1;
@@ -57,7 +57,7 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
     snprintf(fname, sizeof(fname), "%s/%s", dir, name);
     err = hdf_init(&node);
     if (err != STATUS_OK) return nerr_pass(err);
-
+ 
     err = hdf_read_file(node, fname);
     if (err != STATUS_OK) return nerr_pass(err);
 
@@ -68,13 +68,20 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
 
         val = mcs_obj_attr(child, "merge");
         if (val) {
-            snprintf(fname, sizeof(fname), "%s/%s", dir, val);
-            err = hdf_init(&dhdf);
-            JUMP_NOK(err, wnext);
-            err = hdf_read_file(dhdf, fname);
-            JUMP_NOK(err, wnext);
-            err = hdf_copy(child, NULL, dhdf);
-            JUMP_NOK(err, wnext);
+            mtc_dbg("merge attr %s", val);
+            ULIST *list;
+            string_array_split(&list, val, ", ", 10);
+            ITERATE_MLIST(list) {
+                snprintf(fname, sizeof(fname), "%s/%s",
+                         dir, (char*)list->items[t_rsv_i]);
+                err = hdf_init(&dhdf);
+                JUMP_NOK(err, wnext);
+                err = hdf_read_file(dhdf, fname);
+                JUMP_NOK(err, wnext);
+                err = hdf_copy(child, NULL, dhdf);
+                JUMP_NOK(err, wnext);
+            }
+            uListDestroy(&list, ULIST_FREE);
         }
         
         err = cs_init(&cs, hdf_get_obj(child, PRE_CFG_DATASET));
@@ -135,7 +142,7 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
                 
             snprintf(fname, sizeof(fname), PATH_DOC"%s",
                      hdf_get_value(child, PRE_CFG_OUTPUT, "null.html"));
-            err = mutil_makesure_dir(fname);
+            err = mfile_makesure_dir(fname);
             JUMP_NOK(err, wnext);
 
             err = mcs_str2file(str, fname);
@@ -174,7 +181,7 @@ NEOERR* ltpl_parse_dir(char *dir, HASH *outhash)
     err = ldb_init(&dbh);
     if (err != STATUS_OK) return nerr_pass(err);
     
-    n = scandir(dir, &eps, tpl_config, alphasort);
+    n = scandir(dir, &eps, ltpl_config, alphasort);
     for (int i = 0; i < n; i++) {
         mtc_dbg("parse file %s", eps[i]->d_name);
         err = ltpl_parse_file(dbh, lib, dir, eps[i]->d_name, outhash);
@@ -212,9 +219,11 @@ NEOERR* ltpl_init(HASH **tplh, char *path)
 
 void ltpl_destroy(HASH *tplh)
 {
-    char *key = NULL;
+    char *key, *buf;
+
+    if (!tplh) return;
     
-    char *buf = (char*)hash_next(tplh, (void**)&key);
+    buf = (char*)hash_next(tplh, (void**)&key);
 
     while (buf != NULL) {
         free(buf);

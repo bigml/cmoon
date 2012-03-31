@@ -68,13 +68,19 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
 
         val = mcs_obj_attr(child, "merge");
         if (val) {
-            snprintf(fname, sizeof(fname), "%s/%s", dir, val);
-            err = hdf_init(&dhdf);
-            JUMP_NOK(err, wnext);
-            err = hdf_read_file(dhdf, fname);
-            JUMP_NOK(err, wnext);
-            err = hdf_copy(child, NULL, dhdf);
-            JUMP_NOK(err, wnext);
+            ULIST *list;
+            string_array_split(&list, val, ",", 10);
+            ITERATE_MLIST(list) {
+                snprintf(fname, sizeof(fname), "%s/%s",
+                         dir, (char*)list->items[t_rsv_i]);
+                err = hdf_init(&dhdf);
+                JUMP_NOK(err, wnext);
+                err = hdf_read_file(dhdf, fname);
+                JUMP_NOK(err, wnext);
+                err = hdf_copy(child, NULL, dhdf);
+                JUMP_NOK(err, wnext);
+            }
+            uListDestroy(&list, ULIST_FREE);
         }
         
         err = cs_init(&cs, hdf_get_obj(child, PRE_CFG_DATASET));
