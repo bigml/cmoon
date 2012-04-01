@@ -37,9 +37,6 @@ a.btn:hover {background-position: 0 -28px;}
 dl.inp dt {float: left; clear: left; margin: 5px; line-height: 22px; text-align: right; width: 75px;}
 dl.inp dd {margin: 5px; line-height: 22px; float: left;}
 /*dl.inp dd span {margin-left: 20px;}*/
-dl.inp dd.loading .indicator {display:inline-block;margin-left:5px;width:16px;height:16px;background:url(/img/ajax/indicator.gif) 0 0 no-repeat;}
-dl.inp dd.success .indicator {display:inline-block;margin-left:5px;width:16px;height:16px;background:url(/img/ajax/success.png) 0 0 no-repeat}
-dl.inp dd.error .indicator {display:inline-block;margin-left:5px;width:16px;height:16px;background:url(/img/ajax/error.png) 0 0 no-repeat;}
 
 table.list {border: 1px solid #CCCCCC; border-collapse:collapse; width:100%;}
 table.list th {background-color: #eee; border-left:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC; padding:4px 4px; text-align:center; width:auto;}

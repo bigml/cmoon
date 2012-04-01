@@ -6,8 +6,9 @@ FILES = b/base.css \
         b/index.css \
         b/readme.css \
         b/admin/spd/post.css b/admin/spd/robot.css \
+        b/member/regist.css b/member/account.css b/member/reset.css \
         b/bore/bore.css b/bore/op.css \
-        b/plan/info.css \
+        b/plan/info.css b/plan/mine.css \
         b/inbox/system.css
 
 all: preload $(FILES)
@@ -22,16 +23,21 @@ preload:
 
 b/base.css: reset.css base.css layout.css modules/overlay.css
 
-b/index.css: index/dateinput.css index/index.css
+b/index.css: modules/indicator.css index/dateinput.css index/index.css
 b/readme.css: readme.css
 
-b/admin/spd/post.css: admin/spd/post.css
+b/admin/spd/post.css: modules/indicator.css modules/indicator.css admin/spd/post.css
 b/admin/spd/robot.css: admin/spd/robot.css
 
-b/bore/bore.css: bore/bore.css
-b/bore/op.css: bore/mku_skin.css bore/mku_set.css bore/op.css
+b/member/regist.css: modules/indicator.css
+b/member/account.css: modules/indicator.css
+b/member/reset.css: modules/indicator.css
+
+b/bore/bore.css: modules/indicator.css bore/bore.css
+b/bore/op.css: modules/indicator.css bore/mku_skin.css bore/mku_set.css bore/op.css
 
 b/plan/info.css: plan/info.css
+b/plan/mine.css: modules/indicator.css modules/minibtn.css plan/mine.css
 
 b/inbox/system.css: modules/accordion.css modules/box.css modules/pagenav.css \
                     inbox/inbox.css
