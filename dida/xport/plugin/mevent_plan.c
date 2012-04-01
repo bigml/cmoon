@@ -256,14 +256,16 @@ static NEOERR* plan_cmd_plan_add(struct plan_entry *e, QueueEntry *q)
 {
 	STRING str; string_init(&str);
     char *ori = NULL, *oid = NULL, *tmps;
+    int mid;
 	NEOERR *err;
 
+    struct cache *cd = e->cd;
     mdb_conn *db = e->db;
 
     REQ_FETCH_PARAM_STR(q->hdfrcv, "ori", ori);
     REQ_FETCH_PARAM_STR(q->hdfrcv, "oid", oid);
     
-    MEMBER_SET_PARAM_MID(q->hdfrcv);
+    MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
     
     if (ori) {
         if (plan_spd_exist(e, q, ori, oid))
@@ -286,36 +288,91 @@ static NEOERR* plan_cmd_plan_add(struct plan_entry *e, QueueEntry *q)
 
     string_clear(&str);
 
+    cache_delf(cd, PREFIX_PLAN_MINE"%d_0", mid);
+
     return STATUS_OK;
 }
 
 static NEOERR* plan_cmd_plan_up(struct plan_entry *e, QueueEntry *q)
 {
 	STRING str; string_init(&str);
-    int id;
+    int id, mid, caomin = 0;
+    char *pmid;
 	NEOERR *err;
 
     mdb_conn *db = e->db;
     struct cache *cd = e->cd;
 
     REQ_GET_PARAM_INT(q->hdfrcv, "id", id);
+    REQ_FETCH_PARAM_INT(q->hdfrcv, "_caomin", caomin);
+
+    if (caomin == 1) {
+        MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
+    }
 
     err = plan_cmd_plan_get(e, q);
 	if (err != STATUS_OK) return nerr_pass(err);
-
-    if (!hdf_get_obj(q->hdfsnd, "mid"))
+    
+    pmid = hdf_get_value(q->hdfsnd, "mid", NULL);
+    if (!pmid || (caomin == 1 && mid != atoi(pmid)))
         return nerr_raise(REP_ERR_PLAN_NEXIST, "plan %d not exist", id);
 
     err = mdb_build_upcol(q->hdfrcv,
                           hdf_get_obj(g_cfg, CONFIG_PATH".UpdateCol.plan"), &str);
 	if (err != STATUS_OK) return nerr_pass(err);
 
-    MDB_EXEC(db, NULL, "UPDATE plan SET %s WHERE id=%d;", NULL, str.buf, id);
+    if (caomin == 1) {
+        MDB_EXEC(db, NULL, "UPDATE plan SET %s WHERE id=%d AND mid=%d;",
+                 NULL, str.buf, id, mid);
+    } else {
+        MDB_EXEC(db, NULL, "UPDATE plan SET %s WHERE id=%d;", NULL, str.buf, id);
+    }
 
     string_clear(&str);
 
     cache_delf(cd, PREFIX_PLAN"%d", id);
+    cache_delf(cd, PREFIX_PLAN_MINE"%d_0", atoi(pmid));
     
+    return STATUS_OK;
+}
+
+static NEOERR* plan_cmd_plan_mine(struct plan_entry *e, QueueEntry *q)
+{
+    unsigned char *val = NULL; size_t vsize = 0;
+    struct cache *cd = e->cd;
+    mdb_conn *db = e->db;
+    int count, offset;
+    int mid, guest = 0;
+    char *cols = _COL_PLAN_ADMIN;
+    NEOERR *err;
+
+    MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
+    REQ_FETCH_PARAM_INT(q->hdfrcv, "_guest", guest);
+    if (guest) cols = _COL_PLAN;
+
+    mdb_pagediv(q->hdfrcv, NULL, &count, &offset, PRE_RESERVE, q->hdfsnd);
+
+    if (cache_getf(cd, &val, &vsize, PREFIX_PLAN_MINE"%d_%d", mid, offset)) {
+        unpack_hdf(val, vsize, &q->hdfsnd);
+    } else {
+        MDB_PAGEDIV_SET(q->hdfsnd, PRE_RESERVE, db, "plan", "statu=%d AND mid=%d",
+                        NULL, PLAN_ST_FRESH, mid);
+        if (guest) {
+            MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu=%d AND mid=%d "
+                          " ORDER BY id DESC LIMIT %d OFFSET %d",
+                          NULL, PLAN_ST_FRESH, mid, count, offset);
+        } else {
+            MDB_QUERY_RAW(db, "plan", _COL_PLAN_ADMIN, "statu=%d AND mid=%d "
+                          " ORDER BY id DESC LIMIT %d OFFSET %d",
+                          NULL, PLAN_ST_FRESH, mid, count, offset);
+        }
+        err = mdb_set_rows(q->hdfsnd, db, cols, "plans", NULL);
+        nerr_handle(&err, NERR_NOT_FOUND);
+        if (err != STATUS_OK) return nerr_pass(err);
+
+        CACHE_HDF(q->hdfsnd, PLAN_MINE_CC_SEC, PREFIX_PLAN_MINE"%d_%d", mid, offset);
+    }
+
     return STATUS_OK;
 }
 
@@ -366,6 +423,9 @@ static void plan_process_driver(EventEntry *entry, QueueEntry *q)
         break;
     case REQ_CMD_PLAN_UP:
         err = plan_cmd_plan_up(e, q);
+        break;
+    case REQ_CMD_PLAN_MINE:
+        err = plan_cmd_plan_mine(e, q);
         break;
     case REQ_CMD_SPD_PEEL:
         err = plan_cmd_spd_peel(e, q);

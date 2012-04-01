@@ -3,19 +3,21 @@
 
 #define PREFIX_PLAN     "Plan"
 #define PREFIX_PLAN_PRIV "PlanPriv"
+#define PREFIX_PLAN_MINE "PlanMine"
 #define PREFIX_SPD      "Spd"
 
 #define PLAN_CC_SEC     600
+#define PLAN_MINE_CC_SEC 600
 #define SPD_CC_SEC      60000
 
-#define _COL_PLAN "id, mid, ori, ourl, dad, nick, statu, repeat, seat, " \
+#define _COL_PLAN "id, mid, ori, ourl, dad, nick, statu, repeat, subscribe, seat, " \
     " fee, attach, cityid, scityid, ecityid, saddr, eaddr, marks, rect, route, " \
     " km, sdate, edate, stime, etime, estmin, "                         \
     " to_char(intime, 'YYYY-MM-DD') as intime, "                        \
     " to_char(uptime, 'YYYY-MM-DD') as uptime "
 
 #define _COL_PLAN_ADMIN "id, mid, phone, contact, ori, ourl, "          \
-    " dad, nick, statu, repeat, seat, "                                 \
+    " dad, nick, statu, repeat, subscribe, seat, "                      \
     " fee, attach, cityid, scityid, ecityid, saddr, eaddr, marks, rect, route, " \
     " km, sdate, edate, stime, etime, estmin, "                         \
     " to_char(intime, 'YYYY-MM-DD') as intime, "                        \
@@ -41,6 +43,7 @@ enum {
     REQ_CMD_PLAN_MATCH,
     REQ_CMD_PLAN_ADD,
     REQ_CMD_PLAN_UP,
+    REQ_CMD_PLAN_MINE,
     REQ_CMD_SPD_PEEL
 };
 

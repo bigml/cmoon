@@ -13,7 +13,7 @@ FILES = b/base.js \
         b/admin/spd/post.js b/admin/spd/robot.js \
         b/member/regist.js b/member/reset.js b/member/account.js \
         b/bore/bore.js b/bore/op.js \
-        b/plan/info.js \
+        b/plan/info.js b/plan/mine.js \
         b/inbox/system.js
 
 all: preload $(FILES)
@@ -66,6 +66,7 @@ b/bore/op.js: pub/markitup/markitup/jquery.markitup.js bore/mku_set.js \
               pub/jqueryUploader/src/jquery.uploader.js bore/op.js
 
 b/plan/info.js: plan/info.js
+b/plan/mine.js: plan/mine.js
 
 b/inbox/system.js: pub/jquery.mnnav.js inbox/system.js
 

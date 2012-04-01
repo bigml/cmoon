@@ -81,6 +81,7 @@ CREATE TABLE plan (
     nick varchar(32) NOT NULL DEFAULT '',
     statu smallint NOT NULL DEFAULT 0, --0 fresh, 1 pause, 2 delete, 10 spd fresh
     repeat smallint NOT NULL DEFAULT 0, --0 no, 1 day, 2 week
+    subscribe smallint NOT NULL DEFAULT 0, -- same as addrtype of table expect
     seat smallint NOT NULL DEFAULT 4,
     fee int NOT NULL DEFAULT 0,
     attach varchar(256) NOT NULL DEFAULT '',

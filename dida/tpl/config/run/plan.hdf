@@ -12,7 +12,7 @@ plan_info {
     }
 }
 
-plan_mine [merge=dashboard.pub] {
+plan_mine [merge="dashboard.pub,plan.pub"] {
     Layout = layout.html
     Dataset {
         Layout {

@@ -31,15 +31,46 @@ static NEOERR* fft_cmd_expect_add(struct fft_entry *e, QueueEntry *q)
     mdb_conn *db = e->db;
 
     MEMBER_SET_PARAM_MID(q->hdfrcv);
+    hdf_set_int_value(q->hdfrcv, "statu", FFT_EXPECT_STATU_OK);
 
-    err = mdb_build_incol(q->hdfrcv,
-                          hdf_get_obj(g_cfg, CONFIG_PATH".InsertCol.expect"), &str);
+    err = mdb_build_mgcol(q->hdfrcv,
+                          hdf_get_obj(g_cfg, CONFIG_PATH".MergeCol.expect"), &str);
 	if (err != STATUS_OK) return nerr_pass(err);
 
-    MDB_EXEC(db, NULL, "INSERT INTO expect %s", NULL, str.buf);
+    MDB_EXEC(db, NULL, "SELECT merge_expect(%s)", NULL, str.buf);
 
     string_clear(&str);
     
+    return STATUS_OK;
+}
+
+static NEOERR* fft_cmd_expect_up(struct fft_entry *e, QueueEntry *q)
+{
+    STRING str; string_init(&str);
+    int mid, pid, addrtype, caomin = 0;
+    mdb_conn *db = e->db;
+    NEOERR *err;
+
+    MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
+    REQ_GET_PARAM_INT(q->hdfrcv, "pid", pid);
+    REQ_GET_PARAM_INT(q->hdfrcv, "addrtype", addrtype);
+    REQ_FETCH_PARAM_INT(q->hdfrcv, "_caomin", caomin);
+
+    err = mdb_build_upcol(q->hdfrcv,
+                          hdf_get_obj(g_cfg, CONFIG_PATH".UpdateCol.expect"), &str);
+    if (err != STATUS_OK) return nerr_pass(err);
+    
+    if (caomin == 1) {
+        MDB_EXEC(db, NULL, "UPDATE expect SET %s WHERE "
+                 " pid=%d AND mid=%d AND addrtype=%d",
+                 NULL, str.buf, pid, mid, addrtype);
+    } else {
+        MDB_EXEC(db, NULL, "UPDATE expect SET %s WHERE pid=%d AND addrtype=%d",
+                 NULL, str.buf, pid, addrtype);
+    }
+
+    string_clear(&str);
+
     return STATUS_OK;
 }
 
@@ -138,6 +169,9 @@ static void fft_process_driver(EventEntry *entry, QueueEntry *q)
         CASE_SYS_CMD(q->operation, q, e->cd, err);
     case REQ_CMD_FFT_EXPECT_ADD:
         err = fft_cmd_expect_add(e, q);
+        break;
+    case REQ_CMD_FFT_EXPECT_UP:
+        err = fft_cmd_expect_up(e, q);
         break;
     case REQ_CMD_FFT_EXPECT_MATCH:
         err = fft_cmd_expect_match(e, q);

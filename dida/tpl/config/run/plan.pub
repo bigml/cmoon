@@ -1,0 +1,8 @@
+Dataset {
+    subs {
+        none = 0
+        phone = 1
+        email = 2
+        all = 127
+    }
+}

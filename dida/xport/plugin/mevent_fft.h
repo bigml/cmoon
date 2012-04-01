@@ -9,9 +9,9 @@
 
 enum {
     FFT_EXPECT_NONE = 0,
-    FFT_EXPECT_PHONE,
-    FFT_EXPECT_EMAIL,
-    FFT_EXPECT_ALL
+    FFT_EXPECT_PHONE = (1 << 0),
+    FFT_EXPECT_EMAIL = (1 << 1),
+    FFT_EXPECT_ALL = (0x7F << 7)
 };
 
 enum {
@@ -28,6 +28,7 @@ enum {
 
 enum {
     REQ_CMD_FFT_EXPECT_ADD = 1001,
+    REQ_CMD_FFT_EXPECT_UP,
     REQ_CMD_FFT_EXPECT_MATCH
 };
 

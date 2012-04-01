@@ -28,6 +28,12 @@ bmoon.dida = {
             title: '列表网'
         }
     },
+
+    plansub: {
+        phone: 1,
+        email: 2,
+        all: 127
+    },
     
     init: function() {
         var o = bmoon.dida;

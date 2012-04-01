@@ -1,1 +1,55 @@
-<?cs var:Output.member.mname ?> 的线路
+<?cs include:"macro/plan.cs" ?>
+
+<div id="plans">
+  <h2>
+    <?cs var:Output.member.mnick ?> 的线路 (<span class="decimal"><?cs
+    var:Output.Reserve._ntt ?></span>)
+    <a class="btn plan-new">创建路线</a>
+  </h2>
+
+  <?cs if:?Output.plans.0.id ?>
+  <ul id="plan-list">
+    <?cs each:p = Output.plans ?>
+    <li>
+      <div class="op">
+        <input type="checkbox" rel="<?cs var:p.id ?>" class="set-sub" name="phone" <?cs call:plan_subscribe(p.subscribe, subs.phone) ?> /> 短信通知
+        <input type="checkbox" rel="<?cs var:p.id ?>" class="set-sub" name="email" <?cs call:plan_subscribe(p.subscribe, subs.email) ?> /> 邮件通知
+        <a class="minibutton"><span>暂停此线路</span></a>
+      </div>
+      <h3><?cs var:p.nick ?> <span class="slight">创建于<?cs var:p.intime ?></span></h3>
+      <div class="body">
+        <dl class="inp">
+          <dt>路线：</dt>
+          <dd>
+            <?cs var:p.saddr ?> - <?cs var:p.eaddr ?>
+          </dd>
+
+          <dt>出发时间：</dt>
+          <dd>
+            <span><?cs call:plan_sdate(p.repeat, p.sdate) ?></span>
+            <span><?cs var:p.stime ?></span>
+          </dd>
+
+          <dt>联系方式：</dt>
+          <dd>
+            <?cs var:p.phone ?>
+            <?cs var:p.contact ?>
+          </dd>
+
+          <dt>留言：</dt>
+          <dd>
+            <pre><?cs var:p.attach ?></pre>
+          </dd>
+        </dl>
+        <div class="clearer"></div>
+      </div>
+
+      <span class="indicator"></span>
+
+    </li>
+    <?cs /each ?>
+  </ul>
+  <?cs else ?>
+  <div>当前无路线</div>
+  <?cs /if ?>
+</div>

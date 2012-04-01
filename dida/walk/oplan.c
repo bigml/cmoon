@@ -65,13 +65,23 @@ NEOERR* plan_leave_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
         evt = hash_lookup(evth, "fft");
         MCS_NOT_NULLA(evt);
 
-        hdf_copy(evt->hdfsnd, NULL, plan);
+        /* TODO need to do this way??? */
+        if (expect & FFT_EXPECT_PHONE) {
+            hdf_copy(evt->hdfsnd, NULL, plan);
+            hdf_set_value(evt->hdfsnd, "mname", mname);
+            hdf_set_int_value(evt->hdfsnd, "pid", id);
             
-        hdf_set_int_value(evt->hdfsnd, "addrtype", expect);
-        hdf_set_value(evt->hdfsnd, "mname", mname);
-        hdf_set_int_value(evt->hdfsnd, "pid", id);
-
-        MEVENT_TRIGGER(evt, NULL, REQ_CMD_FFT_EXPECT_ADD, FLAGS_NONE);
+            hdf_set_int_value(evt->hdfsnd, "addrtype", FFT_EXPECT_PHONE);
+            MEVENT_TRIGGER(evt, NULL, REQ_CMD_FFT_EXPECT_ADD, FLAGS_NONE);
+        }
+        if (expect & FFT_EXPECT_EMAIL) {
+            hdf_copy(evt->hdfsnd, NULL, plan);
+            hdf_set_value(evt->hdfsnd, "mname", mname);
+            hdf_set_int_value(evt->hdfsnd, "pid", id);
+            
+            hdf_set_int_value(evt->hdfsnd, "addrtype", FFT_EXPECT_EMAIL);
+            MEVENT_TRIGGER(evt, NULL, REQ_CMD_FFT_EXPECT_ADD, FLAGS_NONE);
+        }
     }
 
     /*
@@ -210,9 +220,74 @@ NEOERR* plan_mine_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     HDF_FETCH_INT(cgi->hdf, PRE_QUERY".mid", mid);
 
+    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+
     if (mid == 0) {
         MEMBER_CHECK_LOGIN();
         SET_MY_ACTION(cgi->hdf);
+        hdf_set_value(evt->hdfsnd, "mname", mname);
+    } else {
+        hdf_set_value(evt->hdfsnd, "_guest", "1");
+    }
+    
+    MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_MINE, FLAGS_SYNC);
+    hdf_copy(cgi->hdf, PRE_OUTPUT, evt->hdfrcv);
+    
+    return STATUS_OK;
+}
+
+NEOERR* plan_mine_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mevent_t *evt = hash_lookup(evth, "plan"), *fevt = hash_lookup(evth, "fft");
+    char *mname;
+    bool caomin = false;
+    NEOERR *err;
+
+    MCS_NOT_NULLC(cgi->hdf, evt, fevt);
+
+    MEMBER_CHECK_LOGIN();
+
+    mevent_t *tevt = hash_lookup(evth, "member");
+    if (hdf_get_int_value(tevt->hdfrcv, "verify", -1) < MEMBER_VF_ADMIN) {
+        caomin = true;
+        hdf_set_value(evt->hdfsnd, "_caomin", "1");
+    }
+
+    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+    hdf_set_value(evt->hdfsnd, "mname", mname);
+
+    int pid = hdf_get_int_value(cgi->hdf, PRE_QUERY".id", 0);
+    int sub = hdf_get_int_value(cgi->hdf, PRE_QUERY".subscribe", 0);
+    int op = hdf_get_int_value(cgi->hdf, PRE_QUERY".checkop", 0);
+
+    hdf_set_value(fevt->hdfsnd, "mname", mname);
+    hdf_set_int_value(fevt->hdfsnd, "pid", pid);
+    if (caomin) hdf_set_value(fevt->hdfsnd, "_caomin", "1");
+
+    if (sub && op == 1) {
+        MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_UP, FLAGS_SYNC);
+
+        /*
+         * enable some subscribe, so, we need insert/update expect
+         */
+        hdf_copy(fevt->hdfsnd, NULL, evt->hdfrcv);
+        hdf_set_int_value(fevt->hdfsnd, "addrtype", sub);
+        MEVENT_TRIGGER(fevt, NULL, REQ_CMD_FFT_EXPECT_ADD, FLAGS_NONE);
+    } else {
+        MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_UP, FLAGS_NONE);
+        
+        /*
+         * normarl modify, up plan async
+         */
+        hdf_copy(fevt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+        if (sub) {
+            /*
+             * remove subscribe
+             */
+            hdf_set_int_value(fevt->hdfsnd, "addrtype", sub);
+            hdf_set_int_value(fevt->hdfsnd, "statu", FFT_EXPECT_STATU_DEL);
+        }
+        MEVENT_TRIGGER(fevt, NULL, REQ_CMD_FFT_EXPECT_UP, FLAGS_NONE);
     }
     
     return STATUS_OK;
