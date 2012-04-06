@@ -122,10 +122,13 @@ NEOERR* plan_leave_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
             
             child = hdf_obj_next(child);
         }
-        hdf_copy(tnode, PRE_DATASET".Output.plans.0", plan);
 
-        err = email_multi_add(tnode, evth, "PlanMatched");
-        if (err != STATUS_OK) return nerr_pass(err);
+        if (hdf_obj_child(tnode)) {
+            hdf_copy(tnode, PRE_DATASET".Output.plans.0", plan);
+
+            err = email_multi_add(tnode, evth, "PlanMatched");
+            if (err != STATUS_OK) return nerr_pass(err);
+        }
 
         hdf_destroy(&tnode);
 
@@ -279,15 +282,15 @@ NEOERR* plan_mine_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
         /*
          * normarl modify, up plan async
          */
-        hdf_copy(fevt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
         if (sub) {
             /*
              * remove subscribe
              */
+            hdf_copy(fevt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
             hdf_set_int_value(fevt->hdfsnd, "addrtype", sub);
             hdf_set_int_value(fevt->hdfsnd, "statu", FFT_EXPECT_STATU_DEL);
+            MEVENT_TRIGGER(fevt, NULL, REQ_CMD_FFT_EXPECT_UP, FLAGS_NONE);
         }
-        MEVENT_TRIGGER(fevt, NULL, REQ_CMD_FFT_EXPECT_UP, FLAGS_NONE);
     }
     
     return STATUS_OK;

@@ -355,16 +355,16 @@ static NEOERR* plan_cmd_plan_mine(struct plan_entry *e, QueueEntry *q)
     if (cache_getf(cd, &val, &vsize, PREFIX_PLAN_MINE"%d_%d", mid, offset)) {
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
-        MDB_PAGEDIV_SET(q->hdfsnd, PRE_RESERVE, db, "plan", "statu=%d AND mid=%d",
-                        NULL, PLAN_ST_FRESH, mid);
+        MDB_PAGEDIV_SET(q->hdfsnd, PRE_RESERVE, db, "plan", "statu<%d AND mid=%d",
+                        NULL, PLAN_ST_DELETE, mid);
         if (guest) {
-            MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu=%d AND mid=%d "
+            MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu<%d AND mid=%d "
                           " ORDER BY id DESC LIMIT %d OFFSET %d",
-                          NULL, PLAN_ST_FRESH, mid, count, offset);
+                          NULL, PLAN_ST_DELETE, mid, count, offset);
         } else {
-            MDB_QUERY_RAW(db, "plan", _COL_PLAN_ADMIN, "statu=%d AND mid=%d "
+            MDB_QUERY_RAW(db, "plan", _COL_PLAN_ADMIN, "statu<%d AND mid=%d "
                           " ORDER BY id DESC LIMIT %d OFFSET %d",
-                          NULL, PLAN_ST_FRESH, mid, count, offset);
+                          NULL, PLAN_ST_DELETE, mid, count, offset);
         }
         err = mdb_set_rows(q->hdfsnd, db, cols, "plans", NULL);
         nerr_handle(&err, NERR_NOT_FOUND);
