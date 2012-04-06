@@ -41,14 +41,14 @@
 	display:block;
 	width:20px;
 	height:20px;
-	background:transparent url(/img/dateinput/prev.gif) no-repeat scroll center center;
+	background:transparent url(/img/modules/dateinput/prev.gif) no-repeat scroll center center;
 	float:left;
 	cursor:pointer;
 	margin-left:9px;
 }
 
 #calnext {
-	background-image:url(/img/dateinput/next.gif);
+	background-image:url(/img/modules/dateinput/next.gif);
 	float:right;
 	margin-right:9px;
 }
@@ -160,7 +160,7 @@ a.caldisabled {
 	width:26px;
 	height:28px;
 	float:left;
-	background:url(/img/dateinput/icon.jpg) no-repeat 0 0;
+	background:url(/img/modules/dateinput/icon.jpg) no-repeat 0 0;
 	margin-top:-3px;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
