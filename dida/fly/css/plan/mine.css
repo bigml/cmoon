@@ -1,8 +1,14 @@
+.hide {display: none !important;}
+.show {display: block !important;}
+input.shorter {width:90px;}
+dl.inp dt {width: 60px;}
+
 #plans {
-    width: 500px;
+    width: 530px;
+    float: left;
 }
 
-.plan-new {
+.plan-create {
     float: right;
     line-height: 24px;
     text-shadow: -1px -1px 0 #333333;
@@ -15,6 +21,10 @@
     margin: 0 0 10px;
     overflow: hidden;
     padding: 8px 10px 0;
+}
+
+#plan-list > li.paused {
+    color: #aaa;
 }
 
 #plan-list > li .op {
@@ -38,6 +48,36 @@
     width: 100%;
 }
 
+#plan-list .body textarea[name="attach"] {
+    width: 360px;
+}
+
 #plan-list .body dl.inp dt, #plan-list .body dl.inp dd {
-    margin: 0;
+    margin: 1px;
+}
+
+#plan-new {
+    background: -moz-linear-gradient(#FAFAFA, #EFEFEF) repeat scroll 0 0 transparent;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    list-style-type: none;
+    margin: 0 0 10px;
+    overflow: hidden;
+    padding: 8px 10px;
+}
+
+#pnew-attach {
+    width: 418px;
+}
+
+#pnew-repeat {
+    float: left;
+}
+
+#map {
+    height: 370px;
+    width: 370px;
+    float: right;
+    border: 1px solid #ddd;
+    margin-top: 9ex;
 }

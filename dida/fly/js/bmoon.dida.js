@@ -34,6 +34,22 @@ bmoon.dida = {
         email: 2,
         all: 127
     },
+
+    planstatu: {
+        fresh: 0,
+        spdok: 1,
+        rbtok: 2,
+        pause: 3,
+        del: 4,
+        spdfresh: 10,
+        spdrbted: 11
+    },
+
+    planrepeat: {
+        none: 0,
+        day: 1,
+        week: 2
+    },
     
     init: function() {
         var o = bmoon.dida;

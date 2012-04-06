@@ -45,12 +45,14 @@ bmoon.inboxsystem = {
     rendNav: function() {
         var o = bmoon.inboxsystem.init();
 
-        o.e_nav.mnnav({
-            ntt: mgd.ntt,
-            npg: mgd.npg,
-            npp: mgd.npp,
-            url: '/inbox/system'
-        });
+        if (mgd.ntt > mgd.npp) {
+            o.e_nav.mnnav({
+                ntt: mgd.ntt,
+                npg: mgd.npg,
+                npp: mgd.npp,
+                url: '/inbox/system'
+            });
+        }
     }
 };
 

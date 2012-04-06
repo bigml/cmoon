@@ -3,9 +3,12 @@
 <?cs var:sdate ?>
 <?cs elif:repeat == #1 ?>
 每日
-<?cs elif:repeat == #1 ?>
+<?cs elif:repeat == #2 ?>
 每周 <?cs var:sdate ?>
 <?cs /if ?>
 <?cs /def ?>
 
 <?cs def:plan_subscribe(val, which) ?><?cs if:bitop.and(val, which) == #which ?>checked="checked"<?cs /if ?><?cs /def ?>
+
+<?cs def:plan_disabled(a, b) ?><?cs if:a==b ?>disabled="disabled"<?cs /if ?><?cs /def ?>
+<?cs def:plan_hide(a, b) ?><?cs if:a==b ?> hide<?cs /if ?><?cs /def ?>

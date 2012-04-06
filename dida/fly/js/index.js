@@ -248,7 +248,7 @@ bmoon.index = {
             } else {
                 p.addClass('error');
                 $('<span class="vres">'+ data.errmsg + '</span>').appendTo(p);
-                if (data.errcode == 35) o.e_mc_noresult.fadeIn();
+                if (data.errcode == 35) o.e_mc_noresult.removeClass('hide');
             }
         });
     },

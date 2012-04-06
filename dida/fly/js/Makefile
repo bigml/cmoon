@@ -66,7 +66,9 @@ b/bore/op.js: pub/markitup/markitup/jquery.markitup.js bore/mku_set.js \
               pub/jqueryUploader/src/jquery.uploader.js bore/op.js
 
 b/plan/info.js: plan/info.js
-b/plan/mine.js: plan/mine.js
+b/plan/mine.js: pub/jquerytools/src/dateinput/dateinput.js \
+                pub/jquery.mnnav.js pub/jquerytools/src/tooltip/tooltip.js \
+                plan/mine.js
 
 b/inbox/system.js: pub/jquery.mnnav.js inbox/system.js
 
