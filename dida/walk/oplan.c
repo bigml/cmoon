@@ -216,23 +216,17 @@ NEOERR* plan_mine_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = hash_lookup(evth, "plan");
     char *mname;
-    int mid = 0;
     NEOERR *err;
 
     MCS_NOT_NULLB(cgi->hdf, evt);
 
-    HDF_FETCH_INT(cgi->hdf, PRE_QUERY".mid", mid);
-
-    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
-
-    if (mid == 0) {
-        MEMBER_CHECK_LOGIN();
-        SET_MY_ACTION(cgi->hdf);
-        hdf_set_value(evt->hdfsnd, "mname", mname);
-    } else {
-        hdf_set_value(evt->hdfsnd, "_guest", "1");
-    }
+    MEMBER_CHECK_LOGIN();
+    SET_MY_ACTION(cgi->hdf);
+    hdf_set_value(evt->hdfsnd, "mname", mname);
     
+    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+    hdf_set_value(evt->hdfsnd, "_npp","5");
+
     MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_MINE, FLAGS_SYNC);
     hdf_copy(cgi->hdf, PRE_OUTPUT, evt->hdfrcv);
     

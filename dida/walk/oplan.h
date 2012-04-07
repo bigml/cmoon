@@ -98,8 +98,8 @@ NEOERR* plan_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 /*
  * Description: 列出用户的线路信息
- * Request: id - 用户id，不传时显示自己的线路
- * Returns: None
+ * Request: LOGIN* - see MEMBER_CHECK_LOGIN() of omember.h
+ * Returns: 每页5个结果
  */
 NEOERR* plan_mine_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
