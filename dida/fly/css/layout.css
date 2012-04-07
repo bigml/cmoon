@@ -53,7 +53,7 @@
 #bd-top img {float: left;}
 #bd-mid {margin-top: 2ex; min-height: 320px;}
 
-#bd-personal {float: right; margin: 10px 0 0 0; display: inline;}
+#bd-personal {float: right; margin: 0; display: inline;}
 #bd-personal ul li{display: inline; float: left; margin: 5px 0;    padding: 0 8px; border-right: 1px solid #101010; display: inline;}
 #bd-personal ul li.last{border-right: 0 none;}
 #bd-member {display: none;}
@@ -62,6 +62,7 @@
     font: bold 14px Georgia;
     height: 40px;
     padding: 0;
+    margin-top: 2ex;
 }
 #bd-nav li {float: left;}
 #bd-nav li a {
