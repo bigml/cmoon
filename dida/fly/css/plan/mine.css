@@ -23,6 +23,10 @@ dl.inp dt {width: 60px;}
     padding: 8px 10px 0;
 }
 
+#plan-list > li.fresh .body {
+    background: -moz-linear-gradient(#F8F8FF, #C7F8FF) repeat scroll 0 0 transparent;
+}
+
 #plan-list > li.paused {
     color: #aaa;
 }

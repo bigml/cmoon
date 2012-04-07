@@ -47,8 +47,8 @@ table.list tr:hover {background-color: #FFFFCC;}
 
 .hide {display: none;}
 .show {display: block;}
-.valid {border: 2px solid green !important;}
-.invalid {border: 2px solid #800 !important;}
+.valid {border: 1px solid green !important;}
+.invalid {border: 1px solid #800 !important;}
 .clearer {clear: both !important;}
 .sep {display: block; clear: both; height: 3em;}
 .sepl {display: block; clear: both; height: 1em;}

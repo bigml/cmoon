@@ -10,7 +10,7 @@ lighttpd
 -
 (dev)
     ...10-simple-vhost.conf
-    $HTTP["host"] == "www.dida.com" {
+    $HTTP["host"] == "www.dididada.org" {
       server.document-root = "/var/www/dida/fly/"
       url.rewrite-once= ("^/([^\.\?]+[^\/])$" => "/run/viki?ScriptName=$1",
                          "^/([^\.]+)\?(.*[^\/])$"   => "/run/viki?ScriptName=$1&$2")
@@ -21,7 +21,7 @@ lighttpd
 
 (run)
     ...10-simple-vhost.conf
-    $HTTP["host"] == "www.dida.com" {
+    $HTTP["host"] == "www.dididada.org" {
       server.document-root = "/var/www/dida/fly/"
       url.rewrite-once= ("^/([^\.\?]+[^\/])$" => "/run/viki?ScriptName=$1",
                          "^/([^\.]+)\?(.*[^\/])$"   => "/run/viki?ScriptName=$1&$2")
@@ -45,12 +45,12 @@ lighttpd
       }
     }
     
-    $HTTP["host"] == "js.dida.com" {
+    $HTTP["host"] == "js.dididada.org" {
       server.document-root = "/var/www/dida/fly/js/"
       expire.url = ("" => "access 1 days")
     }
     
-    $HTTP["host"] == "css.dida.com" {
+    $HTTP["host"] == "css.dididada.org" {
       server.document-root = "/var/www/dida/fly/css/"
       expire.url = ("" => "access 1 days")
     }

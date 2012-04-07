@@ -54,8 +54,8 @@ bmoon.planmine = {
     _planFromBodyRW: function(body) {
         var plan = {
             id: body.attr('rel'),
-            saddr: $('input[name="saddr"]', body).val(),
-            eaddr: $('input[name="eaddr"]', body).val(),
+            saddr: $('span[name="saddr"]', body).html(),
+            eaddr: $('span[name="eaddr"]', body).html(),
             sdate: $('input[name="sdate"]', body).val(),
             stime: $('input[name="stime"]', body).val(),
             phone: $('input[name="phone"]', body).val(),
@@ -97,9 +97,9 @@ bmoon.planmine = {
         return [
             '<dt>路线：</dt>',
             '<dd>',
-                '<input name="saddr" type="text" id="saddr-', p.id, '" value="', p.saddr, '" />',
-                ' - ',
-                '<input name="eaddr" type="text" id="eaddr-', p.id, '" value="', p.eaddr, '" />',
+                '<span name="saddr">', p.saddr, '</span>', ' - ',
+                '<span name="eaddr">', p.eaddr, '</span>',
+                '<span class="slight">暂不支持修改路线</span>',
             '</dd>',
 
             '<dt>出发时间：</dt>',
@@ -121,6 +121,20 @@ bmoon.planmine = {
         ].join('');
     },
 
+    _strPlanLi: function(p) {
+        var o = bmoon.planmine.init();
+
+        return [
+            '<li>',
+                '<h3>', p.nick, ' <span class="slight">刚刚创建</span>', '</h3>',
+                '<div class="body">',
+                    '<dl class="inp">', o._strPlanRead(p), '</dl>',
+                    '<div class="clearer"></div>',
+                '</div>',
+            '</li>'
+        ].join('');
+    },
+
     init: function() {
         var o = bmoon.planmine;
         if (o.inited) return o;
@@ -131,7 +145,9 @@ bmoon.planmine = {
         o.e_modify = $('#plan-list .op a[name="modify"]');
         o.e_cancel = $('#plan-list .op a[name="cancel"]');
         o.e_rebirth = $('#plan-list .op a[name="rebirth"]');
-        
+
+        o.e_plan_count = $('#plan-count');
+        o.e_plan_list = $('#plan-list');
         o.e_plan_create = $('#plan-create');
         o.e_plan_new = $('#plan-new');
 
@@ -154,32 +170,12 @@ bmoon.planmine = {
 
         o.e_plan_new.data('_postData', {});
 
-        o.e_now_plan = o.e_plan_new;
-        o.e_now_saddr = o.e_pnew_saddr;
-        o.e_now_eaddr = o.e_pnew_eaddr;
-        o.e_now_km = o.e_pnew_km;
-
         o.e_nav = $('#plan-nav');
 
         o.inited = true;
         return o;
     },
 
-    makeAuto: function(ele) {
-        var o = bmoon.planmine.init();
-
-        var id = ele.attr('id'),
-        name = ele.attr('name'),
-        auto = ele.data(name);
-        
-        if (auto) return;
-
-        ele.data(name, new BMap.Autocomplete({
-            location: o.g_map,
-            input: id
-        }));
-    },
-    
     initMap: function(geo) {
         var o = bmoon.planmine.init();
 
@@ -386,6 +382,7 @@ bmoon.planmine = {
         body = $('div.body dl.inp', pp),
         plan = o._planFromBody(body);
 
+        body.data('_originHtml', body.html());
         body.html(o._strPlanReadWrite(plan));
         body.data('_postData', {id: me.attr('rel')});
         body.data('_edit', true);
@@ -398,15 +395,6 @@ bmoon.planmine = {
             me.removeClass('disabled');
             me.unbind('click').click(o.savePlan);
         });
-
-        $('input[name="saddr"], input[name="eaddr"]', body).focus(function() {
-            o.e_now_plan = body;
-            o.e_now_saddr = $('input[name="saddr"]', body);
-            o.e_now_eaddr = $('input[name="eaddr"]', body);
-            o.e_now_km = null;
-            o.makeAuto(o.e_now_saddr);
-            o.makeAuto(o.e_now_eaddr);
-        });
     },
 
     cancelPlan: function() {
@@ -415,10 +403,9 @@ bmoon.planmine = {
         var me = $(this),
         emodify = $('a[name="modify"]', me.parent()),
         pp = me.parent().parent(),
-        body = $('div.body dl.inp', pp),
-        plan = o._planFromBodyRW(body);
+        body = $('div.body dl.inp', pp);
 
-        body.html(o._strPlanRead(plan));
+        body.html(body.data('_originHtml'));
         body.data('_edit', false);
 
         me.addClass('hide');
@@ -514,10 +501,10 @@ bmoon.planmine = {
         var o = bmoon.planmine.init();
 
         var marker = o.g_smarker,
-        addr = o.e_now_saddr;
+        addr = o.e_pnew_saddr;
         if (x == 'e') {
             marker = o.g_emarker;
-            addr = o.e_now_eaddr;
+            addr = o.e_pnew_eaddr;
         }
 
         var pos = marker.getPosition();
@@ -572,7 +559,7 @@ bmoon.planmine = {
     upPlan: function(x, data) {
         var o = bmoon.planmine.init();
 
-        var p = o.e_now_plan.data('_postData'),
+        var p = o.e_plan_new.data('_postData'),
         s = o._strFromPoi(data);
 
         if (x != 'e') p.saddr = s;
@@ -606,13 +593,13 @@ bmoon.planmine = {
     rendDirect: function() {
         var o = bmoon.planmine.init();
 
-        var plan = o.e_now_plan.data('_postData');
+        var plan = o.e_plan_new.data('_postData');
         
         if (!plan.sll || !plan.ell) return;
 
         var km = bmoon.utl.earthDis(plan.sll, plan.ell);
 
-        o.e_now_km.html('约 '+ km +' 千米');
+        o.e_pnew_km.html('约 '+ km +' 千米');
 
         if (km > 10 && km < 100) o.g_map.setZoom(12);
         else if (km > 100 && km < 300) o.g_map.setZoom(9);
@@ -675,6 +662,16 @@ bmoon.planmine = {
             if (data.success == 1) {
                 //o.e_pnew_submit.attr('disabled', 'disabled');
                 p.addClass('success');
+                var newp = $(o._strPlanLi(plan)).prependTo(o.e_plan_list);
+                newp.expose({
+                    onLoad: function() {
+                        newp.addClass('fresh');
+                    },
+                    onClose: function() {
+                        newp.removeClass('fresh');
+                    }
+                });
+                o.e_plan_count.html(parseInt(o.e_plan_count.html())+1);
             } else {
                 p.addClass('error');
                 $('<span class="vres">'+ data.errmsg + '</span>').appendTo(p);

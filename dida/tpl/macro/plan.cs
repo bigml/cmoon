@@ -8,6 +8,8 @@
 <?cs /if ?>
 <?cs /def ?>
 
+<?cs def:plan_dad(dad) ?><?cs if:dad==0 ?>找车<?cs elif:dad==1 ?>邀人<?cs /if ?><?cs /def ?>
+
 <?cs def:plan_subscribe(val, which) ?><?cs if:bitop.and(val, which) == #which ?>checked="checked"<?cs /if ?><?cs /def ?>
 
 <?cs def:plan_disabled(a, b) ?><?cs if:a==b ?>disabled="disabled"<?cs /if ?><?cs /def ?>

@@ -2,7 +2,7 @@
 
 <div id="plans">
   <h2>
-    <?cs var:Output.member.mnick ?> 的线路 (<span class="decimal"><?cs
+    <?cs var:Output.member.mnick ?> 的线路 (<span id="plan-count" class="decimal"><?cs
     var:Output.Reserve._ntt ?></span>)
     <a id="plan-create" class="btn plan-create">创建路线</a>
   </h2>
@@ -158,7 +158,7 @@
       </span></a>
       </div>
       
-      <h3><?cs var:p.nick ?> <span class="slight">创建于<?cs var:p.intime
+      <h3><?cs var:p.nick ?> <?cs call:plan_dad(p.dad) ?> <span class="slight">创建于<?cs var:p.intime
       ?></span></h3>
       
       <div class="body">
