@@ -119,7 +119,7 @@ NEOERR* member_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = (mevent_t*)hash_lookup(evth, "member");
-    char *mname;
+    char *mname, *msn, *omsn, *rlink;
     NEOERR *err;
 
     MEMBER_CHECK_LOGIN();
@@ -129,6 +129,32 @@ NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
      */
     hdf_set_value(evt->hdfsnd, "mname", mname);
     hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".msn", msn);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".omsn", omsn);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".rlink", rlink);
+    if (msn && *msn) {
+        if (omsn && *omsn) {
+            /*
+             * modify msn through msn
+             */
+            hdf_set_value(evt->hdfsnd, "mname", mname);
+            MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_GET, FLAGS_SYNC);
+            char *msndb = hdf_get_value(evt->hdfrcv, "msn", NULL);
+            if (!msndb || strcmp(msndb, omsn))
+                return nerr_raise(LERR_LOGINPSW, "password wrong %s %s", msndb, msn);
+        } else if (rlink && *rlink) {
+            /*
+             * modify msn through rlink
+             */
+            hdf_set_value(evt->hdfsnd, "mname", mname);
+            MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_GETRLINK, FLAGS_SYNC);
+
+            char *s = hdf_get_value(evt->hdfrcv, "rlink", NULL);
+            if (!s || strcmp(s, rlink))
+                return nerr_raise(LERR_USERINPUT, "验证码错误");
+        } else return nerr_raise(LERR_USERINPUT, "修改密码需要提供旧密码");
+    }
     
     /*
      * trigger
@@ -322,6 +348,8 @@ NEOERR* member_account_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
         hdf_set_value(evt->hdfsnd, "mname", mname);
         MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_GET, FLAGS_SYNC);
         hdf_copy(cgi->hdf, PRE_OUTPUT".member", evt->hdfrcv);
+
+        hdf_set_value(cgi->hdf, PRE_OUTPUT".rlink", rlink);
     } else {
         MEMBER_CHECK_LOGIN();
     }

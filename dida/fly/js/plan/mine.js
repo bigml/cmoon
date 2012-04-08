@@ -205,6 +205,8 @@ bmoon.planmine = {
             height: 100
         });
         o.bindMapChange();
+
+        o.map_inited = true;
     },
 
     onready: function() {
@@ -235,8 +237,6 @@ bmoon.planmine = {
         o.bindClick();
 
         bmoon.utl.after(o.rendNav, 'mgd.ntt != undefined', 10);
-
-        bmoon.utl.loadJS('http://api.map.baidu.com/api?v=1.3&callback=bmoon.planmine.onMapReady');
     },
 
     onMapReady: function() {
@@ -478,6 +478,8 @@ bmoon.planmine = {
     showPlanNew: function() {
         var o = bmoon.planmine.init();
 
+        !o.map_inited && bmoon.utl.loadJS('http://api.map.baidu.com/api?v=1.3&callback=bmoon.planmine.onMapReady');
+        
         o.e_plan_new.toggleClass('hide');
     },
 
