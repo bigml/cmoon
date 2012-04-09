@@ -1,6 +1,5 @@
-用户 dashboard
-爬虫后台/批量化
 统计
+爬虫后台/批量化
 
 (plan clean) plan edata, etime 去掉
 /json/city/ip 获取坐标不到时，直接用字符串 init google map
@@ -25,3 +24,4 @@ DONE email 支持 html
 DONE urls.txt 参数明确 (plan/leave 时无 scityid 不应报错)
 DONE 加速地图载入（baidu）
 DONE inbox 的展现
+DONE 用户 dashboard

@@ -9,7 +9,7 @@ FILES = b/base.css \
         b/member/regist.css b/member/account.css b/member/reset.css \
         b/bore/bore.css b/bore/op.css \
         b/plan/info.css b/plan/mine.css \
-        b/inbox/system.css
+        b/inbox/system.css b/inbox/private.css b/inbox/sent.css
 
 all: preload $(FILES)
 
@@ -44,6 +44,10 @@ b/plan/mine.css: modules/dateinput/dateinput.css modules/tooltip.css \
 
 b/inbox/system.css: modules/accordion.css modules/box.css modules/pagenav.css \
                     inbox/inbox.css
+b/inbox/private.css: modules/accordion.css modules/box.css modules/pagenav.css \
+                     inbox/inbox.css
+b/inbox/sent.css: modules/accordion.css modules/box.css modules/pagenav.css \
+                  inbox/inbox.css
 
 %.css:
 	$(CSSGLUE) $^ > $@

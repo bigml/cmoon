@@ -73,3 +73,25 @@ NEOERR* inbox_data_del(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     return STATUS_OK;
 }
+
+NEOERR* inbox_private_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    char *mname;
+    NEOERR *err;
+    
+    MEMBER_CHECK_LOGIN();
+    SET_MY_ACTION(cgi->hdf);
+
+    return STATUS_OK;
+}
+
+NEOERR* inbox_sent_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    char *mname;
+    NEOERR *err;
+    
+    MEMBER_CHECK_LOGIN();
+    SET_MY_ACTION(cgi->hdf);
+
+    return STATUS_OK;
+}

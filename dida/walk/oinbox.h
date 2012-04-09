@@ -32,5 +32,19 @@ NEOERR* inbox_system_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  */
 NEOERR* inbox_data_del(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
+/*
+ * Description: 查看用户私人信箱
+ * Request: LOGIN* - see MEMBER_CHECK_LOGIN() of omember.h
+ * Returns: None
+ */
+NEOERR* inbox_private_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
+/*
+ * Description: 查看用户发件箱
+ * Request: LOGIN* - see MEMBER_CHECK_LOGIN() of omember.h
+ * Returns: None
+ */
+NEOERR* inbox_sent_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
 __END_DECLS
 #endif /* __OINBOX_H__ */
