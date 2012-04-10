@@ -84,6 +84,9 @@ NEOERR* bore_op_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     MEMBER_CHECK_ADMIN();
 
     hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+    mstr_script_escape(evt->hdfsnd, "title");
+    mstr_script_escape(evt->hdfsnd, "hint");
+    mstr_script_escape(evt->hdfsnd, "content");
 
     MEVENT_TRIGGER(evt, NULL, REQ_CMD_MEMORY_ADD, FLAGS_NONE);
 
@@ -96,6 +99,8 @@ NEOERR* bore_preview_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     MCS_NOT_NULLA(cgi->hdf);
 
     hdf_set_copy(cgi->hdf, PRE_OUTPUT".s", PRE_QUERY".s");
+
+    mstr_script_escape(cgi->hdf, PRE_OUTPUT".s");
     
     return STATUS_OK;
 }
