@@ -159,6 +159,7 @@ $psql -U dida merry
 =>\i /var/www/dida/mtl/table_merry.sql
 =>\i /var/www/dida/mtl/table_aux.sql
 =>\i /var/www/dida/mtl/table_fireflight.sql
+=>\i /var/www/dida/mtl/table_trace.sql
 =>\i /var/www/dida/mtl/data_city.sql
 
 
