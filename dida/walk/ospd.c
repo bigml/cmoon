@@ -37,7 +37,7 @@ NEOERR* spd_do_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
         hdf_set_value(evt->hdfsnd, "c", s);
         MEVENT_TRIGGER_NRET(evt, NULL, REQ_CMD_CITY_BY_S, FLAGS_SYNC);
-        cityid = hdf_get_int_value(evt->hdfrcv, "city.id", 0);
+        cityid = hdf_get_int_value(evt->hdfrcv, "citys.0.id", 0);
     }
 
     /*

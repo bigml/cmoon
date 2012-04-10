@@ -78,8 +78,8 @@ bmoon.spdrobot = {
                 plan.sll = [point.lat, point.lng];
                 o.g_geocode.getLocation(point, function(result) {
                     bmoon.dida.getCityByPoi(result.addressComponents, function(city) {
-                        if (bmoon.utl.type(city) == 'Object') {
-                            plan.scityid = city.id;
+                        if (bmoon.utl.type(city) == 'Array') {
+                            plan.scityid = city[0].id;
                         } else {
                             o.outPut('解析起点有错 ' + city);
                             o.parsePlanErr(plan);
@@ -98,8 +98,8 @@ bmoon.spdrobot = {
                 plan.ell = [point.lat, point.lng];
                 o.g_geocode.getLocation(point, function(result) {
                     bmoon.dida.getCityByPoi(result.addressComponents, function(city) {
-                        if (bmoon.utl.type(city) == 'Object') {
-                            plan.ecityid = city.id;
+                        if (bmoon.utl.type(city) == 'Array') {
+                            plan.ecityid = city[0].id;
 
                             if (plan.scityid && plan.ecityid) {
                                 plan.rect = '((' + plan.sll.join(',') + '),(' +

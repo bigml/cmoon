@@ -243,9 +243,9 @@ bmoon.planmine = {
         var o = bmoon.planmine.init();
 
         $.getJSON('/json/city/ip', null, function(data) {
-            if (data.success == 1 && bmoon.utl.type(data.city) == 'Object') {
-                o.initMap(bmoon.dida.dbpoint2ll(data.city.geopos));
-                o.city = data.city.s;
+            if (data.success == 1 && bmoon.utl.type(data.citys) == 'Array') {
+                o.initMap(bmoon.dida.dbpoint2ll(data.citys[0].geopos));
+                o.city = data.citys[0].s;
             } else o.initMap();
         });
     },
@@ -585,9 +585,9 @@ bmoon.planmine = {
         }
 
         bmoon.dida.getCityByPoi(data, function(city) {
-            if (bmoon.utl.type(city) == 'Object') {
-                if (x != 'e') p.scityid = city.id;
-                else p.ecityid = city.id;
+            if (bmoon.utl.type(city) == 'Array') {
+                if (x != 'e') p.scityid = city[0].id;
+                else p.ecityid = city[0].id;
             }
         });
     },

@@ -224,8 +224,8 @@ bmoon.dida = {
             var city = arrs[pos];
 
             $.getJSON('/json/city/s', {c: city}, function(data) {
-                if (data.success == 1 && bmoon.utl.type(data.city) == 'Object') {
-                    return callback(data.city);
+                if (data.success == 1 && bmoon.utl.type(data.citys) == 'Array') {
+                    return callback(data.citys);
                 } else {
                     return get(pos+1);
                 }

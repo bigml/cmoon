@@ -189,32 +189,13 @@ static bool ip2place(HDF *hdf, char *ip, char *key)
 static NEOERR* city_cmd_s(struct city_entry *e, QueueEntry *q)
 {
 	unsigned char *val = NULL; size_t vsize = 0;
-    STRING str; string_init(&str);
     char *p = NULL, *c;
-    HDF *cnode;
 	NEOERR *err;
 
     mdb_conn *db = e->db;
     struct cache *cd = e->cd;
 
-    cnode = hdf_get_child(q->hdfrcv, "c");
-    if (cnode) {
-        while (cnode) {
-            c = hdf_obj_value(cnode);
-            //if (strstr(c, "市")) c[strlen(c)-3] = '\0';
-
-            if (str.len <= 0) string_appendf(&str, " ('%s'", c);
-            else string_appendf(&str, ", '%s'", c);
-
-            cnode = hdf_obj_next(cnode);
-        }
-        string_appendf(&str, ")");
-
-        cnode = hdf_get_child(q->hdfrcv, "c");
-        c = str.buf;
-    } else {
-        REQ_GET_PARAM_STR(q->hdfrcv, "c", c);
-    }
+    REQ_GET_PARAM_STR(q->hdfrcv, "c", c);
     REQ_FETCH_PARAM_STR(q->hdfrcv, "p", p);
 
     if (cache_getf(cd, &val, &vsize, PREFIX_CITY"%s.%s", p, c)) {
@@ -231,33 +212,38 @@ static NEOERR* city_cmd_s(struct city_entry *e, QueueEntry *q)
             nerr_ignore(&err);
         }
 
-        if (cnode) {
-            MDB_QUERY_RAW(db, "city", _COL_CITY, "s IN %s", NULL, c);
-            err = mdb_set_rows(q->hdfsnd, db, _COL_CITY, "city", "3");
-        } else {
+        MDB_QUERY_RAW(db, "city", _COL_CITY, "s=$1", "s", c);
+        err = mdb_set_rows(q->hdfsnd, db, _COL_CITY, "citys", NULL);
+        if (nerr_handle(&err, NERR_NOT_FOUND)) {
+            if (strstr(c, "市")) c[strlen(c)-3] = '\0';
             MDB_QUERY_RAW(db, "city", _COL_CITY, "s=$1", "s", c);
-            err = mdb_set_row(q->hdfsnd, db, _COL_CITY, "city");
-
-            if (nerr_handle(&err, NERR_NOT_FOUND)) {
-                if (strstr(c, "市")) c[strlen(c)-3] = '\0';
-                MDB_QUERY_RAW(db, "city", _COL_CITY, "s=$1", "s", c);
-                err = mdb_set_row(q->hdfsnd, db, _COL_CITY, "city");
-            }
-            /*
-             * return not found useless, supress it
-             */
-            nerr_handle(&err, NERR_NOT_FOUND);
-            if (err != STATUS_OK) return nerr_pass(err);
+            err = mdb_set_rows(q->hdfsnd, db, _COL_CITY, "citys", NULL);
         }
+        nerr_handle(&err, NERR_NOT_FOUND);
+        if (err != STATUS_OK) return nerr_pass(err);
 
-        int id = hdf_get_int_value(q->hdfsnd, "city.id", 0);
-        MDB_QUERY_RAW(db, "city", _COL_CITY, "pid=%d", NULL, id);
-        err = mdb_set_rows(q->hdfsnd, db, _COL_CITY, "subcities", NULL);
+        /*
+         * get city's parents
+         */
+        int cnt = 0;
+        char *pid = hdf_get_valuef(q->hdfsnd, "citys.0.pid");
+        while (pid && atoi(pid) > 0) {
+            MDB_QUERY_RAW(db, "city", _COL_CITY, "id=%d", NULL, atoi(pid));
+            err = mdb_set_rows(q->hdfsnd, db, _COL_CITY, "citys", NULL);
+            TRACE_NOK(err);
+            pid = hdf_get_valuef(q->hdfsnd, "citys.%d.pid", ++cnt);
+        }
+        
         /*
          * 北京市 has no subcities
          */
+        /*
+        int id = hdf_get_int_value(q->hdfsnd, "city.id", 0);
+        MDB_QUERY_RAW(db, "city", _COL_CITY, "pid=%d", NULL, id);
+        err = mdb_set_rows(q->hdfsnd, db, _COL_CITY, "subcities", NULL);
         nerr_handle(&err, NERR_NOT_FOUND);
         if (err != STATUS_OK) return nerr_pass(err);
+        */
         
         CACHE_HDF(q->hdfsnd, CITY_CC_SEC, PREFIX_CITY"%s.%s", p, c);
     }
@@ -318,9 +304,21 @@ static NEOERR* city_cmd_id(struct city_entry *e, QueueEntry *q)
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
         MDB_QUERY_RAW(db, "city", _COL_CITY, "id=%d", NULL, id);
-        err = mdb_set_row(q->hdfsnd, db, _COL_CITY, "city");
+        err = mdb_set_rows(q->hdfsnd, db, _COL_CITY, "citys", NULL);
         if (err != STATUS_OK) return nerr_pass(err);
 
+        /*
+         * get city's parents
+         */
+        int cnt = 0;
+        char *pid = hdf_get_valuef(q->hdfsnd, "citys.0.pid");
+        while (pid && atoi(pid) > 0) {
+            MDB_QUERY_RAW(db, "city", _COL_CITY, "id=%d", NULL, atoi(pid));
+            err = mdb_set_rows(q->hdfsnd, db, _COL_CITY, "citys", NULL);
+            TRACE_NOK(err);
+            pid = hdf_get_valuef(q->hdfsnd, "citys.%d.pid", ++cnt);
+        }
+        
         CACHE_HDF(q->hdfsnd, CITY_CC_SEC, PREFIX_CITY"%d", id);
     }
     
