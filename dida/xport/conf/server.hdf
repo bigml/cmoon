@@ -12,6 +12,7 @@ Mevent {
         4 = city
         5 = aux
         6 = fft
+        7 = trace
     }
     smsalarm {
         db {
@@ -291,6 +292,31 @@ Plugin {
                 rect [type=box] = ((rect - @@rect) * point(1.6,0) + @@rect) @>
                 sgeo [type=point] = ((rect[0] <-> rect[1]) / 5) > sgeo <-> 
                 km [type=float] = (km / 1.8) <
+            }
+        }
+    }
+    trace {
+        dbsn = pgsql:dbname=merry host=localhost user=dida password=loveu
+        InsertCol {
+            emap {
+                type [type=int, require=true] = type
+                sender [maxlen=256, require=true] = sender
+                provid [type=int, require=true] = provid
+                cityid [type=int, require=true] = cityid
+                browser [type=int, require=true] = browser
+                bversion [type=int, require=true] = bversion
+
+                ei_one [type=int] = ei_one
+                ei_two [type=int] = ei_two
+                ei_three [type=int] = ei_three
+
+                es_one [maxlen=256] = es_one
+                es_two [maxlen=256] = es_two
+                es_three [maxlen=256] = es_three
+
+                et_one = et_one
+                et_two = et_two
+                et_three = et_three
             }
         }
     }

@@ -1,3 +1,4 @@
+-- event big map
 CREATE TABLE emap (
 	id SERIAL,
     type smallint NOT NULL DEFAULT 0, -- 0 pv, 1 regist, 2 comment...
@@ -17,7 +18,7 @@ CREATE TABLE emap (
     et_two   text NOT NULL DEFAULT '',
     et_three text NOT NULL DEFAULT '',
 
-    intime timestamp DEFAULT now(),
+    intime timestamp DEFAULT now,
     PRIMARY KEY (id)
 );
 CREATE INDEX emap_index ON emap (type, cityid, browser);

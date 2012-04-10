@@ -4,14 +4,14 @@
 
 NEOERR* zero_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
-    if (!cgi || !cgi->hdf) return nerr_raise(NERR_ASSERT, "paramter null");
+    MCS_NOT_NULLA(cgi->hdf);
 
     return STATUS_OK;
 }
 
 NEOERR* zero_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
-    if (!cgi || !cgi->hdf) return nerr_raise(NERR_ASSERT, "paramter null");
+    MCS_NOT_NULLA(cgi->hdf);
 
     return STATUS_OK;
 }

@@ -64,6 +64,7 @@ Mevent {
     3 = city
     4 = aux
     5 = fft
+    6 = trace
 }
 
 ClientReqLimit {

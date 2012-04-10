@@ -21,6 +21,7 @@
 #include "mevent_city.h"
 #include "mevent_aux.h"
 #include "mevent_fft.h"
+#include "mevent_trace.h"
 
 /*
  * walker
@@ -33,5 +34,6 @@
 #include "ocomment.h"
 #include "oinbox.h"
 #include "oemail.h"
+#include "otrace.h"
 
 #endif    /* __LHEADS_H__ */

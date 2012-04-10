@@ -135,13 +135,20 @@ bmoon.index = {
     onMapReady: function() {
         var o = bmoon.index.init();
 
-        //$.getJSON('/json/city/ip', {ip: '118.145.22.78'}, function(data) {
-        $.getJSON('/json/city/ip', null, function(data) {
-            if (data.success == 1 && bmoon.utl.type(data.citys) == 'Array') {
-                o.initMap(bmoon.dida.dbpoint2ll(data.citys[0].geopos));
-                o.city = data.citys[0].s;
+        if (bmoon.dida.c_city) {
+            if (bmoon.dida.c_city.id != 0) {
+                o.initMap(bmoon.dida.dbpoint2ll(bmoon.dida.c_city.geopos));
+                o.city = bmoon.dida.c_city.s;
             } else o.initMap();
-        });
+        } else {
+            //$.getJSON('/json/city/ip', {ip: '118.145.22.78'}, function(data) {
+            $.getJSON('/json/city/ip', null, function(data) {
+                if (data.success == 1 && bmoon.utl.type(data.citys) == 'Array') {
+                    bmoon.dida.setCityCookie(data.citys);
+                    o.initMap(bmoon.dida.dbpoint2ll(data.citys[0].geopos));
+                } else o.initMap();
+            });
+        }
     },
 
     bindClick: function() {
@@ -183,8 +190,8 @@ bmoon.index = {
     setDefault: function() {
         var o = bmoon.index.init();
 
-        o.e_mc_no_contact.val(bmoon.dida.loginmname.val());
-        o.e_mc_no_nick.val(bmoon.dida.mnick.text());
+        o.e_mc_no_contact.val(bmoon.dida.c_mname);
+        o.e_mc_no_nick.val(bmoon.dida.c_mnick);
     },
 
     wdayChanged: function() {

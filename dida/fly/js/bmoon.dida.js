@@ -29,6 +29,12 @@ bmoon.dida = {
         }
     },
 
+    tracetype: {
+        pageview: 0
+    },
+
+    browsers: ['mozilla', 'webkit', 'opera', 'msie'],
+
     plansub: {
         phone: 1,
         email: 2,
@@ -56,6 +62,13 @@ bmoon.dida = {
 
         if (o.inited) return o;
         o.inited = true;
+
+        o.c_username = $.cookie('username');
+        o.c_mname    = $.cookie('mname');
+        o.c_mnick    = $.cookie('mnick_esc');
+        o.c_mmsn     = $.cookie('mmsn');
+        o.c_city     = $.parseJSON($.cookie('city'));
+        o.c_province = $.parseJSON($.cookie('province'));
 
         // bmoon.dida.js will used on other site
         // so, we return on other site to avoid js error
@@ -97,14 +110,56 @@ bmoon.dida = {
         if (o.vikierr) {
             o.mnick && $('#content').empty().append('<div class="text-error">'+o.vikierr+'</div>')
         }
+
+        if (!o.c_username) {
+            o.c_username = bmoon.utl.randomName();
+            $.cookie('username', o.c_username, {'path': '/', 'expires': 36500});
+        }
+        if (!o.c_city) {
+            $.getJSON('/json/city/ip', null, function(data) {
+                if (data.success == 1 && bmoon.utl.type(data.citys) == 'Array') {
+                    o.setCityCookie(data.citys);
+                } else o.setCityCookie([{
+                    id: '0',
+                    pid: '0',
+                    grade: '1',
+                    geopos: '(0,0)',
+                    s: '未知'
+                }])
+                o.tracePageview();
+            });
+        } else {
+            o.tracePageview();
+        }
     },
-    
+
     bindClick: function() {
         var o = bmoon.dida.init();
         
         $('#login-submit').click(o.login);
         $('#userlogout').click(o.logout);
         o.loginmsn.bind('keydown', 'return', o.login);
+    },
+
+    tracePageview: function() {
+        var o = bmoon.dida.init();
+
+        var pdata = {
+            _op: 'add',
+            type: o.tracetype.pageview,
+            sender: o.c_mname || o.c_username,
+            provid: o.c_province.id,
+            cityid: o.c_city.id,
+            browser: o.getBrowserType(),
+            bversion: $.browser.version,
+
+            es_one: bmoon.utl.url,
+            es_two: bmoon.utl.title
+        };
+        
+        $.post('/json/trace', pdata, function(data) {
+            ;
+        }, 'json');
     },
 
     login: function() {
@@ -133,9 +188,8 @@ bmoon.dida = {
         
         $.cookie('mname', null, {path: '/', domain: g_site_domain});
         $.cookie('mnick', null, {path: '/', domain: g_site_domain});
-        $.cookie('mnick_esc', null, {path: '/', domain: g_site_domain});
-        $.cookie('msn', null, {path: '/', domain: g_site_domain});
-        //$.cookie('mmsn', null, {path: '/', domain: g_site_domain});
+        $.cookie('mnick_ori', null, {path: '/', domain: g_site_domain});
+        $.cookie('mmsn', null, {path: '/', domain: g_site_domain});
         o.loginmname.val("");
         o.loginCheck();
     },
@@ -143,14 +197,11 @@ bmoon.dida = {
     loginCheck: function() {
         var o = bmoon.dida.init();
         
-        var mnick = $.cookie('mnick_esc'),
-        mname = $.cookie('mname');
-        
-        if (mnick != null) {
-            o.mnick.text(mnick);
+        if (o.c_mnick != null) {
+            o.mnick.text(o.c_mnick);
             o.guest.hide();
             o.member.show();
-            o.loginmname.val(mname);
+            o.loginmname.val(o.c_mname);
             return true;
         } else {
             o.member.hide();
@@ -159,6 +210,38 @@ bmoon.dida = {
         }
     },
 
+    setCityCookie: function(citys) {
+        var o = bmoon.dida.init();
+
+        if (bmoon.utl.type(citys) != 'Array') return;
+        
+        var c = citys[0];
+
+        o.c_city = c;
+        $.cookie('city', JSON.stringify(c), {'path': '/', 'expires': 7});
+        
+        c = null;
+        for (var i = 0; i < citys.length; i++) {
+            if (citys[i].pid == 0) {
+                c = citys[i];
+                break;
+            }
+        }
+        if (c) {
+            o.c_province = c;
+            $.cookie('province', JSON.stringify(c), {'path': '/', 'expires': 7});
+        }
+    },
+
+    getBrowserType: function() {
+        var o = bmoon.dida.init();
+
+        for (var i = 0; i < o.browsers.length; i++) {
+            if ($.browser[o.browsers[i]])
+                return i;
+        }
+    },
+    
     // "(28.228209,114.057868)" => [28.228209, 114.057868]
     dbpoint2ll: function(s) {
         var a = s.split(','),
