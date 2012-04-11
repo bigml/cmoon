@@ -5,8 +5,8 @@
 
 __BEGIN_DECLS
 
-#define SITE_DOMAIN     "dididada.org"
-#define IMG_URL         "http://www.dididada.org/data/"
+#define SITE_DOMAIN     "imdida.org"
+#define IMG_URL         "http://www.imdida.org/data/"
 #define IMG_ROOT        "/var/www/dida/fly/data/"
 #define TC_ROOT         "/var/log/moon/dida/"
 

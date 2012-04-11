@@ -1,6 +1,6 @@
-; var g_site_domain = "dididada.org",
-g_site_admin = "http://admin.dididada.org/",
-g_site_www = "http://www.dididada.org/";
+; var g_site_domain = "imdida.org",
+g_site_admin = "http://admin.imdida.org/",
+g_site_www = "http://www.imdida.org/";
 
 var bmoon = bmoon || {};
 bmoon.dida = {

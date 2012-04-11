@@ -10,7 +10,7 @@ lighttpd
 -
 (dev)
     ...10-simple-vhost.conf
-    $HTTP["host"] == "www.dididada.org" {
+    $HTTP["host"] == "www.imdida.org" {
       server.document-root = "/var/www/dida/fly/"
       url.rewrite-once= ("^/([^\.\?]+[^\/])$" => "/run/viki?ScriptName=$1",
                          "^/([^\.]+)\?(.*[^\/])$"   => "/run/viki?ScriptName=$1&$2")
@@ -21,7 +21,7 @@ lighttpd
 
 (run)
     ...10-simple-vhost.conf
-    $HTTP["host"] == "www.dididada.org" {
+    $HTTP["host"] == "www.imdida.org" {
       server.document-root = "/var/www/dida/fly/"
       url.rewrite-once= ("^/([^\.\?]+[^\/])$" => "/run/viki?ScriptName=$1",
                          "^/([^\.]+)\?(.*[^\/])$"   => "/run/viki?ScriptName=$1&$2")
@@ -45,12 +45,12 @@ lighttpd
       }
     }
     
-    $HTTP["host"] == "js.dididada.org" {
+    $HTTP["host"] == "js.imdida.org" {
       server.document-root = "/var/www/dida/fly/js/"
       expire.url = ("" => "access 1 days")
     }
     
-    $HTTP["host"] == "css.dididada.org" {
+    $HTTP["host"] == "css.imdida.org" {
       server.document-root = "/var/www/dida/fly/css/"
       expire.url = ("" => "access 1 days")
     }
@@ -80,7 +80,7 @@ spawn-fcgi -d /var/www/dida/fly/run/ -f /var/www/dida/fly/run/viki -a 127.0.0.1 
 server
 {
     listen 80;
-    server_name *.dididada.org;
+    server_name *.imdida.org;
     
     index index.html index.htm;
     root  /var/www/dida/fly;

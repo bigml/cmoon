@@ -33,7 +33,7 @@ NEOERR* city_ip_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  * Description: 通过字符串获取其城市信息
  * Request: c* - 待查询字符串，该字符串必须为 city 表中的 s 精确匹配
  *               可通过 bmoon.dida.getCityByGeoresult() 函数获取c, 使用方法请参考 index.js
- * Returns: 自行参考 http://www.dididada.org/json/city/s?c=%E5%BC%80%E7%A6%8F%E5%8C%BA
+ * Returns: 自行参考 /json/city/s?c=%E5%BC%80%E7%A6%8F%E5%8C%BA
  */
 NEOERR* city_s_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 

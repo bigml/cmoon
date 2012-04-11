@@ -24,7 +24,7 @@ readme {
         Layout {
             css = <link rel="stylesheet" type="text/css" href="/css/b/readme.css" />
             js = <script type="text/javascript" src="/js/b/readme.js"></script>
-            title = 关于滴滴嗒嗒
+            title = 关于滴嗒
             tabpart = 2
         }
         Include {
