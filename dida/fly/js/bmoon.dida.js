@@ -33,17 +33,13 @@ bmoon.dida = {
         pageview:   0,
         
         plansearch: 11,
-        planbosh:   12,
-        planleave:  13,
-        planspd:    14,
-        planexpect: 15,
-        planmeet:   16,
+        planleave:  12,
+        planspd:    13,
         
-        memberreg:   51,
-        mmeberlogin: 52,
-        membermsg:   53,
+        memberreg:  51,
+        membermsg:  53,
         
-        borecomment: 71
+        commentadd: 71
     },
 
     browsers: ['mozilla', 'webkit', 'opera', 'msie'],

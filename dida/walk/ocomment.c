@@ -31,8 +31,16 @@ NEOERR* comment_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     hdf_set_value(evt->hdfsnd, "ip", ip);
     hdf_set_value(evt->hdfsnd, "addr", addr);
     MEVENT_TRIGGER(evt, NULL, REQ_CMD_CMT_ADD, FLAGS_SYNC);
-    
-    return STATUS_OK;
+
+    char *s;
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".type", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_one", s);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".content", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_one", s);
+
+    HDF *node = hdf_get_obj(cgi->hdf, PRE_RESERVE".event");
+
+    return nerr_pass(trace_event(node, evth, ses, TRACE_TYPE_COMMENT_ADD));
 }
 
 NEOERR* comment_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)

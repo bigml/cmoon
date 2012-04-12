@@ -210,7 +210,15 @@ NEOERR* member_new_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     member_after_login(cgi, evth, mname, mnick);
 
-    return STATUS_OK;
+    char *s;
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".mnick", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_one", s);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".mname", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_two", s);
+
+    HDF *node = hdf_get_obj(cgi->hdf, PRE_RESERVE".event");
+    
+    return nerr_pass(trace_event(node, evth, ses, TRACE_TYPE_MEMBER_REG));
 }
 
 NEOERR* member_login_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)

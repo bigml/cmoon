@@ -38,7 +38,7 @@ NEOERR* plan_match_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     HDF *node = hdf_get_obj(cgi->hdf, PRE_RESERVE".event");
     
-    return nerr_pass(trace_event(node, evth, ses,TRACE_TYPE_PLAN_SEARCH));
+    return nerr_pass(trace_event(node, evth, ses, TRACE_TYPE_PLAN_SEARCH));
 }
 
 NEOERR* plan_leave_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
@@ -156,9 +156,34 @@ NEOERR* plan_leave_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
         /*
          * TODO sms notify
          */
+
+        expect += 100;
     }
     
-    return STATUS_OK;
+    /*
+     * trace leave event
+     */
+    /*
+     * subscribe + meet ? 100 : 0
+     */
+    hdf_set_int_value(cgi->hdf, PRE_RESERVE".event.ei_one", expect);
+
+    char *s;
+    HDF_FETCH_STR(plan, "scityid", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_two", s);
+    HDF_FETCH_STR(plan, "ecityid", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_three", s);
+
+    HDF_FETCH_STR(plan, "saddr", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_one", s);
+    HDF_FETCH_STR(plan, "eaddr", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_two", s);
+    HDF_FETCH_STR(plan, "sdate", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_three", s);
+
+    HDF *node = hdf_get_obj(cgi->hdf, PRE_RESERVE".event");
+    
+    return nerr_pass(trace_event(node, evth, ses, TRACE_TYPE_PLAN_LEAVE));
 }
 
 NEOERR* plan_info_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
