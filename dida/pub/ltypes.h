@@ -8,9 +8,16 @@ __BEGIN_DECLS
 typedef struct _session {
     int reqtype;
     time_t tm_cache_browser;
+
     char *mname;
+    HDF  *province;
+    HDF  *city;
+    int   browser;
+    float bversion;
+
     char *dataer;
     char *render;
+
     void *data;
 } session_t;
 

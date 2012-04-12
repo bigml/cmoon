@@ -70,7 +70,6 @@ enum {
 
 enum {
     REP_ERR_PLAN_NEXIST = 34,
-    REP_ERR_PLAN_NMATCH,
     REP_ERR_PLANED
 };
 

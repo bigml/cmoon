@@ -181,16 +181,13 @@ static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
                                     &str, NULL);
                 MDB_QUERY_RAW(db, "plan", _COL_PLAN, "%s", NULL, str.buf);
                 err = mdb_set_rows(q->hdfsnd, db, _COL_PLAN, "plans", "0");
-
                 ttnum = mdb_get_rows(db);
-                if (nerr_handle(&err, NERR_NOT_FOUND))
-                    return nerr_raise(REP_ERR_PLAN_NMATCH, "no result %d %d %s",
-                                      scityid, ecityid, rect);
+                nerr_handle(&err, NERR_NOT_FOUND);
             }
             if (err != STATUS_OK) return nerr_pass(err);
         }
 
-        if (!pdate) goto done;
+        if (!pdate || ttnum == 0) goto done;
             
         /*
          * fuck the time

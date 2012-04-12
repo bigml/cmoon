@@ -17,7 +17,28 @@ NEOERR* plan_match_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     hdf_copy(cgi->hdf, PRE_OUTPUT, evt->hdfrcv);
     hdf_set_attr(cgi->hdf, PRE_OUTPUT".plans", "type", "array");
 
-    return STATUS_OK;
+    /*
+     * trace search event
+     */
+    char *s;
+    HDF_FETCH_STR(evt->hdfrcv, "_ntt", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_one", s);
+
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".scityid", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_two", s);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".ecityid", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_three", s);
+
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".saddr", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_one", s);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".eaddr", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_two", s);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".date", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_three", s);
+
+    HDF *node = hdf_get_obj(cgi->hdf, PRE_RESERVE".event");
+    
+    return nerr_pass(trace_event(node, evth, ses,TRACE_TYPE_PLAN_SEARCH));
 }
 
 NEOERR* plan_leave_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)

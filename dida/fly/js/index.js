@@ -254,8 +254,8 @@ bmoon.index = {
                 o.rendPlan(0);
             } else {
                 p.addClass('error');
-                $('<span class="vres">'+ data.errmsg + '</span>').appendTo(p);
-                if (data.errcode == 35) o.e_mc_noresult.removeClass('hide');
+                $('<span class="vres">'+ data.errmsg || ' ' + '</span>').appendTo(p);
+                if (data._ntt == 0) o.e_mc_noresult.fadeIn();
             }
         });
     },
@@ -323,6 +323,11 @@ bmoon.index = {
         
         //o.g_map.addOverlay(o.g_prect);
         o.rendMatch(plan, ncur);
+
+        bmoon.dida.tracePageview({
+            es_one: 'http://imdida.org/plan/info',
+            es_two: '?id=' + plan.id
+        });
     },
 
     rendMatch: function(plan, ncur) {

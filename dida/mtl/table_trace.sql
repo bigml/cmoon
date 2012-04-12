@@ -6,7 +6,7 @@ CREATE TABLE emap (
     provid int NOT NULL DEFAULT 0,           -- province id
     cityid int NOT NULL DEFAULT 0,           -- smalleset city id
     browser smallint NOT NULL DEFAULT 0, -- 0 firefox, 1 chorme, 2 ie...
-    bversion varchar(16) NOT NULL DEFAULT '',
+    bversion real NOT NULL DEFAULT 0.0,
 
     ei_one   int NOT NULL DEFAULT 0,
     ei_two   int NOT NULL DEFAULT 0,

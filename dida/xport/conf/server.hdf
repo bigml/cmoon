@@ -304,7 +304,7 @@ Plugin {
                 provid [type=int, require=true] = provid
                 cityid [type=int, require=true] = cityid
                 browser [type=int, require=true] = browser
-                bversion [type=int, require=true] = bversion
+                bversion [type=float, require=true] = bversion
 
                 ei_one [type=int] = ei_one
                 ei_two [type=int] = ei_two

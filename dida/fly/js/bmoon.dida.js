@@ -30,7 +30,20 @@ bmoon.dida = {
     },
 
     tracetype: {
-        pageview: 0
+        pageview:   0,
+        
+        plansearch: 11,
+        planbosh:   12,
+        planleave:  13,
+        planspd:    14,
+        planexpect: 15,
+        planmeet:   16,
+        
+        memberreg:   51,
+        mmeberlogin: 52,
+        membermsg:   53,
+        
+        borecomment: 71
     },
 
     browsers: ['mozilla', 'webkit', 'opera', 'msie'],
@@ -141,10 +154,10 @@ bmoon.dida = {
         o.loginmsn.bind('keydown', 'return', o.login);
     },
 
-    tracePageview: function() {
+    tracePageview: function(pdata) {
         var o = bmoon.dida.init();
 
-        var pdata = {
+        pdata = $.extend({
             _op: 'add',
             type: o.tracetype.pageview,
             sender: o.c_mname || o.c_username,
@@ -153,9 +166,10 @@ bmoon.dida = {
             browser: o.getBrowserType(),
             bversion: $.browser.version,
 
-            es_one: bmoon.utl.url,
-            es_two: bmoon.utl.title
-        };
+            es_one: bmoon.utl.urlclean,
+            es_two: bmoon.utl.urlparm,
+            es_three: bmoon.utl.title
+        }, pdata || {});
         
         $.post('/json/trace', pdata, function(data) {
             ;
