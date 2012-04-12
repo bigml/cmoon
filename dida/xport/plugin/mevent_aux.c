@@ -73,8 +73,8 @@ static NEOERR* aux_cmd_cmtget(struct aux_entry *e, QueueEntry *q)
                                   " ORDER BY intime DESC LIMIT %d OFFSET %d",
                                   NULL, type, CMT_ST_NORMAL, oid, count, offset);
                     sprintf(tok, "%d.%d.cmts", type, oid);
-                    err = mdb_set_rows(q->hdfsnd, db, _COL_CMT, tok, NULL);
-                    nerr_handle(&err, NERR_NOT_FOUND);
+                    err = mdb_set_rows(q->hdfsnd, db, _COL_CMT, tok,
+                                       NULL, MDB_FLAG_EMPTY_OK);
                     if (err != STATUS_OK) return nerr_pass(err);
                     mstr_html_escape(hdf_get_child(q->hdfsnd, tok), "content");
                     type = oid = -1;
@@ -94,8 +94,8 @@ static NEOERR* aux_cmd_cmtget(struct aux_entry *e, QueueEntry *q)
                           " ORDER BY intime DESC LIMIT %d OFFSET %d",
                           NULL, type, CMT_ST_NORMAL, oid, count, offset);
             sprintf(tok, "%d.%d.cmts", type, oid);
-            err = mdb_set_rows(q->hdfsnd, db, _COL_CMT, tok, NULL);
-            nerr_handle(&err, NERR_NOT_FOUND);
+            err = mdb_set_rows(q->hdfsnd, db, _COL_CMT, tok,
+                               NULL, MDB_FLAG_EMPTY_OK);
             if (err != STATUS_OK) return nerr_pass(err);
             mstr_html_escape(hdf_get_child(q->hdfsnd, tok), "content");
         }
@@ -172,7 +172,7 @@ static NEOERR* aux_cmd_memoryget(struct aux_entry *e, QueueEntry *q)
         MDB_QUERY_RAW(db, "memory", _COL_MEMORY,
                       "id<=%d AND statu=%d ORDER BY id DESC LIMIT 1",
                       NULL, id, MEMORY_ST_OK);
-        err = mdb_set_row(q->hdfsnd, db, _COL_MEMORY, NULL);
+        err = mdb_set_row(q->hdfsnd, db, _COL_MEMORY, NULL, MDB_FLAG_Z);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, MEMORY_CC_SEC, PREFIX_MEMORY"%d", id);
@@ -281,8 +281,8 @@ static NEOERR* aux_cmd_inboxget(struct aux_entry *e, QueueEntry *q)
         MDB_QUERY_RAW(db, "inbox", _COL_INBOX, "type=%d AND statu=%d AND mid=%d "
                       " ORDER BY intime DESC LIMIT %d OFFSET %d",
                       NULL, type, INBOX_ST_NORMAL, mid, count, offset);
-        err = mdb_set_rows(q->hdfsnd, db, _COL_INBOX, "inbox", NULL);
-        nerr_handle(&err, NERR_NOT_FOUND);
+        err = mdb_set_rows(q->hdfsnd, db, _COL_INBOX, "inbox",
+                           NULL, MDB_FLAG_EMPTY_OK);
         if (err != STATUS_OK) return nerr_pass(err);
 
         /*

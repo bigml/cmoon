@@ -112,7 +112,7 @@ static NEOERR* fft_cmd_expect_match(struct fft_entry *e, QueueEntry *q)
      * get all matched expect by position
      */
     MDB_QUERY_RAW(db, "expect", _COL_EXPECT, "%s", NULL, str.buf);
-    err = mdb_set_rows(node, db, _COL_EXPECT, "expects", "0");
+    err = mdb_set_rows(node, db, _COL_EXPECT, "expects", "0", MDB_FLAG_Z);
     if (nerr_handle(&err, NERR_NOT_FOUND)) return STATUS_OK;
 	if (err != STATUS_OK) return nerr_pass(err);
 

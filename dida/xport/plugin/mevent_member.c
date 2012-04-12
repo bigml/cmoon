@@ -36,7 +36,7 @@ static NEOERR* member_cmd_car_get(struct member_entry *e, QueueEntry *q)
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
         MDB_QUERY_RAW(db, "car", _COL_CAR, "mid=%d", NULL, mid);
-        err = mdb_set_row(q->hdfsnd, db, _COL_CAR, NULL);
+        err = mdb_set_row(q->hdfsnd, db, _COL_CAR, NULL, MDB_FLAG_Z);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, CAR_CC_SEC, PREFIX_CAR"%d", mid);
@@ -60,14 +60,13 @@ static NEOERR* member_cmd_mem_get(struct member_entry *e, QueueEntry *q)
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
         MDB_QUERY_RAW(db, "member", _COL_MEMBER, "mid=%d", NULL, mid);
-        err = mdb_set_row(q->hdfsnd, db, _COL_MEMBER, NULL);
+        err = mdb_set_row(q->hdfsnd, db, _COL_MEMBER, NULL, MDB_FLAG_Z);
         if (nerr_handle(&err, NERR_NOT_FOUND))
             return nerr_raise(REP_ERR_MEMBER_NEXIST, "member %d not exist", mid);
         if (err != STATUS_OK) return nerr_pass(err);
 
         MDB_QUERY_RAW(db, "car", _COL_CAR, "mid=%d", NULL, mid);
-        err = mdb_set_row(q->hdfsnd, db, _COL_CAR, NULL);
-        nerr_handle(&err, NERR_NOT_FOUND);
+        err = mdb_set_row(q->hdfsnd, db, _COL_CAR, NULL, MDB_FLAG_EMPTY_OK);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, MEMBER_CC_SEC, PREFIX_MEMBER"%d", mid);
@@ -91,7 +90,7 @@ static NEOERR* member_cmd_mem_priv_get(struct member_entry *e, QueueEntry *q)
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
         MDB_QUERY_RAW(db, "member", _COL_MEMBER_ADMIN, "mid=%d", NULL, mid);
-        err = mdb_set_row(q->hdfsnd, db, _COL_MEMBER_ADMIN, NULL);
+        err = mdb_set_row(q->hdfsnd, db, _COL_MEMBER_ADMIN, NULL, MDB_FLAG_Z);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, MEMBER_CC_SEC, PREFIX_MEMBER_PRIV"%d", mid);
@@ -209,7 +208,7 @@ static NEOERR* member_cmd_mem_getrlink(struct member_entry *e, QueueEntry *q)
     mdb_conn *db = e->db;
 
     MDB_QUERY_RAW(db, "memberreset", _COL_RESET, "mname=$1", "s", mname);
-    err = mdb_set_row(q->hdfsnd, db, _COL_RESET, NULL);
+    err = mdb_set_row(q->hdfsnd, db, _COL_RESET, NULL, MDB_FLAG_Z);
 	if (err != STATUS_OK) return nerr_pass(err);
     //if (nerr_handle(&err, NERR_NOT_FOUND))
     //return nerr_raise(REP_ERR_NRESET, "%s hasn't reseted", mname);

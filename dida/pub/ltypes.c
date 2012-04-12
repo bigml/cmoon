@@ -47,7 +47,7 @@ NEOERR* session_init(CGI *cgi, HASH *dbh, session_t **ses)
     HDF_FETCH_STR(cgi->hdf, PRE_COOKIE".province", s);
     hdf_init(&lses->province);
     if (s) {
-        neos_unescape(s, strlen(s), '%');
+        neos_unescape((UINT8*)s, strlen(s), '%');
         hdf_set_value(lses->province, NULL, s);
         mjson_str2hdf(lses->province, NULL);
     }
@@ -58,7 +58,7 @@ NEOERR* session_init(CGI *cgi, HASH *dbh, session_t **ses)
     HDF_FETCH_STR(cgi->hdf, PRE_COOKIE".city", s);
     hdf_init(&lses->city);
     if (s) {
-        neos_unescape(s, strlen(s), '%');
+        neos_unescape((UINT8*)s, strlen(s), '%');
         hdf_set_value(lses->city, NULL, s);
         mjson_str2hdf(lses->city, NULL);
     }

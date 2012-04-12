@@ -10,7 +10,8 @@ NEOERR* pos_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     if (!cgi || !cgi->hdf || !db) return nerr_raise(NERR_ASSERT, "paramter null");
 
     MDB_QUERY_RAW(db, "city", _COL_CITY, "geopos ?- point '(0,0)' LIMIT 1000", NULL);
-    return nerr_pass(mdb_set_rows(cgi->hdf, db, _COL_CITY, PRE_OUTPUT".cts", NULL));
+    return nerr_pass(mdb_set_rows(cgi->hdf, db, _COL_CITY,
+                                  PRE_OUTPUT".cts", NULL, MDB_FLAG_Z));
 }
 
 NEOERR* pos_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)

@@ -38,7 +38,7 @@ static bool plan_spd_exist(struct plan_entry *e, QueueEntry *q,
     
     if (!cache_getf(cd, &val, &vsize, PREFIX_SPD"%s%s", ori, id)) {
         MDB_QUERY_RAW(db, "plan", "mid", "ori=$1 AND oid=$2", "ss", ori, id);
-        err = mdb_set_row(q->hdfsnd, db, "mid", NULL);
+        err = mdb_set_row(q->hdfsnd, db, "mid", NULL, MDB_FLAG_Z);
         if(nerr_handle(&err, NERR_NOT_FOUND)) return false;
         nerr_ignore(&err);
         
@@ -62,7 +62,7 @@ static NEOERR* plan_cmd_plan_get(struct plan_entry *e, QueueEntry *q)
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
         MDB_QUERY_RAW(db, "plan", _COL_PLAN, "id=%d", NULL, id);
-        err = mdb_set_row(q->hdfsnd, db, _COL_PLAN, NULL);
+        err = mdb_set_row(q->hdfsnd, db, _COL_PLAN, NULL, MDB_FLAG_Z);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, PLAN_CC_SEC, PREFIX_PLAN"%d", id);
@@ -86,7 +86,7 @@ static NEOERR* plan_cmd_plan_priv_get(struct plan_entry *e, QueueEntry *q)
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
         MDB_QUERY_RAW(db, "plan", _COL_PLAN_ADMIN, "id=%d", NULL, id);
-        err = mdb_set_row(q->hdfsnd, db, _COL_PLAN_ADMIN, NULL);
+        err = mdb_set_row(q->hdfsnd, db, _COL_PLAN_ADMIN, NULL, MDB_FLAG_Z);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, PLAN_CC_SEC, PREFIX_PLAN_PRIV"%d", id);
@@ -146,7 +146,7 @@ static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
         if (err != STATUS_OK) return nerr_pass(err);
 
         MDB_QUERY_RAW(db, "plan", _COL_PLAN, "%s", NULL, str.buf);
-        err = mdb_set_rows(q->hdfsnd, db, _COL_PLAN, "plans", "0");
+        err = mdb_set_rows(q->hdfsnd, db, _COL_PLAN, "plans", "0", MDB_FLAG_Z);
         ttnum = mdb_get_rows(db);
 
         /*
@@ -168,7 +168,7 @@ static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
                                 hdf_get_obj(g_cfg, CONFIG_PATH".QueryCond.geob"),
                                 &str, NULL);
             MDB_QUERY_RAW(db, "plan", _COL_PLAN, "%s", NULL, str.buf);
-            err = mdb_set_rows(q->hdfsnd, db, _COL_PLAN, "plans", "0");
+            err = mdb_set_rows(q->hdfsnd, db, _COL_PLAN, "plans", "0", MDB_FLAG_Z);
             ttnum = mdb_get_rows(db);
 
             if (nerr_handle(&err, NERR_NOT_FOUND)) {
@@ -180,9 +180,9 @@ static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
                                     hdf_get_obj(g_cfg, CONFIG_PATH".QueryCond.geox"),
                                     &str, NULL);
                 MDB_QUERY_RAW(db, "plan", _COL_PLAN, "%s", NULL, str.buf);
-                err = mdb_set_rows(q->hdfsnd, db, _COL_PLAN, "plans", "0");
+                err = mdb_set_rows(q->hdfsnd, db, _COL_PLAN, "plans", "0",
+                                   MDB_FLAG_EMPTY_OK);
                 ttnum = mdb_get_rows(db);
-                nerr_handle(&err, NERR_NOT_FOUND);
             }
             if (err != STATUS_OK) return nerr_pass(err);
         }
@@ -280,7 +280,7 @@ static NEOERR* plan_cmd_plan_add(struct plan_entry *e, QueueEntry *q)
 
     MDB_EXEC(db, NULL, "INSERT INTO plan %s RETURNING id", NULL, str.buf);
 
-    err = mdb_set_row(q->hdfsnd, db, "id", NULL);
+    err = mdb_set_row(q->hdfsnd, db, "id", NULL, MDB_FLAG_Z);
 	if (err != STATUS_OK) return nerr_pass(err);
 
     string_clear(&str);
@@ -363,8 +363,7 @@ static NEOERR* plan_cmd_plan_mine(struct plan_entry *e, QueueEntry *q)
                           " ORDER BY id DESC LIMIT %d OFFSET %d",
                           NULL, PLAN_ST_DELETE, mid, count, offset);
         }
-        err = mdb_set_rows(q->hdfsnd, db, cols, "plans", NULL);
-        nerr_handle(&err, NERR_NOT_FOUND);
+        err = mdb_set_rows(q->hdfsnd, db, cols, "plans", NULL, MDB_FLAG_EMPTY_OK);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, PLAN_MINE_CC_SEC, PREFIX_PLAN_MINE"%d_%d", mid, offset);
