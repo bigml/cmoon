@@ -2,8 +2,6 @@
 #include "lheads.h"
 #include "omember.h"
 
-#define SET_MY_ACTION(out) hdf_set_value(out, PRE_WALK_SACTION".0", "actions_1");
-
 static void member_after_login(CGI *cgi, HASH *evth, char *mname, char *mnick)
 {
     char tm[LEN_TM_GMT], *p, mmsn[LEN_CK];
@@ -362,7 +360,7 @@ NEOERR* member_account_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
         MEMBER_CHECK_LOGIN();
     }
 
-    SET_MY_ACTION(cgi->hdf);
+    SET_DASHBOARD_ACTION(cgi->hdf);
     
     return STATUS_OK;
 }

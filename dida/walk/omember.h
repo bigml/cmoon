@@ -53,6 +53,18 @@ __BEGIN_DECLS
             return nerr_raise(LERR_LIMIT, "%s not admin", mname);       \
     } while (0)
 
+/*
+ * called after CHECK_XXX() immediately
+ */
+#define SET_DASHBOARD_ACTION(out)                                       \
+    do {                                                                \
+        hdf_set_value(out, PRE_WALK_SACTION".0", "actions_1");          \
+        mevent_t *_evt = hash_lookup(evth, "member");                   \
+        if (hdf_get_int_value(_evt->hdfrcv, "verify", -1) >= MEMBER_VF_ADMIN) \
+            hdf_set_value(out, PRE_WALK_SACTION".1", "actions_2");      \
+    }                                                                   \
+    while (0)
+
 /* TODO */
 #if 0
 #define LEGAL_CHECK_NICK(mnick)                                     \

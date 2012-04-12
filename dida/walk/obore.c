@@ -2,8 +2,7 @@
 #include "lheads.h"
 #include "obore.h"
 
-#define SET_ADMIN_ACTION(out) hdf_set_value(out, PRE_WALK_SACTION".0", "actions_1");
-
+#define SET_BORE_ACTION(out) hdf_set_value(out, PRE_WALK_SACTION".0", "actions_1");
 
 NEOERR* bore_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
@@ -16,7 +15,7 @@ NEOERR* bore_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     err = member_check_login_data_get(cgi, dbh, evth, ses);
     if (err == STATUS_OK) {
         if (hdf_get_int_value(evt_member->hdfrcv, "verify", -1) >= MEMBER_VF_ADMIN)
-            SET_ADMIN_ACTION(cgi->hdf);
+            SET_BORE_ACTION(cgi->hdf);
     }
     nerr_ignore(&err);
 
@@ -35,8 +34,7 @@ NEOERR* bore_new_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 	NEOERR *err;
     
     MEMBER_CHECK_ADMIN();
-
-    SET_ADMIN_ACTION(cgi->hdf);
+    SET_BORE_ACTION(cgi->hdf);
 
     return STATUS_OK;
 }
@@ -48,8 +46,7 @@ NEOERR* bore_op_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 	NEOERR *err;
     
     MEMBER_CHECK_ADMIN();
-
-    SET_ADMIN_ACTION(cgi->hdf);
+    SET_BORE_ACTION(cgi->hdf);
 
     hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
 

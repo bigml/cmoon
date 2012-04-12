@@ -2,8 +2,6 @@
 #include "lheads.h"
 #include "oinbox.h"
 
-#define SET_MY_ACTION(out) hdf_set_value(out, PRE_WALK_SACTION".0", "actions_1");
-
 NEOERR* inbox_multi_add(HDF *datanode, HASH *evth, char *inboxtype)
 {
     mevent_t *evt;
@@ -46,7 +44,7 @@ NEOERR* inbox_system_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     MCS_NOT_NULLB(cgi->hdf, evt);
     
     MEMBER_CHECK_LOGIN();
-    SET_MY_ACTION(cgi->hdf);
+    SET_DASHBOARD_ACTION(cgi->hdf);
 
     hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
     hdf_set_value(evt->hdfsnd, "mname", mname);
@@ -80,7 +78,7 @@ NEOERR* inbox_private_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     NEOERR *err;
     
     MEMBER_CHECK_LOGIN();
-    SET_MY_ACTION(cgi->hdf);
+    SET_DASHBOARD_ACTION(cgi->hdf);
 
     return STATUS_OK;
 }
@@ -91,7 +89,7 @@ NEOERR* inbox_sent_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     NEOERR *err;
     
     MEMBER_CHECK_LOGIN();
-    SET_MY_ACTION(cgi->hdf);
+    SET_DASHBOARD_ACTION(cgi->hdf);
 
     return STATUS_OK;
 }
