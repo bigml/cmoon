@@ -28,6 +28,7 @@ input.btn, button.btn {height: 28px; width: 80px; text-align: center; vertical-a
 input.btn:hover {cursor: pointer; background-position: 0 -28px;}
 input.btn-w, button.btn-w{width: 130px; background: url(/img/bg/btn.png) -80px 0 no-repeat;}
 input.btn-w:hover {cursor: pointer; background-positon: -80px -28px;}
+input.shorter {width: 80px;}
 input.short {width: 118px;}
 input.long {width: 200px;}
 input.llong {width: 260px;}
@@ -35,10 +36,13 @@ input.llong {width: 260px;}
 a.btn {display: inline-block; height: 28px; width: 80px; text-align: center; color: #fff; background: url(/img/bg/btn.png) 0 0 no-repeat;}
 a.btn:hover {background-position: 0 -28px;}
 
-dl.inp dt {float: left; clear: left; margin: 5px; line-height: 22px; text-align: right; width: 75px;}
-dl.inp dd {margin: 5px; line-height: 22px; float: left;}
+dl.inp dt {float: left; clear: left; margin: 5px; line-height: 24px; text-align: right; width: 75px;}
+dl.inp dd {margin: 5px; line-height: 24px; float: left;}
 dl.inp dd span {margin-left: 11px;}
 /*dl.inp dd span {margin-left: 20px;}*/
+dl.oneline dt {float: left; margin: 0 5px 0 20px; line-height: 24px; text-align: right;}
+dl.oneline dd {float: left; line-height: 24px;}
+dl.oneline dd input {float: left;}
 
 table.list {border: 1px solid #CCCCCC; border-collapse:collapse; width:100%;}
 table.list th {background-color: #eee; border-left:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC; padding:4px 4px; text-align:center; width:auto;}

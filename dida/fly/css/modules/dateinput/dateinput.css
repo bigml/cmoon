@@ -158,14 +158,14 @@ a.caldisabled {
 .caltrigger {
 	display:block;
 	width:26px;
-	height:28px;
+	height:24px;
 	float:left;
-	background:url(/img/modules/dateinput/icon.jpg) no-repeat 0 0;
-	margin-top:-3px;
+	background:url(/img/modules/dateinput/icon-l.jpg) no-repeat 0 0;
+	/*margin-top:-3px;*/
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
 }
 
 .active .caltrigger {
-	background-position: 0 -28px;
+	background-position: 0 -24px;
 }
