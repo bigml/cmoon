@@ -35,5 +35,6 @@
 #include "oinbox.h"
 #include "oemail.h"
 #include "otrace.h"
+#include "osystem.h"
 
 #endif    /* __LHEADS_H__ */

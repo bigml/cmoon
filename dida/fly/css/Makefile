@@ -9,7 +9,8 @@ FILES = b/base.css \
         b/member/regist.css b/member/account.css b/member/reset.css \
         b/bore/bore.css b/bore/op.css \
         b/plan/info.css b/plan/mine.css \
-        b/inbox/system.css b/inbox/private.css b/inbox/sent.css
+        b/inbox/system.css b/inbox/private.css b/inbox/sent.css \
+        b/system/view.css
 
 all: preload $(FILES)
 
@@ -20,6 +21,7 @@ preload:
 	@mkdir -p b/bore/
 	@mkdir -p b/plan/
 	@mkdir -p b/inbox/
+	@mkdir -p b/system/
 
 b/base.css: reset.css base.css layout.css modules/overlay.css
 
@@ -48,6 +50,9 @@ b/inbox/private.css: modules/accordion.css modules/box.css modules/pagenav.css \
                      inbox/inbox.css
 b/inbox/sent.css: modules/accordion.css modules/box.css modules/pagenav.css \
                   inbox/inbox.css
+
+b/system/view.css: modules/accordion.css modules/box.css \
+                   modules/dateinput/dateinput.css system/system.css
 
 %.css:
 	$(CSSGLUE) $^ > $@

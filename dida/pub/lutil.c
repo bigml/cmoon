@@ -15,6 +15,7 @@ static void lutil_donotcall()
     bore_data_get(NULL, NULL, NULL, NULL);
     comment_data_get(NULL, NULL, NULL, NULL);
     trace_data_add(NULL, NULL, NULL, NULL);
+    system_view_data_get(NULL, NULL, NULL, NULL);
 }
 
 void* lutil_get_data_handler(void *lib, CGI *cgi, session_t *ses)

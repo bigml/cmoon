@@ -14,7 +14,8 @@ FILES = b/base.js \
         b/member/regist.js b/member/reset.js b/member/account.js \
         b/bore/bore.js b/bore/op.js \
         b/plan/info.js b/plan/mine.js \
-        b/inbox/system.js
+        b/inbox/system.js \
+        b/system/ie.js b/system/view.js
 
 all: preload $(FILES)
 
@@ -25,6 +26,7 @@ preload:
 	@mkdir -p b/bore/
 	@mkdir -p b/plan/
 	@mkdir -p b/inbox/
+	@mkdir -p b/system/
 
 b/base.js: pub/jquery-1.7.1.js pub/jquery.cookie.js pub/jquery.md5.js \
            pub/jquery.hotkeys.js pub/jquery.mninpval.js \
@@ -72,6 +74,11 @@ b/plan/mine.js: pub/jquerytools/src/dateinput/dateinput.js \
                 plan/mine.js
 
 b/inbox/system.js: pub/jquery.mnnav.js inbox/system.js
+
+b/system/ie.js: pub/flot/excanvas.min.js
+b/system/view.js: pub/jquerytools/src/dateinput/dateinput.js \
+                  pub/jquery.mntable.js \
+                  pub/flot/jquery.flot.js system/view.js
 
 %.js:
 	@echo -n > $@

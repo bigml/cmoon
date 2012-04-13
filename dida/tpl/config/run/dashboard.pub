@@ -13,4 +13,10 @@ Dataset.Layout {
             href = /inbox/system
         }
     }
+    actions_2 {
+        3 {
+            name = 系统统计
+            href = /system/view
+        }
+    }
 }

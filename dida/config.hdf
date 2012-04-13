@@ -40,8 +40,26 @@ Db {
         city = pgsql:dbname=merry host=localhost user=dida password=loveu
         plan = pgsql:dbname=merry host=localhost user=dida password=loveu
         aux = pgsql:dbname=merry host=localhost user=dida password=loveu
+        trace = pgsql:dbname=merry host=localhost user=dida password=loveu
     }
     QueryCond {
+        system {
+            view {
+                type [type=int, require=true] = type =
+                timed [type=raw] = intime >
+                times = intime >
+                timee = intime <
+            }
+            who {
+                type [type=int, require=true] = type =
+                hour = date_trunc('hour', intime) =
+            }
+            viewdetail {
+                type [type=int, require=true] = type =
+                sender = sender =
+                day = date_trunc('day', intime) =
+            }
+        }
     }
     UpdateCol {
         city {
