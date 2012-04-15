@@ -41,7 +41,7 @@ b/index.js: pub/jquerytools/src/dateinput/dateinput.js \
             index.js
 
 b/admin/spd/58.user.js: admin/spd/58.user.js
-b/admin/spd/58.js: pub/bmoon.js bmoon.dida.js admin/spd/58.js
+b/admin/spd/58.js: pub/jquery.cookie.js pub/bmoon.js bmoon.dida.js admin/spd/58.js
 
 b/admin/spd/ganji.user.js: admin/spd/ganji.user.js
 b/admin/spd/ganji.js: pub/jquery-1.7.1.js pub/jquery.cookie.js \

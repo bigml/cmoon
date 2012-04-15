@@ -17,8 +17,8 @@ bmoon.spdganji = {
 
         o.area = href.match(/http:\/\/(.*).ganji.*/)[1];
         
-        if (href.match(/.*\/([0-9|_]+)\.htm$/)) {
-            o.parseNode(o.area + href.match(/.*\/([0-9|_]+)\.htm$/)[1]);
+        if (href.match(/.*\/([0-9|_]+)x\.htm$/)) {
+            o.parseNode(o.area + href.match(/.*\/([0-9|_]+)x\.htm$/)[1]);
         } else if (href.match(/.*ganji.com\/pincheshangxiaban\//)){
             o.parseList();
         }
@@ -38,17 +38,9 @@ bmoon.spdganji = {
         dad = 0, saddr = '', eaddr = '', marks = '', time = '', size = 0, fee = 0,
         repeat = 0, sdate = '', stime = '', attach = '', uname = '赶集网友';
 
-        var x = $.trim($('h1', '.body_left').html()).split('→');
-        if (x) {
-            saddr = $.trim(x[0]);
-            eaddr = $.trim(x[1]);
-            if (eaddr.match(/[0-9]+元/)) {
-                fee = parseInt(eaddr.match(/[0-9]+元/));
-            }
-
-            saddr.replace('-', '');
-            eaddr = $.trim(eaddr.match(/[^0-9]+/)[0].replace('面议', '').replace('-', ''));
-        }
+        saddr = $('.body_left').html().match('起点：([^<\n]+)')[1];
+        
+        eaddr = $('.body_left').html().match('终点：([^<\n]+)')[1];
 
         dad = $('.body_left').html().match('我是车主') ? 1: 0;
 
