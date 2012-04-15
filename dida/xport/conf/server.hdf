@@ -127,7 +127,7 @@ Plugin {
             plan {
                 phone [maxlen=128] = phone
                 contact [maxlen=128] = contact
-                attach = attach
+                attach [maxlen=256] = attach
 
                 ori [type=int] = ori
                 oid [maxlen=64] = oid

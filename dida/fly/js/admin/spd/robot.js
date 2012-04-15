@@ -113,9 +113,18 @@ bmoon.spdrobot = {
                                     o.parsePlanErr(plan);
                                 }
 
-                                var pdata = {
+                                var nplan = {
+                                    id: plan.id,
+                                    scityid: plan.scityid,
+                                    ecityid: plan.ecityid,
+                                    rect: plan.rect,
+                                    sgeo: plan.sgeo,
+                                    egeo: plan.egeo,
+                                    km: plan.km
+                                },
+                                pdata = {
                                     _op: 'mod',
-                                    plan: JSON.stringify(plan),
+                                    plan: JSON.stringify(nplan),
                                     _type_plan: 'object'
                                 };
                                 $.post('/json/spd/post/robot', pdata, function(data) {
@@ -139,10 +148,13 @@ bmoon.spdrobot = {
     parsePlanErr: function(plan) {
         var o = bmoon.spdrobot.init();
 
-        plan.statu = 11;
-        var pdata = {
+        var nplan = {
+            id: plan.id,
+            statu: 11
+        },
+        pdata = {
             _op: 'mod',
-            plan: JSON.stringify(plan),
+            plan: JSON.stringify(nplan),
             _type_plan: 'object'
         };
         $.post('/json/spd/post/robot', pdata, function(data) {
