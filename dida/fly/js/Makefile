@@ -38,7 +38,7 @@ b/base.js: pub/jquery-1.7.1.js pub/jquery.cookie.js pub/jquery.md5.js \
 b/loadgmap.js: loadgmap.js
 
 b/index.js: pub/jquerytools/src/dateinput/dateinput.js \
-            index.js
+            pub/jquery.mnblink.js index.js
 
 b/admin/spd/58.user.js: admin/spd/58.user.js
 b/admin/spd/58.js: pub/jquery.cookie.js pub/bmoon.js bmoon.dida.js admin/spd/58.js
@@ -71,6 +71,7 @@ b/plan/info.js: plan/info.js
 b/plan/mine.js: pub/jquerytools/src/dateinput/dateinput.js \
                 pub/jquerytools/src/toolbox/toolbox.expose.js \
                 pub/jquery.mnnav.js pub/jquerytools/src/tooltip/tooltip.js \
+                pub/jquery.mnblink.js \
                 plan/mine.js
 
 b/inbox/system.js: pub/jquery.mnnav.js inbox/system.js

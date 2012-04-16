@@ -282,6 +282,8 @@ bmoon.planmine = {
                 }
             }
         });
+        o.e_pnew_saddr.bind('blur', function() {setTimeout(o.checkAddrInput, 1000);});
+        o.e_pnew_eaddr.bind('blur', function() {setTimeout(o.checkAddrInput, 1000);});
     },
 
     rendNav: function() {
@@ -313,6 +315,26 @@ bmoon.planmine = {
         o.g_emarker.addEventListener('dragend', function(e) {
             o.markDraged('e');
         });
+    },
+
+    checkAddrInput: function() {
+        var o = bmoon.planmine.init();
+
+        var p = o.e_plan_new.data('_postData');
+        
+        if (o.e_pnew_saddr.val().length && !p.sll) {
+            o.e_pnew_saddr.val('请在下拉框中选择起点地址');
+            o.e_pnew_saddr.mnblink({
+                blinks: 2,
+                callback: function() {o.e_pnew_saddr.val('');}
+            });
+        } else if (o.e_pnew_eaddr.val().length && !p.ell) {
+            o.e_pnew_eaddr.val('请在下拉框中选择终点地址');
+            o.e_pnew_eaddr.mnblink({
+                blinks: 2,
+                callback: function() {o.e_pnew_eaddr.val('');}
+            });
+        }
     },
 
     setPlanSub: function() {

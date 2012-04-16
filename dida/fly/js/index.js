@@ -185,6 +185,8 @@ bmoon.index = {
                 }
             }
         });
+        o.e_saddr.bind('blur', function() {setTimeout(o.checkAddrInput, 1000);});
+        o.e_eaddr.bind('blur', function() {setTimeout(o.checkAddrInput, 1000);});
     },
 
     setDefault: function() {
@@ -192,6 +194,24 @@ bmoon.index = {
 
         o.e_mc_no_contact.val(bmoon.dida.c_mname);
         o.e_mc_no_nick.val(bmoon.dida.c_mnick);
+    },
+
+    checkAddrInput: function() {
+        var o = bmoon.index.init();
+
+        if (o.e_saddr.val().length && !o.plan.sll) {
+            o.e_saddr.val('请在下拉框中选择起点地址');
+            o.e_saddr.mnblink({
+                blinks: 2,
+                callback: function() {o.e_saddr.val('');}
+            });
+        } else if (o.e_eaddr.val().length && !o.plan.ell) {
+            o.e_eaddr.val('请在下拉框中选择终点地址');
+            o.e_eaddr.mnblink({
+                blinks: 2,
+                callback: function() {o.e_eaddr.val('');}
+            });
+        }
     },
 
     wdayChanged: function() {
