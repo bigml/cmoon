@@ -54,7 +54,7 @@ NEOERR* lerr_init()
         err = nerr_register(&LERR_ATTACK, "太过频繁，请稍后请求！");
         if (err != STATUS_OK) return nerr_pass(err);
 
-        err = nerr_register(&LERR_MEMBERED, "用户名已被注册！");
+        err = nerr_register(&LERR_MEMBERED, "邮箱已被注册！");
         if (err != STATUS_OK) return nerr_pass(err);
         err = nerr_register(&LERR_CARED, "一个帐户只能拥有一辆车！");
         if (err != STATUS_OK) return nerr_pass(err);

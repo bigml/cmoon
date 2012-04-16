@@ -208,6 +208,9 @@ bmoon.dida = {
         $.cookie('mnick', null, {path: '/', domain: g_site_domain});
         $.cookie('mnick_ori', null, {path: '/', domain: g_site_domain});
         $.cookie('mmsn', null, {path: '/', domain: g_site_domain});
+        o.c_mnick = null;
+        o.c_mname = null;
+        o.c_mmsn = null;
         o.loginmname.val("");
         o.loginCheck();
     },

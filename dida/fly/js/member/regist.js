@@ -75,6 +75,7 @@ bmoon.memberregist = {
                 $('<span class="vres">' + data.errmsg + '</span>').appendTo(p);
             } else {
                 p.addClass('success');
+                $('<span class="vres">注册成功</span>').appendTo(p);
                 setTimeout(function() {
                     //$('#done').fadeIn();
                     bmoon.dida.loginCheck();
