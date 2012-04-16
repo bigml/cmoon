@@ -85,7 +85,9 @@ bmoon.dida = {
 
         // bmoon.dida.js will used on other site
         // so, we return on other site to avoid js error
+        o.inimdida = false;
         if (!jQuery('a[rel="#bd-login"]').length) return o;
+        o.inimdida = true;
         
         o.e_content = $('#bd-content');
 
@@ -112,16 +114,18 @@ bmoon.dida = {
     onready: function() {
         var o = bmoon.dida.init();
 
-        o.mnick && o.bindClick();
-        o.mnick && o.loginCheck();
-
+        if (!o.inimdida) return;
+        
+        o.bindClick();
+        o.loginCheck();
+        
         o.loginref = bmoon.utl.getQueryString("loginref");
         if (o.loginref) {
-            o.mnick && o.loginoverlay.load();
+            o.loginoverlay.load();
         }
         o.vikierr = bmoon.utl.getQueryString("vikierr");
         if (o.vikierr) {
-            o.mnick && $('#content').empty().append('<div class="text-error">'+o.vikierr+'</div>')
+            $('#content').empty().append('<div class="text-error">'+o.vikierr+'</div>')
         }
 
         if (!o.c_username) {
