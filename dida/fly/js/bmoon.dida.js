@@ -72,12 +72,16 @@ bmoon.dida = {
         if (o.inited) return o;
         o.inited = true;
 
-        o.c_username = $.cookie('username');
-        o.c_mname    = $.cookie('mname');
-        o.c_mnick    = $.cookie('mnick_esc');
-        o.c_mmsn     = $.cookie('mmsn');
-        o.c_city     = $.parseJSON($.cookie('city'));
-        o.c_province = $.parseJSON($.cookie('province'));
+        try {
+            o.c_username = $.cookie('username');
+            o.c_mname    = $.cookie('mname');
+            o.c_mnick    = $.cookie('mnick_esc');
+            o.c_mmsn     = $.cookie('mmsn');
+            o.c_city     = $.parseJSON($.cookie('city'));
+            o.c_province = $.parseJSON($.cookie('province'));
+        } catch (err) {
+            return o;
+        }
 
         // bmoon.dida.js will used on other site
         // so, we return on other site to avoid js error
