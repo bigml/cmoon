@@ -2,24 +2,36 @@
 bmoon.spdpost = {
     version: '1.0',
 
-    _formAddr: function(name, addrs, loc) {
-        if (addrs) {
-            return '<div><strong>' + name + '</strong><br />' +
-                [(addrs[0] &&
-                  addrs[0].short_name || ''),
-                 (addrs[1] &&
-                  addrs[1].short_name || ''),
-                 (addrs[2] &&
-                  addrs[2].short_name || '')
-                ].join(' ') +
-                '（' + loc.lat().toFixed(4) + ', ' + loc.lng().toFixed(4) + '）';
-        } else return ' ';
+    // {"province":"","city":"长沙市","district":"开福区","street":"","streetNumber":"","business":"开福寺"}
+    _strFromPoi: function(d) {
+        if (bmoon.utl.type(d) == 'Object')
+            return d.province + d.city + d.district + d.street + d.streetNumber + d.business;
+    },
+    
+    _formInfoTitle: function(x) {
+        if (x != 'e') return '<b>线路起点</b>';
+        else return '<b>线路终点</b>';
+    },
+
+    _formInfoContent: function(result) {
+        var s = result.address,
+        pois = result.surroundingPois;
+
+        if (pois && pois.length > 0) {
+            s += '<br /><b>周边信息</b>'
+            for (var i = 0; i < pois.length; i++) {
+                s += '<br />' + pois[i].title;
+            }
+        }
+
+        return s;
     },
     
     init: function() {
         var o = bmoon.spdpost;
         if (o.inited) return o;
 
+        o.planinfo = $('#planinfo');
         o.saddr = $('#saddr');
         o.eaddr = $('#eaddr');
         o.sdate = $('#sdate');
@@ -39,32 +51,31 @@ bmoon.spdpost = {
         o.map = $('#map');
 
         o.plan = {};
+        o.nplan = {};           // plan for save
 
-        o.glat = new google.maps.LatLng(28.188, 113.033);
-        o.gmap = new google.maps.Map($('#map')[0], {
-            zoom: 10,
-            center: o.glat,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            region: 'zh-CN'
-        });
+        //o.glat = new google.maps.LatLng(28.188, 113.033);
+        o.g_lat = new BMap.Point(113.033, 28.188);
+        o.g_map = new BMap.Map("map");
+        o.g_map.enableScrollWheelZoom();
+        o.g_map.centerAndZoom(o.g_lat, 13);
 
-        o.gsauto = new google.maps.places.Autocomplete($('#saddr')[0]);
-        o.geauto = new google.maps.places.Autocomplete($('#eaddr')[0]);
-        o.ggeocode = new google.maps.Geocoder();
-        o.gdirservice = new google.maps.DirectionsService();
-        o.gdirrender = new google.maps.DirectionsRenderer();
-        o.ginfow = new google.maps.InfoWindow();
-        o.gsmarker = new google.maps.Marker({
-            map: o.gmap,
-            draggable: true,
-            title: '设置起始位置'
+        o.g_sauto = new BMap.Autocomplete({
+            location: o.g_map,
+            input: 'saddr'});
+        o.g_eauto = new BMap.Autocomplete({
+            location: o.g_map,
+            input: 'eaddr'});
+        o.g_geocode = new BMap.Geocoder();
+
+        o.g_smarker = new BMap.Marker();
+        o.g_emarker = new BMap.Marker();
+        o.g_smarker.enableDragging();
+        o.g_emarker.enableDragging();
+        o.g_direct = new BMap.Polyline();
+        o.g_infow = new BMap.InfoWindow('起点', {
+            width: 250,
+            height: 100
         });
-        o.gemarker = new google.maps.Marker({
-            map: o.gmap,
-            draggable: true,
-            title: '设置终点位置'
-        });
-        
 
         o.inited = true;
         return o;
@@ -80,14 +91,14 @@ bmoon.spdpost = {
     bindClick: function() {
         var o = bmoon.spdpost.init();
 
-        o.gsauto.bindTo('bounds', o.gmap);
-        o.geauto.bindTo('bounds', o.gmap);
-        o.gdirrender.setMap(o.gmap);
-
         o.bindChange();
         o.del.click(o.delPlan);
         o.next.click(o.getPlan);
         o.save.click(o.savePlan);
+
+        $('input', o.planinfo).change(function() {
+            o.nplan[$(this).attr('id')] = $(this).val();
+        });
     },
 
     getPlan: function() {
@@ -99,6 +110,8 @@ bmoon.spdpost = {
 
         $.getJSON('/json/spd/post/do', opt, function(data) {
             if (data.success == 1 && bmoon.utl.type(data.plan) == 'Object') {
+                o.nplan = {};
+
                 var p = data.plan;
                 o.saddr.val(p.saddr);
                 o.eaddr.val(p.eaddr);
@@ -121,26 +134,35 @@ bmoon.spdpost = {
     upPlan: function(x, data) {
         var o = bmoon.spdpost.init();
 
-        var p = o.plan;
+        var p = o.plan,
+        s = o._strFromPoi(data);
 
-        if (x != 'e') {
-            p.sll = [data.geometry.location.lat(), data.geometry.location.lng()];
-            p.saddr = data.formatted_address;
+        if (x != 'e') p.saddr = s;
+        else p.eaddr = s;
+
+        if (data.point) {
+            if (x != 'e') p.sll = [data.point.lat, data.point.lng];
+            else {
+                p.ell = [data.point.lat, data.point.lng];
+                o.rendDirect();
+            }
         } else {
-            p.ell = [data.geometry.location.lat(), data.geometry.location.lng()];
-            p.eaddr = data.formatted_address;
+            o.g_geocode.getPoint(s, function(point) {
+                if (!point) return;
+                if (x != 'e') p.sll = [point.lat, point.lng];
+                else {
+                    p.ell = [point.lat, point.lng];
+                    o.rendDirect();
+                }
+            }, o.city);
         }
 
-        bmoon.dida.getCityByGeoresult(data, function(city) {
+        bmoon.dida.getCityByPoi(data, function(city) {
             if (bmoon.utl.type(city) == 'Array') {
                 if (x != 'e') p.scityid = city[0].id;
                 else p.ecityid = city[0].id;
             }
         });
-
-        if (p.sll && p.ell) {
-            p.km = bmoon.utl.earthDis(p.sll, p.ell);
-        }
     },
 
     delPlan: function() {
@@ -148,9 +170,12 @@ bmoon.spdpost = {
 
         if (!o.plan) return;
 
-        var pdata = {
+        var nplan = {
+            id: o.plan.id
+        },
+        pdata = {
             _op: 'del',
-            plan: JSON.stringify(o.plan),
+            plan: JSON.stringify(nplan),
             _type_plan: 'object'
         },
         p = $(this).parent();
@@ -173,26 +198,19 @@ bmoon.spdpost = {
     savePlan: function() {
         var o = bmoon.spdpost.init();
 
-        var phone = o.phone.val(),
-        contact = o.contact.val(),
-        p = $(this).parent();
+        var p = $(this).parent();
         
         if (!o.plan.sll || !o.plan.ell) return;
 
-        o.plan.sdate = o.sdate.val();
-        o.plan.stime = o.stime.val();
-        o.plan.rect = '((' + o.plan.sll.join(',') + '),(' +
+        o.nplan.rect = '((' + o.plan.sll.join(',') + '),(' +
             o.plan.ell.join(',') + '))';
-        o.plan.sgeo = '(' + o.plan.sll.join(',') +')';
-        o.plan.egeo = '(' + o.plan.ell.join(',') +')';
-        if (phone.length || contact.length) {
-            if (phone) o.plan.phone = phone;
-            if (contact) o.plan.contact = contact;
-        }
+        o.nplan.sgeo = '(' + o.plan.sll.join(',') +')';
+        o.nplan.egeo = '(' + o.plan.ell.join(',') +')';
+        o.nplan.id = o.plan.id;
 
         var pdata = {
             _op: 'mod',
-            plan: JSON.stringify(o.plan),
+            plan: JSON.stringify(o.nplan),
             _type_plan: 'object'
         };
         
@@ -216,34 +234,38 @@ bmoon.spdpost = {
 
         if (!o.plan.sll || !o.plan.ell) return;
 
-        var opts = {
-            origin: new google.maps.LatLng(o.plan.sll[0], o.plan.sll[1]),
-            destination: new google.maps.LatLng(o.plan.ell[0], o.plan.ell[1]),
-            travelMode: google.maps.TravelMode.DRIVING
-        };
-        
-        o.gdirservice.route(opts, function(result, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-                o.gdirrender.setDirections(result);
-            }
-        });
+        var km = bmoon.utl.earthDis(o.plan.sll, o.plan.ell);
+
+        o.km.html('约 '+ km +' 千米');
+        o.nplan.km = km;
+
+        if (km > 10 && km < 100) o.g_map.setZoom(12);
+        else if (km > 100 && km < 300) o.g_map.setZoom(9);
+        else if (km > 300 && km < 600) o.g_map.setZoom(7);
+        else if (km > 600) o.g_map.setZoom(6);
+
+        o.g_direct.setPath([
+            new BMap.Point(o.plan.sll[1], o.plan.sll[0]),
+            new BMap.Point(o.plan.ell[1], o.plan.ell[0])
+        ]);
+        o.g_map.addOverlay(o.g_direct);
     },
 
     bindChange: function() {
         var o = bmoon.spdpost.init();
 
-        google.maps.event.addListener(o.gsmarker, 'dragend', function() {
+        o.g_sauto.addEventListener('onconfirm', function(res) {
+            o.autoChanged('s', res);
+        });
+        o.g_eauto.addEventListener('onconfirm', function(res) {
+            o.autoChanged('e', res);
+        });
+        
+        o.g_smarker.addEventListener('dragend', function(e) {
             o.markDraged('s');
         });
-        google.maps.event.addListener(o.gemarker, 'dragend', function() {
+        o.g_emarker.addEventListener('dragend', function(e) {
             o.markDraged('e');
-        });
-
-        google.maps.event.addListener(o.gsauto, 'place_changed', function() {
-            o.autoChanged('s');
-        });
-        google.maps.event.addListener(o.geauto, 'place_changed', function() {
-            o.autoChanged('e');
         });
     },
 
@@ -258,50 +280,51 @@ bmoon.spdpost = {
         }
 
         var pos = marker.getPosition();
-        o.ggeocode.geocode({latLng: pos}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                addr.val(results[0].formatted_address);
-                o.ginfow.setContent(o._formAddr(
-                    results[0].address_components[0].short_name,
-                    results[0].address_components,
-                    results[0].geometry.location));
-                o.ginfow.open(o.gmap, marker);
-
-                o.upPlan(x, results[0]);
-                o.rendDirect();
+        
+        o.g_geocode.getLocation(pos, function(result) {
+            if (result.surroundingPois && result.surroundingPois.length > 0) {
+                var poi = result.surroundingPois[0];
+                addr.val(poi.address + poi.title);
+                result.addressComponents.point = poi.point;
+            } else {
+                addr.val(result.address);
+                result.addressComponents.point = result.point;
             }
+            o.upPlan(x, result.addressComponents);
+
+            o.g_infow.setTitle(o._formInfoTitle(x));
+            o.g_infow.setContent(o._formInfoContent(result));
+
+            marker.openInfoWindow(o.g_infow);
+            //setTimeout(function() {marker.closeInfoWindow();}, 3000);
         });
     },
 
-    autoChanged: function(x) {
+    autoChanged: function(x, res) {
         var o = bmoon.spdpost.init();
         
-        var marker = o.gsmarker,
-        auto = o.gsauto;
-        
+        var marker = o.g_smarker,
+        p = o.plan,
+        s = o._strFromPoi(res.item.value);
+
         if (x == 'e') {
-            marker = o.gemarker;
-            auto = o.geauto;
+            marker = o.g_emarker;
         }
 
-        o.ginfow.close();
-        var place = auto.getPlace();
-        if (place.geometry.viewport) {
-            o.gmap.fitBounds(place.geometry.viewport);
-        } else {
-            o.gmap.setCenter(place.geometry.location);
-        }
-        
-        marker.setPosition(place.geometry.location);
-        
-        o.ginfow.setContent(o._formAddr(
-            place.name,
-            place.address_components,
-            place.geometry.location));
-        o.ginfow.open(o.gmap, marker);
+        o.g_geocode.getPoint(s, function(point) {
+            if (!point) return;
+            marker.setPosition(point);
+            o.g_map.centerAndZoom(point, 13);
+            o.g_map.addOverlay(marker);
 
-        o.upPlan(x, place);
-        o.rendDirect();
+            o.g_infow.setTitle(o._formInfoTitle(x));
+            o.g_infow.setContent(o._strFromPoi(res.item.value));
+
+            marker.openInfoWindow(o.g_infow);
+            //setTimeout(function() {marker.closeInfoWindow();}, 2000);
+        }, o.city);
+
+        o.upPlan(x, res.item.value);
     }
 };
 

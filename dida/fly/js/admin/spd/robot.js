@@ -11,6 +11,10 @@ bmoon.spdrobot = {
         
         o.g_geocode = new BMap.Geocoder();
         o.g_map = new BMap.Map('map');
+        o.g_map.enableScrollWheelZoom();
+        o.g_smarker = new BMap.Marker();
+        o.g_emarker = new BMap.Marker();
+        o.g_direct = new BMap.Polyline();
 
         o.inited = true;
         return o;
@@ -37,7 +41,7 @@ bmoon.spdrobot = {
     outPut: function(msg) {
         var o = bmoon.spdrobot.init();
 
-        $('<pre>' + msg + '</pre>').appendTo(o.e_res);
+        $('<pre>' + msg + '</pre>').prependTo(o.e_res);
     },
 
     getPlans: function() {
@@ -75,11 +79,83 @@ bmoon.spdrobot = {
 
         o.g_geocode.getPoint(plan.saddr, function(point) {
             if (point) {
+                o.g_smarker.setPosition(point);
+                o.g_map.addOverlay(o.g_smarker);
+                o.g_map.centerAndZoom(point, 13);
+                
                 plan.sll = [point.lat, point.lng];
                 o.g_geocode.getLocation(point, function(result) {
                     bmoon.dida.getCityByPoi(result.addressComponents, function(city) {
                         if (bmoon.utl.type(city) == 'Array') {
                             plan.scityid = city[0].id;
+                            o.g_geocode.getPoint(plan.eaddr, function(point) {
+                                if (point) {
+                                    o.g_emarker.setPosition(point);
+                                    o.g_map.addOverlay(o.g_emarker);
+                                    o.g_map.centerAndZoom(point, 13);
+                                    plan.ell = [point.lat, point.lng];
+
+                                    var km = bmoon.utl.earthDis(plan.sll, plan.ell);
+                                    if (km > 10 && km < 100) o.g_map.setZoom(12);
+                                    else if (km > 100 && km < 300) o.g_map.setZoom(9);
+                                    else if (km > 300 && km < 600) o.g_map.setZoom(7);
+                                    else if (km > 600) o.g_map.setZoom(6);
+
+                                    o.outPut(km + '千米');
+
+                                    o.g_direct.setPath([
+                                        new BMap.Point(plan.sll[1], plan.sll[0]),
+                                        new BMap.Point(plan.ell[1], plan.ell[0])
+                                    ]);
+                                    o.g_map.addOverlay(o.g_direct);
+                                    
+                                    o.g_geocode.getLocation(point, function(result) {
+                                        bmoon.dida.getCityByPoi(result.addressComponents, function(city) {
+                                            if (bmoon.utl.type(city) == 'Array') {
+                                                plan.ecityid = city[0].id;
+
+                                                if (plan.scityid && plan.ecityid) {
+                                                    plan.rect = '((' + plan.sll.join(',') + '),(' +
+                                                        plan.ell.join(',') + '))';
+                                                    plan.sgeo = '(' + plan.sll.join(',') +')';
+                                                    plan.egeo = '(' + plan.ell.join(',') +')';
+                                                    plan.km = bmoon.utl.earthDis(plan.sll, plan.ell);
+
+                                                    if (plan.repeat > 0 && plan.km > 120.0) {
+                                                        o.outPut('长途拼车，却重复。');
+                                                        o.parsePlanErr(plan);
+                                                    }
+
+                                                    var nplan = {
+                                                        id: plan.id,
+                                                        scityid: plan.scityid,
+                                                        ecityid: plan.ecityid,
+                                                        rect: plan.rect,
+                                                        sgeo: plan.sgeo,
+                                                        egeo: plan.egeo,
+                                                        km: plan.km
+                                                    },
+                                                    pdata = {
+                                                        _op: 'mod',
+                                                        plan: JSON.stringify(nplan),
+                                                        _type_plan: 'object'
+                                                    };
+                                                    $.post('/json/spd/post/robot', pdata, function(data) {
+                                                        if (data.success == 1) o.outPut('完成');
+                                                        else o.outPut(data.errmsg);
+                                                    }, 'json');
+                                                }
+                                            } else {
+                                                o.outPut('解析起点有错 ' + city);
+                                                o.parsePlanErr(plan);
+                                            }
+                                        });
+                                    });
+                                } else {
+                                    o.outPut('解析终点失败');
+                                    o.parsePlanErr(plan);
+                                }
+                            }, plan.city);
                         } else {
                             o.outPut('解析起点有错 ' + city);
                             o.parsePlanErr(plan);
@@ -91,57 +167,6 @@ bmoon.spdrobot = {
                 o.parsePlanErr(plan);
             }
             
-        }, plan.city);
-
-        o.g_geocode.getPoint(plan.eaddr, function(point) {
-            if (point) {
-                plan.ell = [point.lat, point.lng];
-                o.g_geocode.getLocation(point, function(result) {
-                    bmoon.dida.getCityByPoi(result.addressComponents, function(city) {
-                        if (bmoon.utl.type(city) == 'Array') {
-                            plan.ecityid = city[0].id;
-
-                            if (plan.scityid && plan.ecityid) {
-                                plan.rect = '((' + plan.sll.join(',') + '),(' +
-                                    plan.ell.join(',') + '))';
-                                plan.sgeo = '(' + plan.sll.join(',') +')';
-                                plan.egeo = '(' + plan.ell.join(',') +')';
-                                plan.km = bmoon.utl.earthDis(plan.sll, plan.ell);
-
-                                if (plan.repeat > 0 && plan.km > 120.0) {
-                                    o.outPut('长途拼车，却重复。');
-                                    o.parsePlanErr(plan);
-                                }
-
-                                var nplan = {
-                                    id: plan.id,
-                                    scityid: plan.scityid,
-                                    ecityid: plan.ecityid,
-                                    rect: plan.rect,
-                                    sgeo: plan.sgeo,
-                                    egeo: plan.egeo,
-                                    km: plan.km
-                                },
-                                pdata = {
-                                    _op: 'mod',
-                                    plan: JSON.stringify(nplan),
-                                    _type_plan: 'object'
-                                };
-                                $.post('/json/spd/post/robot', pdata, function(data) {
-                                    if (data.success == 1) o.outPut('完成');
-                                    else o.outPut(data.errmsg);
-                                }, 'json');
-                            }
-                        } else {
-                            o.outPut('解析起点有错 ' + city);
-                            o.parsePlanErr(plan);
-                        }
-                    });
-                });
-            } else {
-                o.outPut('解析终点失败');
-                o.parsePlanErr(plan);
-            }
         }, plan.city);
     },
 
