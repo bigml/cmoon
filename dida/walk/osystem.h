@@ -27,7 +27,7 @@ NEOERR* system_who_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  * Description: 查看某个用户的浏览记录
  * Request: ADMIN* - see MEMBER_CHECK_ADMIN() of member.h
  *          sender* - 要查看的用户名
- *          day* - 某天的活动
+ *          day - 某天的活动
  * Returns: None
  */
 NEOERR* system_view_detail_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);

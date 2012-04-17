@@ -35,6 +35,8 @@ NEOERR* comment_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     char *s;
     HDF_FETCH_STR(cgi->hdf, PRE_QUERY".type", s);
     hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_one", s);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".oid", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_two", s);
     HDF_FETCH_STR(cgi->hdf, PRE_QUERY".content", s);
     hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_one", s);
 

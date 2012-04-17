@@ -55,8 +55,7 @@ Db {
                 hour = date_trunc('hour', intime) =
             }
             viewdetail {
-                type [type=int, require=true] = type =
-                sender = sender =
+                sender [maxlen=256, require=true] = sender =
                 day = date_trunc('day', intime) =
             }
         }

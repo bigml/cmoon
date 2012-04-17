@@ -52,7 +52,8 @@ b/inbox/sent.css: modules/accordion.css modules/box.css modules/pagenav.css \
                   inbox/inbox.css
 
 b/system/view.css: modules/accordion.css modules/box.css \
-                   modules/dateinput/dateinput.css system/system.css
+                   modules/dateinput/dateinput.css modules/tablesorter/tablesorter.css \
+                   system/system.css
 
 %.css:
 	$(CSSGLUE) $^ > $@

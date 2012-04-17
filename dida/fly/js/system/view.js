@@ -120,16 +120,31 @@ bmoon.systemview = {
                     o.e_viewwho.empty();
                     $(document).mntable(
                         {
-                            sender: ['用户名', function(row, col, val, tr) {
+                            sender: ['用户名', function(row, col, val, tr, td) {
                                 var content = $('<a day="'+row.day+'" rel="'+val+'">'+val+'</a>');
                                 content.click(o.getViewDetail);
                                 return content;
                             }],
-                            count: '页面访问次数'
+                            count: '页面访问次数',
+                            intime: '到访时间',
+                            cityid: ['省市', function(row, col, val, tr, td) {
+                                var id = parseInt(val) > 0 ? parseInt(val) : parseInt(row.provid);
+                                if (id > 0) {
+                                    $.getJSON('/json/city/id', {id: id}, function(cdata) {
+                                        $('<span>'+cdata.citys[0].s+'</span>').appendTo(td);
+                                    });
+                                } else {
+                                    return $('<span>本机</span>');
+                                }
+                            }]
                         },
                         data.who,
-                        {tbattr: 'class="list"'}
-                    ).appendTo(o.e_viewwho);
+                        {tbattr: 'class="list tablesorter"'}
+                    ).tablesorter({
+                        headers: {
+                            0: {sorter: false},
+                            3: {sorter: false}
+                        }}).appendTo(o.e_viewwho);
                 }
             });
         }
@@ -149,14 +164,17 @@ bmoon.systemview = {
                 $(document).mntable(
                     {
                         intime: '时间',
-                        es_three: ['页面', function(row, col, val, tr) {
-                            var content = $('<a target="_blank" href="'+row.es_one+row.es_two+'">'+val+'</a>');
-                            return content;
+                        type: ['类型', function(row, col, val, tr, td) {
+                            return $('<span>'+bmoon.dida.tracespec[val].s+'</span>');
+                        }],
+                        sender: ['内容', function(row, col, val, tr, td) {
+                            var func = bmoon.dida.tracespec[row.type].v;
+                            return $(func(row));
                         }]
                     },
                     data.details,
-                    {tbattr: 'class="list"'}
-                ).appendTo(o.e_viewdetail);
+                    {tbattr: 'class="list tablesorter"'}
+                ).tablesorter().appendTo(o.e_viewdetail);
             }
         });
     }

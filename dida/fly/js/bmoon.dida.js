@@ -37,9 +37,72 @@ bmoon.dida = {
         planspd:    13,
         
         memberreg:  51,
-        membermsg:  53,
+        membermsg:  52,
         
         commentadd: 71
+    },
+
+    tracespec: {
+        0:  {
+            s: '访问',
+            v: function(t) {
+                return [
+                    '<a target="_blank" href="', t.es_one, t.es_two, '">',
+                        t.es_three,
+                    '</a>'
+                ].join('');
+            }
+        },
+        11: {
+            s: '搜索',
+            v: function(t) {
+                return [
+                    '<span class="sdate">', t.es_three, '</span>',
+                    '<span class="saddr">', t.es_one, '</span>', ' - ',
+                    '<span class="eaddr">', t.es_two, '</span>',
+                    '<span class="rescnt">', t.ei_one, '</span>'
+                ].join('');
+            }
+        },
+        12: {
+            s: '留下路线',
+            v: function(t) {
+                return [
+                    '<span class="sdate">', t.es_three, '</span>',
+                    '<span class="saddr">', t.es_one, '</span>', ' - ',
+                    '<span class="eaddr">', t.es_two, '</span>',
+                    '<span class="subscribe">', t.ei_one, '</span>'
+                ].join('');
+            }
+        },
+        13: {
+            s: '爬到路线',
+            v: function(t) {;}
+        },
+        51: {
+            s: '注册',
+            v: function(t) {
+                return [
+                    '<span class="mnick">', t.es_one, '</span>',
+                    '<span class="mname">', t.es_two, '</span>',
+                    '<span class="username">', t.es_three, '</span>'
+                ].join('');
+            }
+        },
+        52: {
+            s: '私信',
+            v: function(t) {;}
+        },
+        71: {
+            s: '评论',
+            v: function(t) {
+                return [
+                    '<span class="type">', t.ei_one, '</span>',
+                    '<span class="oid">', t.ei_two, '</span>',
+                    '<span class="content">', t.es_one, '</span>'
+                ].join('');
+            }
+        }
     },
 
     browsers: ['mozilla', 'webkit', 'opera', 'msie'],
