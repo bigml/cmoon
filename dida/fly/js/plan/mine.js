@@ -519,13 +519,19 @@ bmoon.planmine = {
         var v = o.e_pnew_repeat.val();
         if (v == 0) {
             o.e_pnew_wday.addClass('hide');
-            $('#pnew-sdate').removeAttr('disabled');
+            $('#pnew-sdate').removeAttr('disabled').show();
+            $('a.caltrigger').show();
+            o.e_pnew_datehint.show();
         } else if (v == 1) {
             o.e_pnew_wday.addClass('hide');
-            $('#pnew-sdate').attr('disabled', 'disabled');
+            $('#pnew-sdate').attr('disabled', 'disabled').hide();
+            $('a.caltrigger').hide();
+            o.e_pnew_datehint.hide();
         } else if (v == 2) {
             o.e_pnew_wday.removeClass('hide');
-            $('#pnew-sdate').attr('disabled', 'disabled');
+            $('#pnew-sdate').attr('disabled', 'disabled').hide();
+            $('a.caltrigger').hide();
+            o.e_pnew_datehint.hide();
         }
     },
     
