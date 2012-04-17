@@ -45,7 +45,6 @@ NEOERR* member_info_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     if (!mname) {
         MEMBER_CHECK_LOGIN();
         hdf_set_value(evt->hdfsnd, "mname", mname);
-        /* TODO msn outputed, safe? */
         MEVENT_TRIGGER(evt, NULL, REQ_CMD_MEMBER_PRIV_GET, FLAGS_SYNC);
     } else {
         hdf_set_value(evt->hdfsnd, "mname", mname);
@@ -122,12 +121,6 @@ NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     MEMBER_CHECK_LOGIN();
     
-    /*
-     * prepare data 
-     */
-    hdf_set_value(evt->hdfsnd, "mname", mname);
-    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
-
     HDF_FETCH_STR(cgi->hdf, PRE_QUERY".msn", msn);
     HDF_FETCH_STR(cgi->hdf, PRE_QUERY".omsn", omsn);
     HDF_FETCH_STR(cgi->hdf, PRE_QUERY".rlink", rlink);
@@ -137,10 +130,8 @@ NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
              * modify msn through msn
              */
             hdf_set_value(evt->hdfsnd, "mname", mname);
-            MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_GET, FLAGS_SYNC);
-            char *msndb = hdf_get_value(evt->hdfrcv, "msn", NULL);
-            if (!msndb || strcmp(msndb, omsn))
-                return nerr_raise(LERR_LOGINPSW, "password wrong %s %s", msndb, msn);
+            hdf_set_value(evt->hdfsnd, "msn", omsn);
+            MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_CHECK_MSN, FLAGS_SYNC);
         } else if (rlink && *rlink) {
             /*
              * modify msn through rlink
@@ -152,12 +143,15 @@ NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
             if (!s || strcmp(s, rlink))
                 return nerr_raise(LERR_USERINPUT, "验证码错误");
         } else return nerr_raise(LERR_USERINPUT, "修改密码需要提供旧密码");
+    } else {
+        /*
+         * modify base information
+         */
+        hdf_set_value(evt->hdfsnd, "mname", mname);
+        hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+
+        MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_UP, FLAGS_NONE);
     }
-    
-    /*
-     * trigger
-     */
-    MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_UP, FLAGS_NONE);
     
     return STATUS_OK;
 }
@@ -213,8 +207,6 @@ NEOERR* member_new_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_one", s);
     HDF_FETCH_STR(cgi->hdf, PRE_QUERY".mname", s);
     hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_two", s);
-    HDF_FETCH_STR(cgi->hdf, PRE_COOKIE".username", s);
-    hdf_set_value(cgi->hdf, PRE_RESERVE".event.es_three", s);
 
     HDF *node = hdf_get_obj(cgi->hdf, PRE_RESERVE".event");
     
@@ -232,20 +224,14 @@ NEOERR* member_login_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     HDF_GET_STR(cgi->hdf, PRE_QUERY".msn", msn);
 
     hdf_set_value(evt->hdfsnd, "mname", mname);
+    hdf_set_value(evt->hdfsnd, "msn", msn);
 
-    MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_GET, FLAGS_SYNC);
+    MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_CHECK_MSN, FLAGS_SYNC);
 
-    char *msndb = hdf_get_value(evt->hdfrcv, "msn", NULL);
     char *mnick = hdf_get_value(evt->hdfrcv, "mnick", "嘀嗒");
-    if (msndb) {
-        if (!strcmp(msndb, msn)) {
-            member_after_login(cgi, evth, mname, mnick);
-            return STATUS_OK;
-        } else 
-            return nerr_raise(LERR_LOGINPSW, "password wrong %s %s", msndb, msn);
-    }
+    member_after_login(cgi, evth, mname, mnick);
 
-    return nerr_raise(LERR_MEMBER_NEXIST, "member %s not exist", mname);
+    return STATUS_OK;
 }
 
 NEOERR* member_logout_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
@@ -278,23 +264,17 @@ NEOERR* member_check_login_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *
     if (!mname || !mmsn) {
         HDF_GET_STR_IDENT(cgi->hdf, PRE_COOKIE".mname", mname);
         HDF_GET_STR_IDENT(cgi->hdf, PRE_COOKIE".mmsn", mmsn);
-        hdf_set_value(cgi->hdf, PRE_RESERVE".mname", mname);
     }
+    hdf_set_value(cgi->hdf, PRE_RESERVE".mname", mname);
 
     hdf_set_value(evt->hdfsnd, "mname", mname);
+    hdf_set_value(evt->hdfsnd, "mmsn", mmsn);
 
-    MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_GET, FLAGS_SYNC);
-
-    char *mmsndb = hdf_get_value(evt->hdfrcv, "mmsn", NULL);
-    if (mmsndb) {
-        if (!strcmp(mmsndb, mmsn)) {
-            hdf_copy(cgi->hdf, PRE_OUTPUT".member", evt->hdfrcv);
-            return STATUS_OK;
-        }
-    }
-    mtc_warn("%s<====>%s", mmsndb, mmsn);
-
-    return nerr_raise(LERR_NOTLOGIN, "%s not login", mname);
+    MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_CHECK_MMSN, FLAGS_SYNC);
+    
+    hdf_copy(cgi->hdf, PRE_OUTPUT".member", evt->hdfrcv);
+    
+    return STATUS_OK;
 }
 
 NEOERR* member_reset_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)

@@ -8,7 +8,7 @@
 #define MEMBER_CC_SEC   60
 #define CAR_CC_SEC      60
 
-#define _COL_MEMBER "mid, mname, mnick, msn, mmsn, "    \
+#define _COL_MEMBER "mid, mname, mnick, "               \
     " male, verify, credit, cityid, "                   \
     " to_char(intime, 'YYYY-MM-DD') as intime"
 #define _COL_MEMBER_ADMIN "mid, mname, mnick, msn, mmsn, male, phone, contact, " \
@@ -38,6 +38,8 @@
 enum {
     REQ_CMD_MEMBER_GET = 1001,
     REQ_CMD_MEMBER_PRIV_GET,
+    REQ_CMD_MEMBER_CHECK_MMSN,
+    REQ_CMD_MEMBER_CHECK_MSN,
     REQ_CMD_MEMBER_ADD,
     REQ_CMD_MEMBER_UP,
     REQ_CMD_MEMBER_GETRLINK,
@@ -64,6 +66,8 @@ enum {
 };
 
 enum {
+    REP_ERR_NOTLOGIN = 25,      /* for member_check_mmsn */
+    REP_ERR_LOGINPSW = 26,      /* for member_check_msn */
     REP_ERR_MEMBERED = 31,
     REP_ERR_CARED,
     REP_ERR_MEMBER_NEXIST

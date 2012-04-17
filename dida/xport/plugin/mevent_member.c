@@ -99,6 +99,48 @@ static NEOERR* member_cmd_mem_priv_get(struct member_entry *e, QueueEntry *q)
     return STATUS_OK;
 }
 
+static NEOERR* member_cmd_mem_check_mmsn(struct member_entry *e, QueueEntry *q)
+{
+    char *mname, *mmsn, *mmsndb;
+    NEOERR *err;
+
+    REQ_GET_PARAM_STR(q->hdfrcv, "mname", mname);
+    REQ_GET_PARAM_STR(q->hdfrcv, "mmsn", mmsn);
+
+    err = member_cmd_mem_priv_get(e, q);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    mmsndb = hdf_get_value(q->hdfsnd, "mmsn", NULL);
+    if (!mmsndb || strcmp(mmsn, mmsndb))
+        return nerr_raise(REP_ERR_NOTLOGIN, "mmsn incoreect");
+
+    hdf_remove_tree(q->hdfsnd, "msn");
+    hdf_remove_tree(q->hdfsnd, "mmsn");
+    
+    return STATUS_OK;
+}
+
+static NEOERR* member_cmd_mem_check_msn(struct member_entry *e, QueueEntry *q)
+{
+    char *mname, *msn, *msndb;
+    NEOERR *err;
+
+    REQ_GET_PARAM_STR(q->hdfrcv, "mname", mname);
+    REQ_GET_PARAM_STR(q->hdfrcv, "msn", msn);
+
+    err = member_cmd_mem_priv_get(e, q);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    msndb = hdf_get_value(q->hdfsnd, "msn", NULL);
+    if (!msndb || strcmp(msn, msndb))
+        return nerr_raise(REP_ERR_LOGINPSW, "msn incoreect");
+
+    hdf_remove_tree(q->hdfsnd, "msn");
+    hdf_remove_tree(q->hdfsnd, "mmsn");
+    
+    return STATUS_OK;
+}
+
 static NEOERR* member_cmd_car_add(struct member_entry *e, QueueEntry *q)
 {
 	STRING str; string_init(&str);
@@ -253,6 +295,12 @@ static void member_process_driver(EventEntry *entry, QueueEntry *q)
         break;
     case REQ_CMD_MEMBER_PRIV_GET:
         err = member_cmd_mem_priv_get(e, q);
+        break;
+    case REQ_CMD_MEMBER_CHECK_MMSN:
+        err = member_cmd_mem_check_mmsn(e, q);
+        break;
+    case REQ_CMD_MEMBER_CHECK_MSN:
+        err = member_cmd_mem_check_msn(e, q);
         break;
     case REQ_CMD_MEMBER_ADD:
         err = member_cmd_mem_add(e, q);

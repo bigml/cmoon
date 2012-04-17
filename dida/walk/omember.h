@@ -108,10 +108,10 @@ NEOERR* member_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  * Description: 用户修改自己的信息
  * Request: LOGIN* - see MEMBER_CHECK_LOGIN() of omember.h
  *          mnick - 用户昵称
- *          msn - 用户密码
  *          male - 性别
  *          phone - 用户电话
  *          contact - 其他联系方式 IM/Email
+ *          msn - 用户密码，修改密码不能与修改基本信息同时操作，需要前密码，或者重置的rlink
  * Returns: None
  */
 NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
