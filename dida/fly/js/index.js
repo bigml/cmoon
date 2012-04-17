@@ -346,7 +346,8 @@ bmoon.index = {
 
         bmoon.dida.tracePageview({
             es_one: 'http://imdida.org/plan/info',
-            es_two: '?id=' + plan.id
+            es_two: '?id=' + plan.id,
+            es_three: '线路详情'
         });
     },
 

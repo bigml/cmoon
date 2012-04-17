@@ -84,8 +84,7 @@ bmoon.dida = {
             v: function(t) {
                 return [
                     '<span class="mnick">', t.es_one, '</span>',
-                    '<span class="mname">', t.es_two, '</span>',
-                    '<span class="username">', t.es_three, '</span>'
+                    '<span class="mname">', t.es_two, '</span>'
                 ].join('');
             }
         },
@@ -269,7 +268,7 @@ bmoon.dida = {
         
         $.cookie('mname', null, {path: '/', domain: g_site_domain});
         $.cookie('mnick', null, {path: '/', domain: g_site_domain});
-        $.cookie('mnick_ori', null, {path: '/', domain: g_site_domain});
+        $.cookie('mnick_esc', null, {path: '/', domain: g_site_domain});
         $.cookie('mmsn', null, {path: '/', domain: g_site_domain});
         o.c_mnick = null;
         o.c_mname = null;
