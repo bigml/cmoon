@@ -204,6 +204,8 @@ bmoon.spdpost = {
         
         if (!o.plan.sll || !o.plan.ell) return;
 
+        o.nplan.scityid = o.plan.scityid;
+        o.nplan.ecityid = o.plan.ecityid;
         o.nplan.rect = '((' + o.plan.sll.join(',') + '),(' +
             o.plan.ell.join(',') + '))';
         o.nplan.sgeo = '(' + o.plan.sll.join(',') +')';

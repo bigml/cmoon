@@ -164,6 +164,7 @@ static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
         if (nerr_handle(&err, NERR_NOT_FOUND) ||
             (ttnum < hdf_get_int_value(g_cfg, CONFIG_PATH".geoaMin", 0)) ) {
             string_clear(&str);
+            hdf_remove_tree(q->hdfsnd, "plans");
             mdb_build_querycond(q->hdfrcv,
                                 hdf_get_obj(g_cfg, CONFIG_PATH".QueryCond.geob"),
                                 &str, NULL);
@@ -176,6 +177,7 @@ static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
                  * ok, try larger at last
                  */
                 string_clear(&str);
+                hdf_remove_tree(q->hdfsnd, "plans");
                 mdb_build_querycond(q->hdfrcv,
                                     hdf_get_obj(g_cfg, CONFIG_PATH".QueryCond.geox"),
                                     &str, NULL);
