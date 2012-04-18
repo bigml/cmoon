@@ -155,7 +155,7 @@ bmoon.index = {
         var o = bmoon.index.init();
 
         o.calendar.bind("onShow onHide", function()  {
-	        $(this).parent().toggleClass("active"); 
+            $(this).parent().toggleClass("active"); 
         });
 
         o.e_mc_no_repeat.change(o.wdayChanged);
@@ -260,8 +260,8 @@ bmoon.index = {
         //plan.eaddr = ... plan.ecity = ..
         //plan.scityid = x plan.ecityid = x
 
-		$('.vres', p).remove();
-		p.removeClass('success').removeClass('error').addClass('loading');
+        $('.vres', p).remove();
+        p.removeClass('success').removeClass('error').addClass('loading');
         
         $.getJSON('/json/plan/match', plan, function(data) {
             p.removeClass('loading');
@@ -312,11 +312,11 @@ bmoon.index = {
         var pdata = {
             _op: 'add',
             plan: JSON.stringify(o.plan),
-            _type_plan: 'object'
+            _type_object: 'plan',
         };
 
-		$('.vres', p).remove();
-		p.removeClass('success').removeClass('error').addClass('loading');
+        $('.vres', p).remove();
+        p.removeClass('success').removeClass('error').addClass('loading');
         $.post('/json/plan/leave', pdata, function(data) {
             p.removeClass('loading');
             if (data.success == 1) {

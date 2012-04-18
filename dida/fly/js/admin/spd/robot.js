@@ -138,7 +138,7 @@ bmoon.spdrobot = {
                                                     pdata = {
                                                         _op: 'mod',
                                                         plan: JSON.stringify(nplan),
-                                                        _type_plan: 'object'
+                                                        _type_object: 'plan'
                                                     };
                                                     $.post('/json/spd/post/robot', pdata, function(data) {
                                                         if (data.success == 1) o.outPut('完成');
@@ -180,7 +180,7 @@ bmoon.spdrobot = {
         pdata = {
             _op: 'mod',
             plan: JSON.stringify(nplan),
-            _type_plan: 'object'
+            _type_object: 'plan'
         };
         $.post('/json/spd/post/robot', pdata, function(data) {
             if (data.success == 1) o.outPut('处理有错，完成置位');

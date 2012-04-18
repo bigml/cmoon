@@ -3,7 +3,6 @@ include $(LOCALBASE)Make.env
 include $(BASEDIR)Make.env
 
 FILES = b/base.js \
-        b/loadgmap.js \
         b/index.js \
         b/admin/pos.js \
         b/admin/spd/58.user.js b/admin/spd/58.js \
@@ -34,8 +33,6 @@ b/base.js: pub/jquery-1.7.1.js pub/jquery.cookie.js pub/jquery.md5.js \
            pub/jquerytools/src/overlay/overlay.js \
            pub/jquery.bmoon.js pub/bmoon.js \
            bmoon.dida.js
-
-b/loadgmap.js: loadgmap.js
 
 b/index.js: pub/jquerytools/src/dateinput/dateinput.js \
             pub/jquery.mnblink.js index.js

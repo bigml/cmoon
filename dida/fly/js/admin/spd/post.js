@@ -176,7 +176,7 @@ bmoon.spdpost = {
         pdata = {
             _op: 'del',
             plan: JSON.stringify(nplan),
-            _type_plan: 'object'
+            _type_object: 'plan'
         },
         p = $(this).parent();
         
@@ -211,7 +211,7 @@ bmoon.spdpost = {
         var pdata = {
             _op: 'mod',
             plan: JSON.stringify(o.nplan),
-            _type_plan: 'object'
+            _type_object: 'plan'
         };
         
         $('.vres', p).remove();

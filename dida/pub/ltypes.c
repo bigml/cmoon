@@ -16,16 +16,25 @@ session_t* session_default()
 NEOERR* session_init(CGI *cgi, HASH *dbh, session_t **ses)
 {
     session_t *lses;
-    char tok[_POSIX_PATH_MAX];
+    HDF *node, *onode;
+    char tok[LEN_HDF_KEY], *s;
 
-    HDF *node = hdf_get_child(cgi->hdf, PRE_QUERY);
-    while (node) {
-        snprintf(tok, sizeof(tok), "%s._type_%s", PRE_QUERY, hdf_obj_name(node));
-        char *type = hdf_get_value(cgi->hdf, tok, NULL);
-        if (type && !strcmp(type, "object")) {
-            mjson_str2hdf(node, NULL);
+    /*
+     * follow cgi_parse(), to process _type_object
+     */
+    s = hdf_get_value(cgi->hdf, PRE_QUERY"._type_object", NULL);
+    if (s) {
+        ULIST *list;
+        string_array_split(&list, s, ",", 50);
+        ITERATE_MLIST(list) {
+            snprintf(tok, sizeof(tok), "%s.%s",
+                     PRE_QUERY, neos_strip((char*)list->items[t_rsv_i]));
+            onode = hdf_get_obj(cgi->hdf, tok);
+            if (onode) {
+                mjson_str2hdf(onode, NULL);
+            }
         }
-        node = hdf_obj_next(node);
+        uListDestroy(&list, ULIST_FREE);
     }
     
     *ses = NULL;
@@ -36,7 +45,6 @@ NEOERR* session_init(CGI *cgi, HASH *dbh, session_t **ses)
     /*
      * mname
      */
-    char *s;
     HDF_FETCH_STR(cgi->hdf, PRE_COOKIE".mname", s);
     if (!s) HDF_FETCH_STR(cgi->hdf, PRE_COOKIE".username", s);
     if (s) lses->mname = strdup(s);

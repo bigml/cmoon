@@ -145,7 +145,7 @@ bmoon.spdedeng = {
                 attach: attach
             }),
             
-            _type_plan: 'object',
+            _type_object: 'plan',
             
         }, function(mydata) {
             if (mydata.success == 1) {

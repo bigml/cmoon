@@ -69,7 +69,7 @@ NEOERR* plan_match_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  *                           若repeat为2，则为逗号分割的阿拉伯数字(1-7)，如6,7表示周末
  *                  stime* - 出发时间，格式必须为 HH:MM:SS
  *                  subscribe - 是否订阅该线路 1 手机订阅 2 邮件订阅 3手机、和邮件订阅
- *          _type_plan* - 传值 'object'，用来告诉后台把plan当作对象使用
+ *          _type_object* - 传值 'plan'，用来告诉后台把plan当作对象使用
  *          LOGIN - 如果用户已登录，该线路将会以该用户名义保存（可以暂停、删除操作等）
  *                  如果用户需要订阅匹配线路，则需要用户已登录
  * Returns: None

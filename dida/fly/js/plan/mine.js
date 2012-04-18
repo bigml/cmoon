@@ -689,7 +689,7 @@ bmoon.planmine = {
         var pdata = {
             _op: 'add',
             plan: JSON.stringify(plan),
-            _type_plan: 'object'
+            _type_object: 'plan'
         };
         
         $('.vres', p).remove();
