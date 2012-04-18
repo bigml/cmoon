@@ -185,8 +185,8 @@ bmoon.index = {
                 }
             }
         });
-        o.e_saddr.bind('blur', function() {setTimeout(o.checkAddrInput, 1000);});
-        o.e_eaddr.bind('blur', function() {setTimeout(o.checkAddrInput, 1000);});
+        o.e_saddr.bind('blur', o.checkAddrInput);
+        o.e_eaddr.bind('blur', o.checkAddrInput);
     },
 
     setDefault: function() {
@@ -199,19 +199,21 @@ bmoon.index = {
     checkAddrInput: function() {
         var o = bmoon.index.init();
 
-        if (o.e_saddr.val().length && !o.plan.sll) {
-            o.e_saddr.val('请在下拉框中选择起点地址');
-            o.e_saddr.mnblink({
-                blinks: 2,
-                callback: function() {o.e_saddr.val('');}
-            });
-        } else if (o.e_eaddr.val().length && !o.plan.ell) {
-            o.e_eaddr.val('请在下拉框中选择终点地址');
-            o.e_eaddr.mnblink({
-                blinks: 2,
-                callback: function() {o.e_eaddr.val('');}
-            });
-        }
+        var me = $(this),
+        id = me.attr('id');
+        
+        setTimeout(function() {
+            var val = me.val(),
+            ll = id == 'saddr' ? o.plan.sll : o.plan.ell,
+            addr = id == 'saddr' ? o.e_saddr : o.e_eaddr;
+            if (val.length && !ll) {
+                addr.val('请在下拉框中选择地址');
+                addr.mnblink({
+                    blinks: 2,
+                    callback: function() {addr.val('');}
+                });
+            }
+        }, 1500);
     },
 
     wdayChanged: function() {
