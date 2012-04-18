@@ -265,7 +265,8 @@ bmoon.index = {
         
         $.getJSON('/json/plan/match', plan, function(data) {
             p.removeClass('loading');
-            if (data.success == '1' && bmoon.utl.type(data.plans) == 'Array') {
+            if (data.success == '1' && data._ntt > 0 &&
+                bmoon.utl.type(data.plans) == 'Array') {
                 p.addClass('success');
 
                 o._pnum = data._ntt ? data._ntt: data.plans.length;

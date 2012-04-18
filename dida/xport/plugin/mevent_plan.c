@@ -240,6 +240,7 @@ static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
     done:
         mtc_foo("get %d results", ttnum);
         hdf_set_int_value(q->hdfsnd, "_ntt", ttnum);
+        if (ttnum == 0) hdf_remove_tree(q->hdfsnd, "plans");
         CACHE_HDF(q->hdfsnd, PLAN_CC_SEC, PREFIX_PLAN"%d_%d_%d_%s_%d_%d_%s_%s",
                   dad, scityid, ecityid, rect, nmax, maxday, pdate, ptime);
     }
