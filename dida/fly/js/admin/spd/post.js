@@ -36,6 +36,7 @@ bmoon.spdpost = {
         o.eaddr = $('#eaddr');
         o.sdate = $('#sdate');
         o.stime = $('#stime');
+        o.planid = $('#planid');
         o.attach = $('#attach');
         o.ourl = $('#ourl');
         o.km = $('#km');
@@ -117,6 +118,7 @@ bmoon.spdpost = {
                 o.eaddr.val(p.eaddr);
                 o.sdate.val(p.sdate);
                 o.stime.val(p.stime);
+                o.planid.html(p.id);
                 o.attach.html(p.attach);
                 o.ourl.attr('href', p.ourl);
                 o.plan = data.plan;
