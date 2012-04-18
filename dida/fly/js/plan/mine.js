@@ -282,8 +282,8 @@ bmoon.planmine = {
                 }
             }
         });
-        o.e_pnew_saddr.bind('blur', function() {setTimeout(o.checkAddrInput, 1000);});
-        o.e_pnew_eaddr.bind('blur', function() {setTimeout(o.checkAddrInput, 1000);});
+        o.e_pnew_saddr.bind('blur', o.checkAddrInput);
+        o.e_pnew_eaddr.bind('blur', o.checkAddrInput);
     },
 
     rendNav: function() {
@@ -320,21 +320,22 @@ bmoon.planmine = {
     checkAddrInput: function() {
         var o = bmoon.planmine.init();
 
-        var p = o.e_plan_new.data('_postData');
+        var me = $(this),
+        id = me.attr('id'),
+        p = o.e_plan_new.data('_postData');
         
-        if (o.e_pnew_saddr.val().length && !p.sll) {
-            o.e_pnew_saddr.val('请在下拉框中选择起点地址');
-            o.e_pnew_saddr.mnblink({
-                blinks: 2,
-                callback: function() {o.e_pnew_saddr.val('');}
-            });
-        } else if (o.e_pnew_eaddr.val().length && !p.ell) {
-            o.e_pnew_eaddr.val('请在下拉框中选择终点地址');
-            o.e_pnew_eaddr.mnblink({
-                blinks: 2,
-                callback: function() {o.e_pnew_eaddr.val('');}
-            });
-        }
+        setTimeout(function() {
+            var val = me.val(),
+            ll = id == 'pnew-saddr' ? p.sll : p.ell,
+            addr = id == 'pnew-saddr' ? o.e_pnew_saddr : o.e_pnew_eaddr;
+            if (val.length && !ll) {
+                addr.val('请在下拉框中选择地址');
+                addr.mnblink({
+                    blinks: 2,
+                    callback: function() {addr.val('');}
+                });
+            }
+        }, 1500);
     },
 
     setPlanSub: function() {
@@ -701,18 +702,11 @@ bmoon.planmine = {
                 //o.e_pnew_submit.attr('disabled', 'disabled');
                 p.addClass('success');
                 var newp = $(o._strPlanLi(plan)).prependTo(o.e_plan_list);
-                newp.expose({
-                    onLoad: function() {
-                        newp.addClass('fresh');
-                    },
-                    onClose: function() {
-                        newp.removeClass('fresh');
-                    }
-                });
                 o.e_plan_count.html(parseInt(o.e_plan_count.html())+1);
+                noty({text: '成功添加路线。', type: 'success', theme: 'noty_theme_mitgux'});
             } else {
                 p.addClass('error');
-                $('<span class="vres">'+ data.errmsg + '</span>').appendTo(p);
+                noty({text: data.errmsg, type: 'error', theme: 'noty_theme_mitgux'});
             }
         }, 'json');
     }

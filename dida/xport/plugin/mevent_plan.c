@@ -322,7 +322,7 @@ static NEOERR* plan_cmd_plan_up(struct plan_entry *e, QueueEntry *q)
 	if (err != STATUS_OK) return nerr_pass(err);
 
     if (caomin == 1) {
-        MDB_EXEC(db, NULL, "UPDATE plan SET %s WHERE id=%d AND mid=%d;",
+        MDB_EXEC(db, NULL, "UPDATE plan SET %s WHERE id=%d AND (mid=%d OR mid=0);",
                  NULL, str.buf, id, mid);
     } else {
         MDB_EXEC(db, NULL, "UPDATE plan SET %s WHERE id=%d;", NULL, str.buf, id);

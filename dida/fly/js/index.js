@@ -54,6 +54,7 @@ bmoon.index = {
         o.e_mc_saddr = $('#mc-saddr');
         o.e_mc_eaddr = $('#mc-eaddr');
         o.e_mc_planurl = $('#mc-planurl');
+        o.e_mc_del = $('#mc-del');
         o.e_mc_from = $('#mc-from');
         o.e_mc_sdate = $('#mc-sdate');
         o.e_mc_stime = $('#mc-stime');
@@ -127,6 +128,11 @@ bmoon.index = {
             }
         });
         
+        o.e_mc_del.tooltip({
+            tipClass: 'tipsy tipsy-south',
+            layout: '<div><div class="tipsy-inner"/></div>'
+        });
+
         o.bindClick();
         o.setDefault();
         bmoon.utl.loadJS('http://api.map.baidu.com/api?v=1.3&callback=bmoon.index.onMapReady');
@@ -185,6 +191,7 @@ bmoon.index = {
                 }
             }
         });
+        o.e_mc_del.click(o.delPlan);
         o.e_saddr.bind('blur', o.checkAddrInput);
         o.e_eaddr.bind('blur', o.checkAddrInput);
     },
@@ -354,6 +361,26 @@ bmoon.index = {
         });
     },
 
+    delPlan: function() {
+        var o = bmoon.index.init();
+
+        var plan = o.mplans[o._pcur],
+        p = $(this).parent(),
+        pdata = {
+            _op: 'mod',
+            id: plan.id,
+            statu: bmoon.dida.planstatu.del
+        };
+
+        $.getJSON('/json/plan/mine', pdata, function(data) {
+            if (data.success == '1') {
+                noty({text: '感谢您举报垃圾线路，稍后该线路将不会被搜到。', type: 'success', theme: 'noty_theme_mitgux'});
+            } else {
+                noty({text: data.errmsg, type: 'error', theme: 'noty_theme_mitgux'});
+            }
+        });
+    },
+
     rendMatch: function(plan, ncur) {
         var o = bmoon.index.init();
 
@@ -379,6 +406,9 @@ bmoon.index = {
 
         o.e_mc_nav.fadeIn();
         o.e_mc_result.fadeIn('slow');
+
+        if (bmoon.dida.c_mnick && plan.mid == 0) o.e_mc_del.show();
+        else o.e_mc_del.hide();
         
         o.e_mc_from.empty();
         if (plan.ori > 0) {

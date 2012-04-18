@@ -34,7 +34,8 @@ b/base.js: pub/jquery-1.7.1.js pub/jquery.cookie.js pub/jquery.md5.js \
            pub/jquery.bmoon.js pub/bmoon.js \
            bmoon.dida.js
 
-b/index.js: pub/jquerytools/src/dateinput/dateinput.js \
+b/index.js: pub/jquerytools/src/dateinput/dateinput.js pub/jquerytools/src/tooltip/tooltip.js \
+            pub/noty/js/jquery.noty.js \
             pub/jquery.mnblink.js index.js
 
 b/admin/spd/58.user.js: admin/spd/58.user.js
@@ -66,7 +67,7 @@ b/bore/op.js: pub/markitup/markitup/jquery.markitup.js bore/mku_set.js \
 
 b/plan/info.js: plan/info.js
 b/plan/mine.js: pub/jquerytools/src/dateinput/dateinput.js \
-                pub/jquerytools/src/toolbox/toolbox.expose.js \
+                pub/noty/js/jquery.noty.js \
                 pub/jquery.mnnav.js pub/jquerytools/src/tooltip/tooltip.js \
                 pub/jquery.mnblink.js \
                 plan/mine.js

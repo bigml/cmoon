@@ -330,6 +330,14 @@ NEOERR* plan_mine_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
             MEVENT_TRIGGER(fevt, NULL, REQ_CMD_FFT_EXPECT_UP, FLAGS_NONE);
         }
     }
-    
-    return STATUS_OK;
+
+    char *s;
+    hdf_set_int_value(cgi->hdf, PRE_RESERVE".event.ei_one", pid);
+    hdf_set_int_value(cgi->hdf, PRE_RESERVE".event.ei_two", sub);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".statu", s);
+    hdf_set_value(cgi->hdf, PRE_RESERVE".event.ei_three", s);
+
+    HDF *node = hdf_get_obj(cgi->hdf, PRE_RESERVE".event");
+
+    return nerr_pass(trace_event(node, evth, ses, TRACE_TYPE_PLAN_MODIFY));
 }

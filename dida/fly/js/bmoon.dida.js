@@ -34,7 +34,8 @@ bmoon.dida = {
         
         plansearch: 11,
         planleave:  12,
-        planspd:    13,
+        planmodify: 13,
+        planspd:    14,
         
         memberreg:  51,
         membermsg:  52,
@@ -76,6 +77,16 @@ bmoon.dida = {
             }
         },
         13: {
+            s: '修改路线',
+            v: function(t) {
+                return [
+                    '<span class="pid">', t.ei_one, '</span>',
+                    '<span class="subscribe">', t.ei_two, '</span>',
+                    '<span class="statu">', t.ei_three, '</span>'
+                ].join('');
+            }
+        },
+        14: {
             s: '爬到路线',
             v: function(t) {;}
         },

@@ -104,7 +104,7 @@ NEOERR* plan_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 NEOERR* plan_mine_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 /*
- * Description: 修改用户的单条线路信息
+ * Description: 修改用户的单条线路信息(普通用户可以修改爬虫入库的数据)
  * Request: LOGIN* - see MEMBER_CHECK_LOGIN() of omember.h
  *          id* - 线路id
  *          subscribe - 修改订阅信息，subscribe 为待修改的位，如 email 项为 0x2

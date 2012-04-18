@@ -6,7 +6,7 @@
 #define PREFIX_PLAN_MINE "PlanMine"
 #define PREFIX_SPD      "Spd"
 
-#define PLAN_CC_SEC     600
+#define PLAN_CC_SEC     60
 #define PLAN_MINE_CC_SEC 600
 #define SPD_CC_SEC      60000
 
