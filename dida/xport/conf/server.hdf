@@ -87,7 +87,7 @@ Plugin {
         InsertCol {
             plan {
                 mid [type=int, require=true] = mid
-                phone [maxlen=128, require=true] = phone
+                phone [maxlen=128] = phone
                 contact [maxlen=128] = contact
 
                 ori [type=int] = ori
