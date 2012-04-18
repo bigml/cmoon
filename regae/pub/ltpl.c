@@ -68,12 +68,11 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
 
         val = mcs_obj_attr(child, "merge");
         if (val) {
-            mtc_dbg("merge attr %s", val);
             ULIST *list;
-            string_array_split(&list, val, ", ", 10);
+            string_array_split(&list, val, ",", 10);
             ITERATE_MLIST(list) {
                 snprintf(fname, sizeof(fname), "%s/%s",
-                         dir, (char*)list->items[t_rsv_i]);
+                         dir, neos_strip((char*)list->items[t_rsv_i]));
                 err = hdf_init(&dhdf);
                 JUMP_NOK(err, wnext);
                 err = hdf_read_file(dhdf, fname);
