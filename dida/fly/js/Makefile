@@ -57,7 +57,7 @@ b/admin/pos.js: admin/pos.js
 b/admin/spd/post.js: admin/spd/post.js
 b/admin/spd/robot.js: admin/spd/robot.js
 
-b/member/regist.js: member/regist.js
+b/member/regist.js: pub/noty/js/jquery.noty.js member/regist.js
 b/member/reset.js: member/reset.js
 b/member/account.js: member/account.js
 

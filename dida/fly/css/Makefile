@@ -33,7 +33,8 @@ b/readme.css: readme.css
 b/admin/spd/post.css: modules/indicator.css modules/indicator.css admin/spd/post.css
 b/admin/spd/robot.css: admin/spd/robot.css
 
-b/member/regist.css: modules/indicator.css
+b/member/regist.css: modules/noty/jquery.noty.css modules/noty/noty_theme_mitgux.css \
+                     modules/indicator.css
 b/member/account.css: modules/box.css modules/minibtn.css modules/indicator.css \
                       member/account.css
 b/member/reset.css: modules/indicator.css

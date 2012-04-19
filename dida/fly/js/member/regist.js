@@ -72,10 +72,10 @@ bmoon.memberregist = {
             p.removeClass('loading');
             if (data.success != 1 || !data.mnick) {
                 p.addClass('error');
-                $('<span class="vres">' + data.errmsg + '</span>').appendTo(p);
+                noty({text: data.errmsg, type: 'error', theme: 'noty_theme_mitgux'});
             } else {
                 p.addClass('success');
-                $('<span class="vres">注册成功</span>').appendTo(p);
+                noty({text: '注册成功，且已完成登录。', type: 'success', theme: 'noty_theme_mitgux'});
                 setTimeout(function() {
                     //$('#done').fadeIn();
                     bmoon.dida.loginCheck();

@@ -145,11 +145,12 @@ bmoon.dida = {
         if (o.inited) return o;
         o.inited = true;
 
+        o.c_username = $.cookie('username');
+        o.c_mname    = $.cookie('mname');
+        o.c_mnick    = $.cookie('mnick_esc');
+        o.c_mmsn     = $.cookie('mmsn');
+
         try {
-            o.c_username = $.cookie('username');
-            o.c_mname    = $.cookie('mname');
-            o.c_mnick    = $.cookie('mnick_esc');
-            o.c_mmsn     = $.cookie('mmsn');
             o.c_city     = $.parseJSON($.cookie('city'));
             o.c_province = $.parseJSON($.cookie('province'));
         } catch (err) {
@@ -177,6 +178,10 @@ bmoon.dida = {
                     o.loginmname.focus();
                 else
                     o.loginmsn.focus();
+                o.logincheckID = setInterval(o.loginCheck, 500);
+            },
+            onClose: function() {
+                o.logincheckID && clearInterval(o.logincheckID);
             }
         });
         o.reloadAfterLogin = true;
@@ -266,7 +271,6 @@ bmoon.dida = {
                 alert(data.errmsg || "操作失败， 请稍后再试");
                 return;
             }
-            o.loginoverlay.close();
             o.loginCheck();
             o.reloadAfterLogin && setTimeout(function() {location.href = o.loginref || location.href;}, 1000);
         });
@@ -290,8 +294,15 @@ bmoon.dida = {
     
     loginCheck: function() {
         var o = bmoon.dida.init();
+
+        if (!o.c_mnick) {
+            o.c_mname = $.cookie('mname');
+            o.c_mnick = $.cookie('mnick_esc');
+            o.c_mmsn  = $.cookie('mmsn');
+        }
         
         if (o.c_mnick != null) {
+            o.loginoverlay.close();
             o.mnick.text(o.c_mnick);
             o.guest.hide();
             o.member.show();
