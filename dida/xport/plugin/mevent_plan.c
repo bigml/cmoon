@@ -268,8 +268,10 @@ static NEOERR* plan_cmd_plan_add(struct plan_entry *e, QueueEntry *q)
     MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
     
     if (ori) {
-        if (plan_spd_exist(e, q, ori, oid))
-            return nerr_raise(REP_ERR_PLANED, "%s %s planed", ori, oid);
+        if (plan_spd_exist(e, q, ori, oid)) {
+            mtc_warn("%s %s planed", ori, oid);
+            return STATUS_OK;
+        }
         
         tmps = hdf_get_valuef(g_cfg, "Odomain.%s", ori);
         if (tmps) hdf_set_value(q->hdfrcv, "ori", tmps);
