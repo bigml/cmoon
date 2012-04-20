@@ -2,7 +2,7 @@ dl.inp dt, dl.inp dd {margin: 1px;}
 
 #user-pic-info {
     width: 530px;
-    float: right;
+    margin-left: 2em;
 }
 
 #plans {
