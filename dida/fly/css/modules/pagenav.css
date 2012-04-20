@@ -1,13 +1,14 @@
 .page-nav {color: #666666; text-align: right;}
-.page-nav input {width: 20px; height: 14px; padding: 0;}
+.page-nav input {width: 20px; height: 14px; padding: 0 0 0 0.2em;}
 .page-nav .confirm, .page-nav .nav-prev, .page-nav .nav-next {
     display: inline-block;
     cursor: pointer;
+    height: 16px;
+    width: 16px;
     background: url(/img/modules/pagediv/pagediv.png) 0 0 no-repeat;
 }
-.page-nav .confirm {width: 24px; height: 18px;}
-.page-nav .nav-prev {width: 30px; height: 22px; background-position: 0 -18px;}
-.page-nav .nav-next {width: 70px; height: 22px; background-position: 0 -40px;}
+.page-nav .nav-next {background-position: 0 -16px;}
+.page-nav .nav-prev {background-position: 0 -32px;}
 .page-nav a {color: #666666;}
 
 .page-nav .left {width: 100px;}
