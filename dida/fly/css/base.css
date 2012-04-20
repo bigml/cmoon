@@ -38,10 +38,12 @@ a.btn:hover {background-position: 0 -28px;}
 
 dl.inp dt {float: left; clear: left; margin: 5px; line-height: 24px; text-align: right; width: 75px;}
 dl.inp dd {margin: 5px; line-height: 24px; float: left;}
+dl.inp dd img {vertical-align: middle;}
 dl.inp dd span {margin-left: 10px;}
 /*dl.inp dd span {margin-left: 20px;}*/
 dl.oneline dt {float: left; margin: 0 5px 0 20px; line-height: 24px; text-align: right;}
 dl.oneline dd {float: left; line-height: 24px;}
+dl.oneline dd img {vertical-align: middle;}
 dl.oneline dd input {float: left;}
 
 table.list {border: 1px solid #CCCCCC; border-collapse:collapse; width:100%;}

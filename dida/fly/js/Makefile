@@ -10,7 +10,7 @@ FILES = b/base.js \
         b/admin/spd/edeng.user.js b/admin/spd/edeng.js \
         b/admin/spd/liebiao.user.js b/admin/spd/liebiao.js \
         b/admin/spd/post.js b/admin/spd/robot.js \
-        b/member/regist.js b/member/reset.js b/member/account.js \
+        b/member/regist.js b/member/reset.js b/member/account.js b/member/home.js \
         b/bore/bore.js b/bore/op.js \
         b/plan/info.js b/plan/mine.js \
         b/inbox/system.js \
@@ -60,6 +60,8 @@ b/admin/spd/robot.js: admin/spd/robot.js
 b/member/regist.js: pub/noty/js/jquery.noty.js member/regist.js
 b/member/reset.js: member/reset.js
 b/member/account.js: member/account.js
+b/member/home.js: pub/jquerytools/src/tooltip/tooltip.js pub/jquery.mnnav.js \
+                  member/home.js
 
 b/bore/bore.js: bore/bore.js
 b/bore/op.js: pub/markitup/markitup/jquery.markitup.js bore/mku_set.js \

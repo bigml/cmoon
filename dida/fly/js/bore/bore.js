@@ -34,7 +34,7 @@ bmoon.bore = {
         o.commentnum = 0;
         o.commentget = 0;
 
-        o.author = $.cookie('mnick_esc');
+        o.author = bmoon.dida.c_mnick;
         if (!o.author) o.author = '网友';
 
         o.e_comment = $('#comment');

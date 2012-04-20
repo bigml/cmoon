@@ -269,7 +269,7 @@ NEOERR* plan_mine_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     hdf_set_value(evt->hdfsnd, "mname", mname);
     hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
-    hdf_set_value(evt->hdfsnd, "_npp","5");
+    hdf_set_value(evt->hdfsnd, "_npp", "5");
 
     MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_MINE, FLAGS_SYNC);
     hdf_copy(cgi->hdf, PRE_OUTPUT, evt->hdfrcv);

@@ -99,7 +99,10 @@ NEOERR* member_info_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  *                    phone 查看用户电话
  *                    contact 查看用户其他联系方式，如IM/Email
  *                    type=phone&type=contact 在用户电话为空时返回contact
- *          defs - 用户联系方式为空时，返回的图片字符串内容，默认为本站域名
+ *          defs - 用户联系方式为空时，返回的图片字符串内容，默认为本站域名，
+ *                 defs为 segv 且联系方式为空时不输出图片，仅输出 {"success": "1"}
+ *          fpath - 指定图片字体
+ *          fsize - 指定图片大小
  * Returns: 图片，内容为需要的字符串
  */
 NEOERR* member_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
@@ -178,6 +181,14 @@ NEOERR* member_reset_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  * Returns: None
  */
 NEOERR* member_account_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
+/*
+ * Description: 用户个人信息展示页
+ * Request: mid[*] - 用户id，强烈建议使用mid参数来展示（包括本人主页），
+ *                   在没有mid的情况下， 支持 LOGIN 检查，查看自己的主页。
+ * Returns: None
+ */
+NEOERR* member_home_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 __END_DECLS
 #endif /* __OMEMBER_H__ */

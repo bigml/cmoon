@@ -2,7 +2,8 @@
 #include "lheads.h"
 #include "omember.h"
 
-static void member_after_login(CGI *cgi, HASH *evth, char *mname, char *mnick)
+static void member_after_login(CGI *cgi, HASH *evth,
+                               char *mname, char *mnick, char *mid)
 {
     char tm[LEN_TM_GMT], *p, mmsn[LEN_CK];
     mevent_t *evt = (mevent_t*)hash_lookup(evth, "member");
@@ -23,6 +24,7 @@ static void member_after_login(CGI *cgi, HASH *evth, char *mname, char *mnick)
 
     //cgi_url_escape(mmsn, &p);
     cgi_cookie_set(cgi, "mmsn", mmsn, NULL, SITE_DOMAIN, tm, 1, 0);
+    cgi_cookie_set(cgi, "mid",  mid,  NULL, SITE_DOMAIN, tm, 1, 0);
 
     hdf_set_value(evt->hdfsnd, "mname", mname);
     hdf_set_value(evt->hdfsnd, "mmsn", mmsn);
@@ -31,6 +33,7 @@ static void member_after_login(CGI *cgi, HASH *evth, char *mname, char *mnick)
     hdf_set_copy(cgi->hdf, PRE_OUTPUT".mnick", PRE_QUERY".mnick");
     hdf_set_copy(cgi->hdf, PRE_OUTPUT".mname", PRE_QUERY".mname");
     hdf_set_value(cgi->hdf, PRE_OUTPUT".mmsn", mmsn);
+    hdf_set_value(cgi->hdf, PRE_OUTPUT".mid", mid);
 }
 
 NEOERR* member_info_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
@@ -60,12 +63,13 @@ NEOERR* member_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = hash_lookup(evth, "member");
     HDF *node;
-    char *s = NULL, *defs = NULL;
-    NEOERR *err;
+    char *s = NULL, *defs = NULL, *path, *size;
     
     MCS_NOT_NULLB(cgi->hdf, evt);
 
     HDF_FETCH_STR(cgi->hdf, PRE_QUERY".defs", defs);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".fpath", path);
+    HDF_FETCH_STR(cgi->hdf, PRE_QUERY".fsize", size);
 
     node = hdf_get_child(cgi->hdf, PRE_QUERY".type");
     if (!node) HDF_GET_STR(cgi->hdf, PRE_QUERY".type", s);
@@ -91,7 +95,7 @@ NEOERR* member_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
             break;
         }
         
-        node = hdf_obj_next(node);
+        if (node) node = hdf_obj_next(node);
     }
 
     if (!s || !*s) {
@@ -100,17 +104,13 @@ NEOERR* member_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
         else s = defs;
     }
     
-    err = mimg_create_from_string(s,
-                                  hdf_get_value(g_cfg,
-                                                "Config.font.member.path",
-                                                "/usr/share/ttf/Times.ttf"),
-                                  atof(hdf_get_value(g_cfg,
-                                                     "Config.font.member.size",
-                                                     "14.")),
-                                  &ses->data);
-    if (err != STATUS_OK) return nerr_pass(err);
+    if (!path) path = hdf_get_value(g_cfg,
+                                    "Config.font.member.path",
+                                    "/usr/share/ttf/Times.ttf");
     
-    return STATUS_OK;
+    if (!size) size = hdf_get_value(g_cfg, "Config.font.member.size", "14.");
+    
+    return nerr_pass(mimg_create_from_string(s, path, atof(size), &ses->data));
 }
 
 NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
@@ -186,7 +186,7 @@ NEOERR* member_exist_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 NEOERR* member_new_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = hash_lookup(evth, "member");
-    char *mnick, *mname;
+    char *mnick, *mname, *mid;
     
     MCS_NOT_NULLB(cgi->hdf, evt);
 
@@ -200,7 +200,9 @@ NEOERR* member_new_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_ADD, FLAGS_SYNC);
 
-    member_after_login(cgi, evth, mname, mnick);
+    mid = hdf_get_value(evt->hdfrcv, "mid", NULL);
+
+    member_after_login(cgi, evth, mname, mnick, mid);
 
     char *s;
     HDF_FETCH_STR(cgi->hdf, PRE_QUERY".mnick", s);
@@ -229,7 +231,8 @@ NEOERR* member_login_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_CHECK_MSN, FLAGS_SYNC);
 
     char *mnick = hdf_get_value(evt->hdfrcv, "mnick", "嘀嗒");
-    member_after_login(cgi, evth, mname, mnick);
+    char *mid = hdf_get_value(evt->hdfrcv, "mid", NULL);
+    member_after_login(cgi, evth, mname, mnick, mid);
 
     return STATUS_OK;
 }
@@ -313,7 +316,7 @@ NEOERR* member_reset_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 NEOERR* member_account_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = (mevent_t*)hash_lookup(evth, "member");
-    char *mnick, *mname, *rlink;
+    char *mnick, *mname, *mid, *rlink;
     NEOERR *err;
 
     MCS_NOT_NULLB(cgi->hdf, evt);
@@ -331,11 +334,12 @@ NEOERR* member_account_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
         if (!s || strcmp(s, rlink))
             return nerr_raise(LERR_USERINPUT, "验证码错误");
 
-        member_after_login(cgi, evth, mname, mnick);
-
         hdf_set_value(evt->hdfsnd, "mname", mname);
         MEVENT_TRIGGER(evt, mname, REQ_CMD_MEMBER_GET, FLAGS_SYNC);
         hdf_copy(cgi->hdf, PRE_OUTPUT".member", evt->hdfrcv);
+
+        mid = hdf_get_value(evt->hdfrcv, "mid", NULL);
+        member_after_login(cgi, evth, mname, mnick, mid);
 
         hdf_set_value(cgi->hdf, PRE_OUTPUT".rlink", rlink);
     } else {
@@ -343,6 +347,38 @@ NEOERR* member_account_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     }
 
     SET_DASHBOARD_ACTION(cgi->hdf);
+    
+    return STATUS_OK;
+}
+
+NEOERR* member_home_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mevent_t *evt = hash_lookup(evth, "member");
+    char *mname = NULL;
+    int mid;
+    NEOERR *err;
+
+    MCS_NOT_NULLB(cgi->hdf, evt);
+    
+    HDF_FETCH_INT(cgi->hdf, PRE_QUERY".mid", mid);
+
+    if (mid == 0) {
+        MEMBER_CHECK_LOGIN();
+    } else {
+        hdf_set_int_value(evt->hdfsnd, "mid", mid);
+        MEVENT_TRIGGER(evt, NULL, REQ_CMD_MEMBER_GET, FLAGS_SYNC);
+        hdf_copy(cgi->hdf, PRE_OUTPUT".member", evt->hdfrcv);
+    }
+
+    evt = hash_lookup(evth, "plan");
+    MCS_NOT_NULLA(evt);
+
+    if (mname) hdf_set_value(evt->hdfsnd, "mname", mname);
+    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+    hdf_set_value(evt->hdfsnd, "_npp", "5");
+    hdf_set_value(evt->hdfsnd, "_guest", "1");
+    MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_MINE, FLAGS_SYNC);
+    hdf_copy(cgi->hdf, PRE_OUTPUT, evt->hdfrcv);
     
     return STATUS_OK;
 }

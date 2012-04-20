@@ -91,6 +91,7 @@ NEOERR* plan_info_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  *                    contact 查看路线其他联系方式，如IM/Email
  *                    type=phone&type=contact 在路线电话为空时返回contact
  *          defs - 路线联系方式为空时，返回的图片字符串内容，默认为本站域名
+ *                 defs为 segv 且联系方式为空时不输出图片，仅输出 {"success": "1"}
  * Returns: None
  */
 NEOERR* plan_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);

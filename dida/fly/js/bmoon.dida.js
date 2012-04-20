@@ -149,6 +149,7 @@ bmoon.dida = {
         o.c_mname    = $.cookie('mname');
         o.c_mnick    = $.cookie('mnick_esc');
         o.c_mmsn     = $.cookie('mmsn');
+        o.c_mid      = $.cookie('mid');
 
         try {
             o.c_city     = $.parseJSON($.cookie('city'));
@@ -166,6 +167,7 @@ bmoon.dida = {
         o.e_content = $('#bd-content');
 
         o.mnick = $('#bd-mnick');
+        o.mhome = $('#bd-mhome');
         o.member = $('#bd-member');
         o.guest = $('#bd-guest');
         o.loginhint = $('#login-hint');
@@ -285,9 +287,11 @@ bmoon.dida = {
         $.cookie('mnick', null, {path: '/', domain: g_site_domain});
         $.cookie('mnick_esc', null, {path: '/', domain: g_site_domain});
         $.cookie('mmsn', null, {path: '/', domain: g_site_domain});
+        $.cookie('mid', null, {path: '/', domain: g_site_domain});
         o.c_mnick = null;
         o.c_mname = null;
-        o.c_mmsn = null;
+        o.c_mmsn  = null;
+        o.c_mid   = null;
         o.loginmname.val("");
         o.loginCheck();
     },
@@ -299,11 +303,14 @@ bmoon.dida = {
             o.c_mname = $.cookie('mname');
             o.c_mnick = $.cookie('mnick_esc');
             o.c_mmsn  = $.cookie('mmsn');
+            o.c_mid   = $.cookie('mid');
         }
         
         if (o.c_mnick != null) {
             o.loginoverlay.close();
             o.mnick.text(o.c_mnick);
+            if (o.c_mid) o.mhome.attr('href', '/member/home?mid='+o.c_mid);
+            else o.mhome.attr('href', '/member/home');
             o.guest.hide();
             o.member.show();
             o.loginmname.val(o.c_mname);

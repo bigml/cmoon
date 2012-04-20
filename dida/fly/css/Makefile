@@ -6,7 +6,7 @@ FILES = b/base.css \
         b/index.css \
         b/readme.css \
         b/admin/spd/post.css b/admin/spd/robot.css \
-        b/member/regist.css b/member/account.css b/member/reset.css \
+        b/member/regist.css b/member/account.css b/member/reset.css b/member/home.css \
         b/bore/bore.css b/bore/op.css \
         b/plan/info.css b/plan/mine.css \
         b/inbox/system.css b/inbox/private.css b/inbox/sent.css \
@@ -25,7 +25,8 @@ preload:
 
 b/base.css: reset.css base.css layout.css modules/overlay.css
 
-b/index.css: modules/indicator.css modules/dateinput/dateinput.css modules/tooltip.css \
+b/index.css: modules/indicator.css modules/dateinput/dateinput.css \
+             modules/tooltip.css \
              modules/noty/jquery.noty.css modules/noty/noty_theme_mitgux.css \
              index/index.css
 b/readme.css: readme.css
@@ -38,6 +39,8 @@ b/member/regist.css: modules/noty/jquery.noty.css modules/noty/noty_theme_mitgux
 b/member/account.css: modules/box.css modules/minibtn.css modules/indicator.css \
                       member/account.css
 b/member/reset.css: modules/indicator.css
+b/member/home.css: modules/tooltip.css modules/miniicon.css modules/pagenav.css \
+                   member/home.css
 
 b/bore/bore.css: modules/indicator.css bore/bore.css
 b/bore/op.css: modules/indicator.css bore/mku_skin.css bore/mku_set.css bore/op.css

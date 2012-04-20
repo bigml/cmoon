@@ -202,6 +202,8 @@ static NEOERR* member_cmd_mem_add(struct member_entry *e, QueueEntry *q)
     
     string_clear(&str);
     
+    hdf_set_int_value(q->hdfsnd, "mid", hash_string_rev(mname));
+    
     tmps = NULL;
     REQ_FETCH_PARAM_STR(q->hdfrcv, "_addcar", tmps);
     if (tmps) return nerr_pass(member_cmd_car_add(e, q));
