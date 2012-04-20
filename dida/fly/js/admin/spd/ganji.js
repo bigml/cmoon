@@ -17,8 +17,8 @@ bmoon.spdganji = {
 
         o.area = href.match(/http:\/\/(.*).ganji.*/)[1];
         
-        if (href.match(/.*\/([0-9|_]+)x\.htm$/)) {
-            o.parseNode(o.area + href.match(/.*\/([0-9|_]+)x\.htm$/)[1]);
+        if (href.match(/.*\/([0-9|_]+x)\.htm$/)) {
+            o.parseNode(o.area + href.match(/.*\/([0-9|_]+x)\.htm$/)[1]);
         } else if (href.match(/.*ganji.com\/pincheshangxiaban\//)){
             o.parseList();
         }
