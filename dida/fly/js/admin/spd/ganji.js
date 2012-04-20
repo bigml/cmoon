@@ -38,9 +38,9 @@ bmoon.spdganji = {
         dad = 0, saddr = '', eaddr = '', marks = '', time = '', size = 0, fee = 0,
         repeat = 0, sdate = '', stime = '', attach = '', uname = '赶集网友';
 
-        saddr = $('.body_left').html().match('起点：([^<\n]+)')[1];
+        saddr = $.trim($('.body_left').text().match('起点：([^<\n]+)')[1]);
         
-        eaddr = $('.body_left').html().match('终点：([^<\n]+)')[1];
+        eaddr = $.trim($('.body_left').text().match('终点：([^<\n]+)')[1]);
 
         dad = $('.body_left').html().match('我是车主') ? 1: 0;
 
