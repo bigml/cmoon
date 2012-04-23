@@ -47,7 +47,7 @@ NEOERR* lerr_init()
         if (err != STATUS_OK) return nerr_pass(err);
         err = nerr_register(&LERR_LIMIT, "用户无权限");
         if (err != STATUS_OK) return nerr_pass(err);
-        err = nerr_register(&LERR_MISS_DATA, "资源不存在");
+        err = nerr_register(&LERR_MISS_DATA, "请求的资源不存在");
         if (err != STATUS_OK) return nerr_pass(err);
         err = nerr_register(&LERR_MISS_TPL, "找不到渲染模板(忘记了/json ?)");
         if (err != STATUS_OK) return nerr_pass(err);

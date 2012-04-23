@@ -16,6 +16,10 @@ int LERR_ATTACK    = 0;            /* 30 */
 /*
  * mevent plugin error
  */
+int LERR_MEMBERED = 0;
+int LERR_CARED = 0;
+int LERR_MEMBER_NEXIST = 0;
+int LERR_PLAN_NEXIST = 0;
 
 /*
  * app error
@@ -39,16 +43,24 @@ NEOERR* lerr_init()
 
         err = nerr_register(&LERR_NOTLOGIN, "请登录后操作");
         if (err != STATUS_OK) return nerr_pass(err);
-
         err = nerr_register(&LERR_LOGINPSW, "密码错误");
         if (err != STATUS_OK) return nerr_pass(err);
         err = nerr_register(&LERR_LIMIT, "用户无权限");
         if (err != STATUS_OK) return nerr_pass(err);
-        err = nerr_register(&LERR_MISS_DATA, "资源不存在");
+        err = nerr_register(&LERR_MISS_DATA, "请求的资源不存在");
         if (err != STATUS_OK) return nerr_pass(err);
         err = nerr_register(&LERR_MISS_TPL, "找不到渲染模板(忘记了/json ?)");
         if (err != STATUS_OK) return nerr_pass(err);
         err = nerr_register(&LERR_ATTACK, "太过频繁，请稍后请求！");
+        if (err != STATUS_OK) return nerr_pass(err);
+
+        err = nerr_register(&LERR_MEMBERED, "邮箱已被注册！");
+        if (err != STATUS_OK) return nerr_pass(err);
+        err = nerr_register(&LERR_CARED, "一个帐户只能拥有一辆车！");
+        if (err != STATUS_OK) return nerr_pass(err);
+        err = nerr_register(&LERR_MEMBER_NEXIST, "用户不存在");
+        if (err != STATUS_OK) return nerr_pass(err);
+        err = nerr_register(&LERR_PLAN_NEXIST, "路线不存在");
         if (err != STATUS_OK) return nerr_pass(err);
 
         err = nerr_register(&LERR_USERINPUT, "输入参数错误");
@@ -74,9 +86,9 @@ void lerr_opfinish_json(NEOERR *err, HDF *hdf)
     char buf[1024], errname[128];
     NEOERR *neede = mcs_err_valid(err);
     if (!neede) neede = err;
-    snprintf(buf, sizeof(buf), "%s:%d %s() %s:%s",
-             neede->file, neede->lineno, neede->func,
-             _lookup_errname(neede, errname, sizeof(errname)), neede->desc);
+    snprintf(buf, sizeof(buf), "%s:%d %s",
+             neede->file, neede->lineno,
+             _lookup_errname(neede, errname, sizeof(errname)));
     /* set PRE_ERRXXX with the most recently err */
     if (!hdf_get_obj(hdf, PRE_ERRMSG)) {
         hdf_set_value(hdf, PRE_ERRMSG, buf);

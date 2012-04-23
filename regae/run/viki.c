@@ -109,10 +109,14 @@ int main(int argc, char **argv, char **envp)
             case CGI_REQ_HTML:
                 err = ltpl_render(cgi, tplh, session);
                 if (err != STATUS_OK) {
-                    if (nerr_match(err, LERR_MISS_TPL))
-                        cgi_redirect(cgi, "/404.html");
-                    else
-                        cgi_redirect(cgi, "/503.html");
+                    SAFE_FREE(session->render);
+                    if (nerr_match(err, LERR_MISS_TPL)) {
+                        session->render = strdup("404");
+                    } else {
+                        session->render = strdup("503");
+                    }
+                    nerr_ignore(&err);
+                    err = ltpl_render(cgi, tplh, session);
                     TRACE_NOK(err);
                 }
                 break;
