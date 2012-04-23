@@ -274,6 +274,7 @@ bmoon.dida = {
                 return;
             }
             o.loginCheck();
+            o.reloadAfterLogin && setTimeout(function() {location.href = o.loginref || location.href;}, 1000);
         });
     },
     
@@ -307,18 +308,12 @@ bmoon.dida = {
         
         if (o.c_mnick != null) {
             o.loginoverlay.close();
-
+            o.mnick.text(o.c_mnick);
             if (o.c_mid) o.mhome.attr('href', '/member/home?mid='+o.c_mid);
             else o.mhome.attr('href', '/member/home');
-            o.mnick.text(o.c_mnick);
             o.guest.hide();
             o.member.show();
             o.loginmname.val(o.c_mname);
-
-            o.reloadAfterLogin && setTimeout(function() {
-                location.href = o.loginref || location.href;
-            }, 1000);
-
             return true;
         } else {
             o.member.hide();
