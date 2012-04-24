@@ -139,6 +139,13 @@ bmoon.dida = {
         week: 2
     },
     
+    dateinputzh: {
+        months:        '一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月',
+        shortMonths:   '一,二,三,四,五,六,七,八,九,十,十一,十二',
+        days:          '星期日,星期一,星期二,星期三,星期四,星期五,星期六',
+        shortDays:     '日,一,二,三,四,五,六'
+    },
+    
     init: function() {
         var o = bmoon.dida;
 
@@ -176,6 +183,8 @@ bmoon.dida = {
         o.loginoverlay = $('a[rel="#bd-login"]').overlay({
             mask: '#666', api: true,
             onLoad: function() {
+                $.cookie('mmsn', null, {path: '/', domain: g_site_domain});
+                o.c_mmsn  = null;
                 if (o.loginmname.val().length <= 0)
                     o.loginmname.focus();
                 else
@@ -299,14 +308,12 @@ bmoon.dida = {
     loginCheck: function() {
         var o = bmoon.dida.init();
 
-        if (!o.c_mnick) {
-            o.c_mname = $.cookie('mname');
-            o.c_mnick = $.cookie('mnick_esc');
-            o.c_mmsn  = $.cookie('mmsn');
-            o.c_mid   = $.cookie('mid');
-        }
+        !o.c_mname && o.c_mname = $.cookie('mname');
+        !o.c_mnick && o.c_mnick = $.cookie('mnick_esc');
+        !o.c_mmsn  && o.c_mmsn  = $.cookie('mmsn');
+        !o.c_mid   && o.c_mid   = $.cookie('mid');
         
-        if (o.c_mnick != null) {
+        if (o.c_mnick != null && o.c_mmsn != null) {
             o.loginoverlay.close();
             o.mnick.text(o.c_mnick);
             if (o.c_mid) o.mhome.attr('href', '/member/home?mid='+o.c_mid);
