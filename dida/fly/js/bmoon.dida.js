@@ -308,10 +308,10 @@ bmoon.dida = {
     loginCheck: function() {
         var o = bmoon.dida.init();
 
-        !o.c_mname && o.c_mname = $.cookie('mname');
-        !o.c_mnick && o.c_mnick = $.cookie('mnick_esc');
-        !o.c_mmsn  && o.c_mmsn  = $.cookie('mmsn');
-        !o.c_mid   && o.c_mid   = $.cookie('mid');
+        if (o.c_mname == null) o.c_mname = $.cookie('mname');
+        if (o.c_mnick == null) o.c_mnick = $.cookie('mnick_esc');
+        if (o.c_mmsn  == null) o.c_mmsn  = $.cookie('mmsn');
+        if (o.c_mid   == null) o.c_mid   = $.cookie('mid');
         
         if (o.c_mnick != null && o.c_mmsn != null) {
             o.loginoverlay.close();
