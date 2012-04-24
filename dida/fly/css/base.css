@@ -52,8 +52,8 @@ table.list td {border-left:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC; p
 table.list td span {margin-left: 10px;}
 table.list tr:hover {background-color: #FFFFCC;}
 
-.hide {display: none;}
-.show {display: block;}
+.hide {display: none !important;}
+.show {display: block !important;}
 .valid {border: 1px solid green !important;}
 .invalid {border: 1px solid #800 !important;}
 .clearer {clear: both !important;}
@@ -63,6 +63,7 @@ table.list tr:hover {background-color: #FFFFCC;}
 .slight {color:#767676;}
 .em {font-weight: bold;}
 .eem {font-weight: bold; font-size: 120%;}
+/* 浮动元素自动变为块级元素，如 <span class="fright" 将可以为其设置宽度，跟display: inline-block效果一样，除了后者有浏览器兼容问题 */
 .fright {float: right;}
 .fleft {float: left;}
 .text-red {color: #ff0000;}
@@ -74,6 +75,7 @@ table.list tr:hover {background-color: #FFFFCC;}
 .text-success {color: #00ff00;}
 .text-error {color: #ff0000;}
 .page-hint {width: 82%; text-align: center; margin: 2em auto; margin-bottom: 3em; padding: 1em; background-color: #FCFCFC; border: 1px solid #DDD; font-weight: bold; -moz-border-radius:4px;}
+/* 有移动子元素时，为其后面的元素自动添加clear，跟最后子元素为clearer效果一样（除了不能为自己设置高度） */
 .clearfix:after {
     clear: both;
     content: ".";
@@ -81,3 +83,18 @@ table.list tr:hover {background-color: #FFFFCC;}
     height: 0;
     visibility: hidden;
 }
+.clearfix {
+    display: block;
+}
+/* 设计 span 的 width，需结合float使用，参考 fright */
+.w100 {width: 100px;}
+
+.mr2 {margin-right: 2em;}
+.mr5 {margin-right: 5em;}
+.ml2 {margin-left: 2em;}
+.ml5 {margin-left: 5em;}
+
+.pr2 {padding-right: 2em;}
+.pr5 {padding-right: 5em;}
+.pl2 {padding-left: 2em;}
+.pl5 {padding-left: 5em;}

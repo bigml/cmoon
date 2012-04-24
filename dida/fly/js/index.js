@@ -111,13 +111,7 @@ bmoon.index = {
     onready: function() {
         var o = bmoon.index.init();
 
-        $.tools.dateinput.localize("zh",  {
-            months:        '一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月',
-            shortMonths:   '一,二,三,四,五,六,七,八,九,十,十一,十二',
-            days:          '星期日,星期一,星期二,星期三,星期四,星期五,星期六',
-            shortDays:     '日,一,二,三,四,五,六'
-        });
-        
+        $.tools.dateinput.localize("zh", bmoon.dida.dateinputzh);
         o.calendar = o.e_dateinput.dateinput({
             format: 'yyyy-mm-dd',
             lang: 'zh',
@@ -169,7 +163,7 @@ bmoon.index = {
         o.e_mc_no_submit.click(o.leavePlan);
         o.e_mc_prev.click(function() {o.rendPlan(o._pcur-1);});
         o.e_mc_next.click(function() {o.rendPlan(o._pcur+1);});
-        o.e_mc_continue.click(function() {o.e_mc_noresult.toggle();});
+        o.e_mc_continue.click(function() {o.e_mc_noresult.toggleClass('hide');});
         o.e_mc_no_subscribes.click(function() {
             if ($(this).attr('checked') == 'checked') {
                 if ($(this).val() == 1) {
@@ -227,9 +221,9 @@ bmoon.index = {
         var o = bmoon.index.init();
 
         if (o.e_mc_no_repeat.val() == 2) {
-            o.e_mc_no_wday.show();
+            o.e_mc_no_wday.removeClass('hide');
         } else {
-            o.e_mc_no_wday.hide();
+            o.e_mc_no_wday.addClass('hide');
         }
     },
 
@@ -239,9 +233,9 @@ bmoon.index = {
         var p = $(this).parent(),
         plan = o.plan;
 
-        o.e_mc_noresult.fadeOut();
-        o.e_mc_result.fadeOut();
-        o.e_mc_nav.fadeOut();
+        o.e_mc_noresult.addClass('hide');
+        o.e_mc_result.addClass('hide');
+        o.e_mc_nav.addClass('hide');
         //o.g_prect.setMap(null);
         o.mplans = {};
         
@@ -285,7 +279,7 @@ bmoon.index = {
             } else {
                 p.addClass('error');
                 $('<span class="vres">'+ data.errmsg || ' ' + '</span>').appendTo(p);
-                if (data._ntt == 0) o.e_mc_noresult.fadeIn();
+                if (data._ntt == 0) o.e_mc_noresult.removeClass('hide');
             }
         });
     },
@@ -386,12 +380,16 @@ bmoon.index = {
 
         var domains = bmoon.dida.odomain;
         o._pcur = ncur;
-        if (ncur > 0) o.e_mc_prev.show();
-        else o.e_mc_prev.hide();
-        if (ncur < o._pnum-1) o.e_mc_next.show();
-        else o.e_mc_next.hide();
-        
-        o.e_mc_nick.html(plan.nick);
+        if (ncur > 0) o.e_mc_prev.removeClass('hide');
+        else o.e_mc_prev.addClass('hide');
+        if (ncur < o._pnum-1) o.e_mc_next.removeClass('hide');
+        else o.e_mc_next.addClass('hide');
+
+        if (plan.mid == 0) {
+            o.e_mc_nick.html(plan.nick);
+        } else {
+            o.e_mc_nick.html('<a target="_blank" href="/member/home?mid='+plan.mid+'">'+plan.nick+'</a>');
+        }
         o.e_mc_attach.html(plan.attach);
         o.e_mc_num_nav.html(ncur+1 + ' / ' + o._pnum);
         o.e_mc_saddr.html(plan.saddr);
@@ -404,11 +402,11 @@ bmoon.index = {
         o.e_mc_stime.html(plan.stime);
         o.e_mc_planurl.attr('href', '/plan/info?id='+plan.id);
 
-        o.e_mc_nav.fadeIn();
-        o.e_mc_result.fadeIn('slow');
+        o.e_mc_nav.removeClass('hide');
+        o.e_mc_result.removeClass('hide');
 
-        if (bmoon.dida.c_mnick && plan.mid == 0) o.e_mc_del.show();
-        else o.e_mc_del.hide();
+        if (bmoon.dida.c_mnick && plan.mid == 0) o.e_mc_del.removeClass('hide');
+        else o.e_mc_del.addClass('hide');
         
         o.e_mc_from.empty();
         if (plan.ori > 0) {
@@ -540,7 +538,7 @@ bmoon.index = {
         if (x == 'e') {
             marker = o.g_emarker;
         } else {
-            o.e_maphint.fadeIn();
+            o.e_maphint.removeClass('hide');
         }
 
         o.g_geocode.getPoint(s, function(point) {

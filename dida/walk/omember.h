@@ -120,6 +120,16 @@ NEOERR* member_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 /*
+ * Description: 用户修改自己的汽车信息
+ * Request: LOGIN* - see MEMBER_CHECK_LOGIN() of omember.h
+ *          size - 汽车类型，参考 table_merry.sql
+ *          model - 汽车型号，字符串
+ *          mdate - 购买日期
+ * Returns: None
+ */
+NEOERR* member_car_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
+/*
  * Description: 判断邮箱是否已被注册
  * Request: mname* - 需要判断的邮箱号
  * Returns: {success: "1", exist: '1', msg: "用户已被注册"}

@@ -36,7 +36,7 @@ static NEOERR* member_cmd_car_get(struct member_entry *e, QueueEntry *q)
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
         MDB_QUERY_RAW(db, "car", _COL_CAR, "mid=%d", NULL, mid);
-        err = mdb_set_row(q->hdfsnd, db, _COL_CAR, NULL, MDB_FLAG_Z);
+        err = mdb_set_row(q->hdfsnd, db, _COL_CAR, NULL, MDB_FLAG_EMPTY_OK);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, CAR_CC_SEC, PREFIX_CAR"%d", mid);
@@ -91,6 +91,10 @@ static NEOERR* member_cmd_mem_priv_get(struct member_entry *e, QueueEntry *q)
     } else {
         MDB_QUERY_RAW(db, "member", _COL_MEMBER_ADMIN, "mid=%d", NULL, mid);
         err = mdb_set_row(q->hdfsnd, db, _COL_MEMBER_ADMIN, NULL, MDB_FLAG_Z);
+        if (err != STATUS_OK) return nerr_pass(err);
+
+        MDB_QUERY_RAW(db, "car", _COL_CAR, "mid=%d", NULL, mid);
+        err = mdb_set_row(q->hdfsnd, db, _COL_CAR, NULL, MDB_FLAG_EMPTY_OK);
         if (err != STATUS_OK) return nerr_pass(err);
 
         CACHE_HDF(q->hdfsnd, MEMBER_CC_SEC, PREFIX_MEMBER_PRIV"%d", mid);
@@ -148,11 +152,13 @@ static NEOERR* member_cmd_car_add(struct member_entry *e, QueueEntry *q)
 	NEOERR *err;
 
     mdb_conn *db = e->db;
+    struct cache *cd = e->cd;
 
     MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
 
     err = member_cmd_car_get(e, q);
-    nerr_handle(&err, NERR_NOT_FOUND);
+    if (err != STATUS_OK) return nerr_pass(err);
+
     if (hdf_get_obj(q->hdfsnd, "size"))
         return nerr_raise(REP_ERR_CARED, "%d already has car", mid);
     
@@ -165,7 +171,49 @@ static NEOERR* member_cmd_car_add(struct member_entry *e, QueueEntry *q)
     
     string_clear(&str);
 
+    cache_delf(cd, PREFIX_CAR"%d", mid);
+    cache_delf(cd, PREFIX_MEMBER"%d", mid);
+    cache_delf(cd, PREFIX_MEMBER_PRIV"%d", mid);
+    
     return STATUS_OK;
+}
+
+static NEOERR* member_cmd_car_up(struct member_entry *e, QueueEntry *q)
+{
+	STRING str; string_init(&str);
+    int mid;
+	NEOERR *err;
+
+    mdb_conn *db = e->db;
+    struct cache *cd = e->cd;
+
+    MEMBER_GET_PARAM_MID(q->hdfrcv, mid);
+
+    err = member_cmd_car_get(e, q);
+    if (err != STATUS_OK) return nerr_pass(err);
+    if (hdf_get_obj(q->hdfsnd, "size")) {
+        /*
+         * update
+         */
+        err = mdb_build_upcol(q->hdfrcv,
+                              hdf_get_obj(g_cfg, CONFIG_PATH".UpdateCol.car"), &str);
+        if (err != STATUS_OK) return nerr_pass(err);
+
+        MDB_EXEC(db, NULL, "UPDATE car SET %s WHERE mid=%d;", NULL, str.buf, mid);
+
+        string_clear(&str);
+
+        cache_delf(cd, PREFIX_CAR"%d", mid);
+        cache_delf(cd, PREFIX_MEMBER"%d", mid);
+        cache_delf(cd, PREFIX_MEMBER_PRIV"%d", mid);
+    
+        return STATUS_OK;
+    }
+    
+    /*
+     * insert
+     */
+    return nerr_pass(member_cmd_car_add(e, q));
 }
 
 static NEOERR* member_cmd_mem_add(struct member_entry *e, QueueEntry *q)
@@ -321,6 +369,9 @@ static void member_process_driver(EventEntry *entry, QueueEntry *q)
         break;
     case REQ_CMD_CAR_ADD:
         err = member_cmd_car_add(e, q);
+        break;
+    case REQ_CMD_CAR_UP:
+        err = member_cmd_car_up(e, q);
         break;
     case REQ_CMD_STATS:
         st->msg_stats++;

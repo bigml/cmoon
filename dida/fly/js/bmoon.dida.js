@@ -318,13 +318,13 @@ bmoon.dida = {
             o.mnick.text(o.c_mnick);
             if (o.c_mid) o.mhome.attr('href', '/member/home?mid='+o.c_mid);
             else o.mhome.attr('href', '/member/home');
-            o.guest.hide();
-            o.member.show();
+            o.guest.addClass('hide');
+            o.member.removeClass('hide');
             o.loginmname.val(o.c_mname);
             return true;
         } else {
-            o.member.hide();
-            o.guest.show();
+            o.member.addClass('hide');
+            o.guest.removeClass('hide');
             return false;
         }
     },

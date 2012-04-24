@@ -14,7 +14,7 @@
 #define _COL_MEMBER_ADMIN "mid, mname, mnick, msn, mmsn, male, phone, contact, " \
     " verify, credit, cityid, "                                         \
     " to_char(intime, 'YYYY-MM-DD') as intime"
-#define _COL_CAR "mid, size, model, mdate"
+#define _COL_CAR "carstatu, mid, size, model, mdate"
 #define _COL_RESET " mname, rlink, to_char(intime, 'YYYY-MM-DD') as intime "
 
 #define MEMBER_GET_PARAM_MID(hdf, mid)                  \
@@ -45,7 +45,8 @@ enum {
     REQ_CMD_MEMBER_GETRLINK,
     REQ_CMD_MEMBER_SETRLINK,
     REQ_CMD_CAR_GET,
-    REQ_CMD_CAR_ADD
+    REQ_CMD_CAR_ADD,
+    REQ_CMD_CAR_UP
 };
 
 enum {

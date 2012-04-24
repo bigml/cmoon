@@ -61,7 +61,7 @@ Plugin {
                 mid [type=int, require=true] = mid
                 size [type=int] = size
                 model [maxlen=64] = model
-                mdate [maxlen=64] = mdate
+                mdate = mdate
             }
         }
         UpdateCol {
@@ -76,6 +76,12 @@ Plugin {
                 cityid [type=int] = cityid
                 phone [maxlen=128] = phone
                 contact [maxlen=128] = contact
+            }
+            car {
+                carstatu [type=int] = carstatu
+                size [type=int] = size
+                model [maxlen=64] = model
+                mdate = mdate
             }
         }
     }

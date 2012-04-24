@@ -212,13 +212,7 @@ bmoon.planmine = {
     onready: function() {
         var o = bmoon.planmine.init();
 
-        $.tools.dateinput.localize("zh",  {
-            months:        '一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月',
-            shortMonths:   '一,二,三,四,五,六,七,八,九,十,十一,十二',
-            days:          '星期日,星期一,星期二,星期三,星期四,星期五,星期六',
-            shortDays:     '日,一,二,三,四,五,六'
-        });
-
+        $.tools.dateinput.localize("zh", bmoon.dida.dateinputzh);
         o.calendar = o.e_pnew_sdate.dateinput({
             format: 'yyyy-mm-dd',
             lang: 'zh',
@@ -520,19 +514,19 @@ bmoon.planmine = {
         var v = o.e_pnew_repeat.val();
         if (v == 0) {
             o.e_pnew_wday.addClass('hide');
-            $('#pnew-sdate').removeAttr('disabled').show();
-            $('a.caltrigger').show();
-            o.e_pnew_datehint.show();
+            $('#pnew-sdate').removeAttr('disabled').removeClass('hide');
+            $('a.caltrigger').removeClass('hide');
+            o.e_pnew_datehint.removeClass('hide');
         } else if (v == 1) {
             o.e_pnew_wday.addClass('hide');
-            $('#pnew-sdate').attr('disabled', 'disabled').hide();
-            $('a.caltrigger').hide();
-            o.e_pnew_datehint.hide();
+            $('#pnew-sdate').attr('disabled', 'disabled').addClass('hide');
+            $('a.caltrigger').addClass('hide');
+            o.e_pnew_datehint.addClass('hide');
         } else if (v == 2) {
             o.e_pnew_wday.removeClass('hide');
-            $('#pnew-sdate').attr('disabled', 'disabled').hide();
-            $('a.caltrigger').hide();
-            o.e_pnew_datehint.hide();
+            $('#pnew-sdate').attr('disabled', 'disabled').addClass('hide');
+            $('a.caltrigger').addClass('hide');
+            o.e_pnew_datehint.addClass('hide');
         }
     },
     

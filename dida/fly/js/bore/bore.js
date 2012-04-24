@@ -84,9 +84,9 @@ bmoon.bore = {
                         o.commentget++;
                     });
                     if (o.commentget < o.commentnum) {
-                        o.e_comment_get.show();
+                        o.e_comment_get.removeClass('hide');
                     } else {
-                        o.e_comment_get.hide();
+                        o.e_comment_get.addClass('hide');
                     }
                 }
             }

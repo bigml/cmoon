@@ -59,7 +59,7 @@ b/admin/spd/robot.js: admin/spd/robot.js
 
 b/member/regist.js: pub/noty/js/jquery.noty.js member/regist.js
 b/member/reset.js: member/reset.js
-b/member/account.js: member/account.js
+b/member/account.js: pub/jquerytools/src/dateinput/dateinput.js member/account.js
 b/member/home.js: pub/jquerytools/src/tooltip/tooltip.js pub/jquery.mnnav.js \
                   member/home.js
 

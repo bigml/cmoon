@@ -77,7 +77,7 @@ bmoon.memberregist = {
                 p.addClass('success');
                 noty({text: '注册成功，且已完成登录。', type: 'success', theme: 'noty_theme_mitgux'});
                 setTimeout(function() {
-                    //$('#done').fadeIn();
+                    //$('#done').removeClass('hide');
                     bmoon.dida.loginCheck();
                 }, 1000);
             }

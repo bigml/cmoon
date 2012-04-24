@@ -60,6 +60,7 @@ LANGUAGE plpgsql;
 
 CREATE TABLE car (
     mid int PRIMARY KEY,
+    carstatu smallint NOT NULL DEFAULT 0, --0 fresh, 1 pause
     size smallint NOT NULL DEFAULT 0, --0 小轿车, 1 MPV, 2 SUV, 3 面包车, 4 大客车, 5 货车
     model varchar(64) NOT NULL DEFAULT '',
     mdate date DEFAULT '2011-10-10'

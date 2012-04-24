@@ -6,13 +6,6 @@
     <h3>基本信息</h3>
     <div class="boxed-group-inner full-width">
       <table class="list">
-        <!--
-        <tr>
-          <th>键</th>
-          <th>值</th>
-        </tr>
-        -->
-
         <tr>
           <td>注册邮箱</td>
           <td><?cs var:Output.member.mname ?></td>
@@ -35,6 +28,47 @@
           var:Output.member.contact ?>" /></td>
         </tr>
       </table>
+      <span class="indicator"></span>
+    </div>
+  </div>
+
+  <div id="car-setting" class="boxed-group">
+    <div class="op">
+      <a id="car-save" class="minibutton disabled"><span>保存修改</span></a>
+    </div>
+    <h3>汽车信息</h3>
+    <div class="boxed-group-inner">
+      <ul class="boxed-group-list standalone">
+        <li class="clearfix">
+          <span class="fleft w100 text-right">
+            <input type="radio" name="carstatu" value="1" <?cs if:!?Output.member.carstatu || Output.member.carstatu == #1 ?>checked="checked"<?cs /if ?> /> 我仅仅是乘客
+          </span>
+          <span class="ml2">
+            <input type="radio" name="carstatu" value="0" <?cs if:?Output.member.carstatu && Output.member.carstatu == #0 ?>checked="checked"<?cs /if ?> /> 我同时也是车主
+          </span>
+        </li>
+
+        <li class="car-info clearfix <?cs if:!?Output.member.carstatu || Output.member.carstatu == #1 ?>hide<?cs /if ?>">
+          <span class="fleft w100 text-right">车型：</span>
+          <select id="car-size" name="size">
+            <option value="0" selected="selected">小轿车</option>
+            <option value="1">MPV</option>
+            <option value="2">SUV</option>
+            <option value="3">面包车</option>
+            <option value="4">大客车</option>
+            <option value="5">货车</option>
+          </select>
+        </li>
+        <li class="car-info clearfix <?cs if:!?Output.member.carstatu || Output.member.carstatu == #1 ?>hide<?cs /if ?>">
+          <span class="fleft w100 text-right">品牌：</span>
+          <input id="car-model" type="text" class="VAL_CAR vrequire" name="model" value="<?cs var:Output.member.model ?>" />
+        </li>
+        <li class="car-info clearfix <?cs if:!?Output.member.carstatu || Output.member.carstatu == #1 ?>hide<?cs /if ?>">
+          <span class="fleft w100 text-right">购买日期：</span>
+          <input id="car-date" type="text" class="datep VAL_CAR vrequire" name="mdate" value="<?cs var:Output.member.mdate ?>" />
+        </li>
+
+      </ul>
       <span class="indicator"></span>
     </div>
   </div>

@@ -156,6 +156,24 @@ NEOERR* member_edit_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     return STATUS_OK;
 }
 
+NEOERR* member_car_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mevent_t *evt = hash_lookup(evth, "member");
+    char *mname;
+    NEOERR *err;
+
+    MCS_NOT_NULLB(cgi->hdf, evt);
+    
+    MEMBER_CHECK_LOGIN();
+
+    hdf_set_value(evt->hdfsnd, "mname", mname);
+    hdf_copy(evt->hdfsnd, NULL, hdf_get_obj(cgi->hdf, PRE_QUERY));
+
+    MEVENT_TRIGGER(evt, mname, REQ_CMD_CAR_UP, FLAGS_NONE);
+    
+    return STATUS_OK;
+}
+
 NEOERR* member_exist_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = hash_lookup(evth, "member");
