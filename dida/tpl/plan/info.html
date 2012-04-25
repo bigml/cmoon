@@ -1,6 +1,13 @@
-<h2>查看路线详情</h2>
+<?cs include:"macro/plan.cs" ?>
+
+<h2>拼车线路详情</h2>
 
 <dl class="inp">
+  <dt>类型：</dt>
+  <dd>
+    <?cs call:plan_dad(Output.plan.dad) ?>
+  </dd>
+  
   <dt>路线：</dt>
   <dd>
     <span id="plan-saddr"><?cs var: Output.plan.saddr ?></span> 至 <span

@@ -9,6 +9,13 @@
 __BEGIN_DECLS
 
 /*
+ * Description: 获取今天入库的正常路线（内部使用，非接口）
+ * Request:
+ * Returns: None
+ */
+NEOERR* plan_of_today(HDF *hdf, HASH *dbh);
+
+/*
  * Description: 根据时间和地点，获取匹配路线
  *              该接口将会根据参数和配置进行以下几步路线匹配：
  *              1, 根据scityid, ecityid 快速查找，若总结果数在10~20之间，goto 4
@@ -95,7 +102,6 @@ NEOERR* plan_info_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
  * Returns: None
  */
 NEOERR* plan_pic_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
-
 
 /*
  * Description: 列出用户的线路信息

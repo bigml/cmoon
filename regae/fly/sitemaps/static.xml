@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset>
+  <url>
+    <loc>http://imdida.org/</loc>
+    <priority>1.0</priority>
+    <lastmod>2012-04-24</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <url>
+    <loc>http://imdida.org/index.html</loc>
+    <priority>1.0</priority>
+    <lastmod>2012-04-24</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <url>
+    <loc>http://imdida.org/readme.html</loc>
+    <priority>1.0</priority>
+    <lastmod>2012-04-24</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+</urlset>

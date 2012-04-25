@@ -2,14 +2,6 @@
 #include "lheads.h"
 #include "ozero.h"
 
-/*
- * TODO how make local dlsym ok? so tired 
- */
-static void lutil_donotcall()
-{
-    zero_data_get(NULL, NULL, NULL, NULL);
-}
-
 void* lutil_get_data_handler(void *lib, CGI *cgi, session_t *ses)
 {
     char *hname, *tp;

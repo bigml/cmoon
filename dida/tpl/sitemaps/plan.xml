@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset>
+  <?cs each:p=Output.plans ?>
+  <url>
+    <loc>http://imdida.org/plan/info?id=<?cs var:p.id ?></loc>
+    <priority>0.7</priority>
+    <lastmod><?cs var:p.intime ?></lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <?cs /each ?>
+</urlset>

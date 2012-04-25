@@ -26,6 +26,7 @@
 /*
  * walker
  */
+#include "ozero.h"
 #include "ospd.h"
 #include "opos.h"
 #include "oplan.h"

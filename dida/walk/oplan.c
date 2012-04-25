@@ -2,6 +2,20 @@
 #include "lheads.h"
 #include "oplan.h"
 
+NEOERR* plan_of_today(HDF *hdf, HASH *dbh)
+{
+    mdb_conn *db = hash_lookup(dbh, "plan");
+    NEOERR *err;
+
+    MCS_NOT_NULLB(hdf, db);
+
+    MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > current_date",
+                  NULL, PLAN_ST_PAUSE);
+
+    return nerr_pass(mdb_set_rows(hdf, db, _COL_PLAN, PRE_OUTPUT".plans",
+                                  NULL, MDB_FLAG_EMPTY_OK));
+}
+
 NEOERR* plan_match_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = hash_lookup(evth, "plan");
@@ -195,6 +209,10 @@ NEOERR* plan_info_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_GET, FLAGS_SYNC);
 
     hdf_copy(cgi->hdf, PRE_OUTPUT".plan", evt->hdfrcv);
+
+    hdf_set_valuef(cgi->hdf, PRE_CFG_LAYOUT".keywords=%s拼车,%s拼车,",
+                   hdf_get_value(evt->hdfrcv, "saddr", "地球"),
+                   hdf_get_value(evt->hdfrcv, "eaddr", "火星"));
     
     return STATUS_OK;
 }

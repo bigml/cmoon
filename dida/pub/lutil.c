@@ -2,22 +2,6 @@
 #include "lheads.h"
 #include "ozero.h"
 
-/*
- * TODO how make local dlsym ok? so tired 
- */
-static void lutil_donotcall()
-{
-    zero_data_get(NULL, NULL, NULL, NULL);
-    spd_pre_data_get(NULL, NULL, NULL, NULL);
-    pos_data_get(NULL, NULL, NULL, NULL);
-    plan_match_data_get(NULL, NULL, NULL, NULL);
-    member_info_data_get(NULL, NULL, NULL, NULL);
-    bore_data_get(NULL, NULL, NULL, NULL);
-    comment_data_get(NULL, NULL, NULL, NULL);
-    trace_data_add(NULL, NULL, NULL, NULL);
-    system_view_data_get(NULL, NULL, NULL, NULL);
-}
-
 void* lutil_get_data_handler(void *lib, CGI *cgi, session_t *ses)
 {
     char *hname, *tp;

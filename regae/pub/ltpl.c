@@ -1,6 +1,14 @@
 #include "mheads.h"
 #include "lheads.h"
 
+/*
+ * TODO how make local dlsym ok? so tired 
+ */
+static void ltpl_donotcall()
+{
+    zero_data_get(NULL, NULL, NULL, NULL);
+}
+
 int ltpl_config(const struct dirent *ent)
 {
     if (reg_search(".*.hdf", ent->d_name))
@@ -49,7 +57,7 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
     HDF *node = NULL, *dhdf = NULL, *child = NULL;
     CSPARSE *cs = NULL;
     STRING str;
-    char fname[_POSIX_PATH_MAX], tok[64];
+    char fname[_POSIX_PATH_MAX], tok[64], *outfile;
     NEOERR* (*data_handler)(HDF *hdf, HASH *dbh);
     NEOERR *err;
     
@@ -82,10 +90,16 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
             }
             uListDestroy(&list, ULIST_FREE);
         }
+
+        /*
+         * can't use dataset directly, because we'll destroy the whole node
+         */
+        hdf_init(&dhdf);
+        hdf_copy(dhdf, NULL, hdf_get_node(child, PRE_CFG_DATASET));
         
-        err = cs_init(&cs, hdf_get_obj(child, PRE_CFG_DATASET));
+        err = cs_init(&cs, dhdf);
         JUMP_NOK(err, wnext);
-            
+
         hdf_set_value(cs->hdf, "hdf.loadpaths.tpl", PATH_TPL);
         hdf_set_value(cs->hdf, "hdf.loadpaths.local", dir);
 
@@ -110,16 +124,17 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
             if (hdf_get_obj(child, PRE_CFG_DATASET)) {
                 err = hdf_init(&dhdf);
                 JUMP_NOK(err, wnext);
-                err = hdf_copy(dhdf, NULL, hdf_get_obj(child, PRE_CFG_DATASET));
+                err = hdf_copy(dhdf, NULL, hdf_get_node(child, PRE_CFG_DATASET));
                 JUMP_NOK(err, wnext);
                 snprintf(tok, sizeof(tok), "%s_hdf", hdf_obj_name(child));
                 err = hash_insert(outhash, (void*)strdup(tok), (void*)dhdf);
                 JUMP_NOK(err, wnext);
             }
         }
-            
-        if (hdf_get_value(child, PRE_CFG_OUTPUT, NULL) != NULL) {
-            ltpl_prepare_rend(hdf_get_obj(child, PRE_CFG_DATASET), tpl);
+
+        outfile = hdf_get_value(child, PRE_CFG_OUTPUT, NULL);
+        if (outfile) {
+            ltpl_prepare_rend(cs->hdf, tpl);
                 
             /*
              * get_data
@@ -131,16 +146,28 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
                     mtc_err("%s", tp);
                     //continue;
                 } else {
-                    err = (*data_handler)(hdf_get_obj(child, PRE_CFG_DATASET), dbh);
+                    err = (*data_handler)(cs->hdf, dbh);
                     TRACE_NOK(err);
                 }
             }
                 
             err = cs_render(cs, &str, mcs_strcb);
             JUMP_NOK(err, wnext);
-                
-            snprintf(fname, sizeof(fname), PATH_DOC"%s",
-                     hdf_get_value(child, PRE_CFG_OUTPUT, "null.html"));
+
+            /*
+             * produce output filename
+             */
+            val = mcs_hdf_attr(child, PRE_CFG_OUTPUT, "ftime");
+            if (val) {
+                char tm[LEN_TM];
+                mutil_getdatetime(tm, sizeof(tm), val, 0);
+                outfile = mstr_repstr(1, outfile, "$ftime$", tm);
+            }
+            snprintf(fname, sizeof(fname), PATH_DOC"%s", outfile);
+
+            /*
+             * output file
+             */
             err = mfile_makesure_dir(fname);
             JUMP_NOK(err, wnext);
 
