@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset>
+<urlset xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <?cs each:p=Output.plans ?>
   <url>
     <loc>http://imdida.org/plan/info?id=<?cs var:p.id ?></loc>
