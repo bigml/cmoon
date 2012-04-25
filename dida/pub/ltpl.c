@@ -62,7 +62,7 @@ void ltpl_prepare_rend(HDF *hdf, char *tpl)
 NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outhash)
 {
     char *tp = NULL, *tpl = NULL, *val = NULL;
-    HDF *node = NULL, *dhdf = NULL, *child = NULL;
+    HDF *node = NULL, *dhdf = NULL, *child = NULL, *thdf = NULL;
     CSPARSE *cs = NULL;
     STRING str;
     char fname[_POSIX_PATH_MAX], tok[64], *outfile;
@@ -102,8 +102,12 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
         /*
          * can't use dataset directly, because we'll destroy the whole node
          */
-        hdf_init(&dhdf);
-        hdf_copy(dhdf, NULL, hdf_get_node(child, PRE_CFG_DATASET));
+        err = hdf_init(&dhdf);
+        JUMP_NOK(err, wnext);
+        err = hdf_get_node(child, PRE_CFG_DATASET, &thdf);
+        JUMP_NOK(err, wnext);
+        err = hdf_copy(dhdf, NULL, thdf);
+        JUMP_NOK(err, wnext);
         
         err = cs_init(&cs, dhdf);
         JUMP_NOK(err, wnext);
@@ -129,19 +133,13 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
              */
             err = hash_insert(outhash, (void*)strdup(hdf_obj_name(child)), (void*)cs);
             JUMP_NOK(err, wnext);
-            if (hdf_get_obj(child, PRE_CFG_DATASET)) {
-                err = hdf_init(&dhdf);
-                JUMP_NOK(err, wnext);
-                err = hdf_copy(dhdf, NULL, hdf_get_node(child, PRE_CFG_DATASET));
-                JUMP_NOK(err, wnext);
-                snprintf(tok, sizeof(tok), "%s_hdf", hdf_obj_name(child));
-                err = hash_insert(outhash, (void*)strdup(tok), (void*)dhdf);
-                JUMP_NOK(err, wnext);
-            }
+
+            snprintf(tok, sizeof(tok), "%s_hdf", hdf_obj_name(child));
+            err = hash_insert(outhash, (void*)strdup(tok), (void*)cs->hdf);
+            JUMP_NOK(err, wnext);
         }
 
-        outfile = hdf_get_value(child, PRE_CFG_OUTPUT, NULL);
-        if (outfile) {
+        if ((outfile = hdf_get_value(child, PRE_CFG_OUTPUT, NULL)) != NULL) {
             ltpl_prepare_rend(cs->hdf, tpl);
                 
             /*
@@ -158,7 +156,7 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
                     TRACE_NOK(err);
                 }
             }
-                
+
             err = cs_render(cs, &str, mcs_strcb);
             JUMP_NOK(err, wnext);
 
