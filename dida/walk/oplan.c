@@ -16,6 +16,30 @@ NEOERR* plan_of_today(HDF *hdf, HASH *dbh)
                                   NULL, MDB_FLAG_EMPTY_OK));
 }
 
+NEOERR* plan_of_recentday(HDF *hdf, HASH *dbh)
+{
+    mdb_conn *db = hash_lookup(dbh, "plan");
+    int days;
+    NEOERR *err;
+
+    MCS_NOT_NULLB(hdf, db);
+
+    HDF_GET_INT(hdf, "days", days);
+
+    MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > current_date",
+                  NULL, PLAN_ST_PAUSE);
+    
+    err = mdb_set_rows(hdf, db, _COL_PLAN, PRE_OUTPUT".plans.today",
+                       NULL, MDB_FLAG_EMPTY_OK);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > current_date - %d "
+                  " AND intime < current_date", NULL, PLAN_ST_PAUSE, days);
+    
+    return nerr_pass(mdb_set_rows(hdf, db, _COL_PLAN, PRE_OUTPUT".plans.recent",
+                                  NULL, MDB_FLAG_EMPTY_OK));
+}
+
 NEOERR* plan_match_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mevent_t *evt = hash_lookup(evth, "plan");

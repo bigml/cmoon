@@ -16,6 +16,13 @@ __BEGIN_DECLS
 NEOERR* plan_of_today(HDF *hdf, HASH *dbh);
 
 /*
+ * Description: 获取最近几天入库的正常路线（内部使用，非接口）
+ * Request: days* - 最近的天数
+ * Returns: None
+ */
+NEOERR* plan_of_recentday(HDF *hdf, HASH *dbh);
+
+/*
  * Description: 根据时间和地点，获取匹配路线
  *              该接口将会根据参数和配置进行以下几步路线匹配：
  *              1, 根据scityid, ecityid 快速查找，若总结果数在10~20之间，goto 4
