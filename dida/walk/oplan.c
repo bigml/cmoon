@@ -5,13 +5,17 @@
 NEOERR* plan_of_today(HDF *hdf, HASH *dbh)
 {
     mdb_conn *db = hash_lookup(dbh, "plan");
+    int limit;
     NEOERR *err;
-
+    
     MCS_NOT_NULLB(hdf, db);
-
-    MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > current_date",
-                  NULL, PLAN_ST_PAUSE);
-
+    
+    HDF_FETCH_INT(hdf, "limit", limit);
+    if (limit == 0) limit = 100;
+    
+    MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > current_date "
+                  " LIMIT %d", NULL, PLAN_ST_PAUSE, limit);
+    
     return nerr_pass(mdb_set_rows(hdf, db, _COL_PLAN, PRE_OUTPUT".plans",
                                   NULL, MDB_FLAG_EMPTY_OK));
 }
@@ -19,22 +23,26 @@ NEOERR* plan_of_today(HDF *hdf, HASH *dbh)
 NEOERR* plan_of_recentday(HDF *hdf, HASH *dbh)
 {
     mdb_conn *db = hash_lookup(dbh, "plan");
-    int days;
+    int days, limit;
     NEOERR *err;
 
     MCS_NOT_NULLB(hdf, db);
 
     HDF_GET_INT(hdf, "days", days);
 
-    MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > current_date",
-                  NULL, PLAN_ST_PAUSE);
+    HDF_FETCH_INT(hdf, "limit", limit);
+    if (limit == 0) limit = 100;
+
+    MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > current_date "
+                  " LIMIT %d", NULL, PLAN_ST_PAUSE, limit);
     
     err = mdb_set_rows(hdf, db, _COL_PLAN, PRE_OUTPUT".plans.today",
                        NULL, MDB_FLAG_EMPTY_OK);
     if (err != STATUS_OK) return nerr_pass(err);
-
+    
     MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > current_date - %d "
-                  " AND intime < current_date", NULL, PLAN_ST_PAUSE, days);
+                  " AND intime < current_date LIMIT %d",
+                  NULL, PLAN_ST_PAUSE, days, limit);
     
     return nerr_pass(mdb_set_rows(hdf, db, _COL_PLAN, PRE_OUTPUT".plans.recent",
                                   NULL, MDB_FLAG_EMPTY_OK));
