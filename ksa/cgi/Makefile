@@ -17,8 +17,11 @@ $(DEPEND): $(SOURCES)
 	@$(CC) $(CFLAGS) -MM $^ $(INCS) > $@
 
 preload:
+	@$(MAKE) -C $(LIBBASE)
+	@$(MAKE) -C $(PUBBASE)
+	@$(MAKE) -C $(ROBOTBASE)
 
-include $(DEPEND)
+-include $(DEPEND)
 %:%.c
 	@if [ "$<" = `ls *.c|awk '{print $1}'|sed -n '1p'` ]; then \
 		echo "=== "$(CFLAGS); \
@@ -30,17 +33,8 @@ include $(DEPEND)
 cflag:
 	@echo "=== "$(CFLAGS)
 	@echo "=== "$(INCS)
-	@echo "=== "$(LIBS)
-install: all
-	@mkdir -p -m 775 $(PATH_FRT_CGI)
-	@strip $(BINARY)
-	@cp $(BINARY) $(PATH_FRT_CGI)/
-	@chmod a+x $(PATH_FRT_CGI)/$(BINARY)
-release: all
-	@strip $(BINARY)
-	@scp $(BINARY) $(USER_DEST)@$(SITE_DEST):$(PATH_DEST_CGI)
+
 clean:
 	@rm -rf ${BINARY}
-distclean:
-	@rm -rf $(PATH_FRT_CGI)/*
-	@rm -rf ${BINARY}
+
+install:

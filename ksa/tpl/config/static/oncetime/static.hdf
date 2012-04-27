@@ -1,0 +1,140 @@
+index {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = 首页
+            tabpart = 0
+        }
+        Include {
+            content = index.html
+        }
+    }
+    Output = index.html
+}
+
+kosher {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = Kosher知识
+            tabpart = 1
+        }
+        Include {
+            content = kosher.html
+        }
+    }
+    Output = kosher.html
+}
+
+process {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = 申请流程
+            tabpart = 2
+        }
+        Include {
+            content = process.html
+        }
+    }
+    Output = process.html
+}
+
+dld {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = 获取申请表
+            tabpart = 3
+        }
+        Include {
+            content = dld.html
+        }
+    }
+    Output = dld.html
+}
+
+query {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = 已认证公司产品查询
+            tabpart = 4
+        }
+        Include {
+            content = query.html
+        }
+    }
+    Output = query.html
+}
+
+com_pass {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = 获证企业名单
+            tabpart = 5
+        }
+        Include {
+            content = com_pass.html
+        }
+    }
+    Output = com_pass.html
+}
+
+zizhi {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = 认证资质
+            tabpart = 6
+        }
+        Include {
+            content = zizhi.html
+        }
+    }
+    Output = zizhi.html
+}
+
+notice {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = 公告通知
+            tabpart = 7
+        }
+        Include {
+            content = notice.html
+        }
+    }
+    Output = notice.html
+}
+
+about {
+    Layout = layout.html
+    Dataset {
+        Layout {
+            title = 联系我们
+            tabpart = 8
+        }
+        Include {
+            content = about.html
+        }
+    }
+    Output = about.html
+}
+
+paper_add {
+    Layout = layout_nokefu.html
+    Dataset {
+        Layout {
+            css = <link rel="stylesheet" type="text/css" href="/css/b/paper/add.css" />
+            js = <script type="text/javascript" src="/js/b/paper/add.js"></script>
+            title = 添加文章
+        }
+        Include {
+            content = paper/add.html
+        }
+    }
+    Output = paper/add.html
+}

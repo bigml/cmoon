@@ -6,7 +6,7 @@ INCS	= $(INC_LOCAL) $(INC_MOON)
 
 SOURCES = $(wildcard *.c)
 OBJS	= $(patsubst %.c, %.o, $(SOURCES))
-DEPEND = .depend
+DEPEND  = .depend
 
 all: libpub.a
 
@@ -17,7 +17,7 @@ libpub.a:$(OBJS) $(DEPEND)
 	@rm -rf $@
 	$(AR) rcs $@ $(OBJS)
 
-include $(DEPEND)
+-include $(DEPEND)
 %.o:%.c
 	@if [ "$<" = `ls *.c|awk '{print $1}'|sed -n '1p'` ]; then \
 		echo "=== "$(CFLAGS); \
@@ -31,3 +31,5 @@ cflag:
 
 clean:
 	@rm -f $(OBJS) *.a
+
+install:

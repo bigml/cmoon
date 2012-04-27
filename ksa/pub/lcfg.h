@@ -5,29 +5,42 @@
 
 __BEGIN_DECLS
 
-#define SITE_DOMAIN    "kosherall.com"
+#define SITE_DOMAIN    "kosherall.com.cn"
 #define TC_ROOT        "/var/log/moon/ksa/"
 
-#ifdef RELEASE
-/* #define PATH_SITE    "/usr/local/moon/www/" */
-#define PATH_SITE    "/home/bigml/web/moon/"
-#define SITE_CONFIG    "/home/kosheeral/www/config.hdf"
-#else
-#define PATH_SITE    "/home/bigml/web/moon/"
-#define SITE_CONFIG    "/home/bigml/web/moon/ksa/config.hdf"
-#endif
-#define PATH_FRT_DOC    PATH_SITE"ksa/htdocs/"
-#define PATH_FRT_CGI    PATH_SITE"ksa/cgi-bin/"
-#define PATH_FRT_TPL    PATH_SITE"ksa/tpl/"
-#define PATH_FRT_MTLS    PATH_SITE"ksa/mtls/"
-#define PATH_ADM_DOC    PATH_SITE"admin/htdocs/"
-#define PATH_ADM_CGI    PATH_SITE"admin/cgi-bin/"
-#define PATH_ADM_TPL    PATH_SITE"admin/tpl/"
-#define PATH_ADM_MTLS    PATH_SITE"admin/mtls/"
-#define F_TPL_LAYOUT    PATH_FRT_TPL"layout.html"
+#define URL_DATA       "http://www.kosherall.com.cn/data/"
+#define URL_IMG         URL_DATA"images/"
+#define URL_PAPER       URL_DATA"pagers/"
 
-#define NAV_NUM 7
-extern anchor_t g_nav[NAV_NUM];
+#define ROOT_DATA       "/var/www/ksa/htdocs/data/"
+#define ROOT_IMG        ROOT_DATA"images/"
+#define ROOT_PAPER      ROOT_DATA"papers/"
+
+#define PATH_SITE   "/var/www/ksa/"
+#define SITE_CONFIG PATH_SITE"config.hdf"
+#define PATH_DOC    PATH_SITE"htdocs/"
+#define PATH_CGI    PATH_SITE"cgi/"
+#define PATH_TPL    PATH_SITE"tpl/"
+#define PATH_MTL    PATH_SITE"mtls/"
+#define PATH_PAGER  PATH_SITE"pager/"
+
+#define PRE_REQ_IP      PRE_CGI".RemoteAddress"
+#define PRE_REQ_URI     PRE_CGI".ScriptName"    /* lutil_file_access() */
+#define PRE_REQ_URI_RW  PRE_QUERY".ScriptName"  /* lutil_file_access_rewrited() */
+#define PRE_REQ_AJAX_FN PRE_QUERY".JsonCallback"/* main() */
+
+#define PRE_CFG_OUTPUT  	"Output"
+#define PRE_CFG_LAYOUT  	"Layout"
+#define PRE_CFG_DATASET 	"Dataset"
+#define PRE_CFG_REQLIMIT    "ClientReqLimit"
+#define PRE_CFG_FILECACHE   "FileCache"
+#define PRE_CFG_DATAER      "DataGeter"
+
+#define PRE_WALK_SACTION    "SpecialAction"
+
+#define PRE_MMC_COUNT        "Ttnum"
+
+#define REXP_EMAIL "^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$"
 
 __END_DECLS
 #endif    /* __LCFG_H__ */

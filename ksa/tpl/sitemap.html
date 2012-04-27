@@ -1,0 +1,23 @@
+<h2>站点功能</h2>
+<ul>
+  <li><a href="/index.html">首页</a></li>
+  <li><a href="/kosher.html">Kosher知识</a></li>
+  <li><a href="/process.html">申请流程</a></li>
+  <li><a href="/dld.html">获取申请表</a></li>
+  <li><a href="/query.html">已认证公司产品查询</a></li>
+  <li><a href="/com_pass.html">获证企业名单</a></li>
+  <li><a href="/zizhi.html">认证资质</a></li>
+  <li><a href="/notice.html">公告通知</a></li>
+  <li><a href="/about.html">联系我们</a></li>
+</ul>
+
+<h2>最新 kosher 信息</h2>
+<ul>
+  <?cs each:p=Output.papers.today ?>
+  <li>
+    <a href="/data/papers/<?cs var:p.id ?>.html" title="<?cs var:p.title ?>">
+      <?cs var:p.title ?>
+    </a>
+  </li>
+  <?cs /each ?>
+</ul>

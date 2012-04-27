@@ -83,7 +83,7 @@ input, textarea {
 }
 
 /* header */
-#header, #content {
+#header, #bd-content {
     width: 960px;
     margin: 0 auto;
     padding-top: 3ex;
@@ -91,7 +91,7 @@ input, textarea {
     border-right: 1px solid #666666;
     background-color: white;
 }
-#content {
+#bd-content {
     padding-bottom: 2ex;
 }
 
@@ -181,5 +181,7 @@ input, textarea {
     color: #aaaaaa;
 }
 
-.valid{border:2px solid green !important;}
-.invalid{border:2px solid #800 !important;}
+.hide {display: none !important;}
+.show {display: block !important;}
+.valid{border:1px solid green !important;}
+.invalid{border:1px solid #800 !important;}

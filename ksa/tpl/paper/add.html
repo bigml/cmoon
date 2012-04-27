@@ -1,0 +1,24 @@
+<h2>添加文章</h2>
+
+<dl class="op" id="paper-info">
+  <dt>标题 (1 ~ 128 个字)</dt>
+  <dd>
+    <input type="text" name="title" class="title VAL_NEWPAPER vrequire" vmax="256" />
+  </dd>
+
+  <dt>副标题</dt>
+  <dd>
+    <input type="text" name="hint" class="hint VAL_NEWPAPER vrequire" vmax="256" />
+  </dd>
+  
+  <dt>内容</dt>
+  <dd>
+    <textarea id="content" name="content" draggable="true" class="content VAL_NEWPAPER vrequire"></textarea>
+  </dd>
+
+  <dt>&nbsp;</dt>
+  <dd>
+    <input type="button" id="submit" class="submitbtn" value="提交" />
+    <span class="indicator"></span>
+  </dd>
+</dl>

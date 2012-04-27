@@ -4,9 +4,8 @@
 
 __BEGIN_DECLS
 
-#define DB_DSN            (mcfg_getvalue("db_dsn", "sqlite:../data/commentdb"))
-
-void ldb_opfinish_json(int ret, HDF *hdf, mdb_conn *conn);
+NEOERR* ldb_init(HASH **dbh);
+void ldb_destroy(HASH *dbh);
 
 __END_DECLS
 #endif    /* __LDB_H__ */

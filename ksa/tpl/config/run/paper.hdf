@@ -1,0 +1,8 @@
+paper {
+    Layout = layout.html
+    Dataset {
+        Include {
+            content = paper/paper.html
+        }
+    }
+}

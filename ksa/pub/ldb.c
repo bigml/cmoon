@@ -1,16 +1,42 @@
 #include "mheads.h"
 #include "lheads.h"
 
-void ldb_opfinish_json(int ret, HDF *hdf, mdb_conn *conn)
+NEOERR* ldb_init(HASH **dbh)
 {
-    switch (ret) {
-    default:
-        hdf_set_value(hdf, PRE_OUTPUT".errmsg", "数据库操作错误");
-        break;
+    HDF *node;
+    HASH *ldbh;
+    NEOERR *err;
+
+    node = hdf_get_obj(g_cfg, "Db.Dsn");
+    if (!node) return nerr_raise(NERR_ASSERT, "Db.Dsn config not found");
+    
+    err = hash_init(&ldbh, hash_str_hash, hash_str_comp);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    node = hdf_obj_child(node);
+    mdb_conn *conn;
+    while (node != NULL) {
+        err = mdb_init(&conn, hdf_obj_value(node));
+        if (err != STATUS_OK) return nerr_pass(err);
+        hash_insert(ldbh, (void*)strdup(hdf_obj_name(node)), (void*)conn);
+        
+        node = hdf_obj_next(node);
     }
-    if (conn != NULL) {
+    
+    *dbh = ldbh;
+    return STATUS_OK;
+}
+
+void ldb_destroy(HASH *dbh)
+{
+    char *key = NULL;
+    
+    mdb_conn *conn = (mdb_conn*)hash_next(dbh, (void**)&key);
+
+    while (conn != NULL) {
         mdb_destroy(conn);
+        conn = hash_next(dbh, (void**)&key);
     }
-    mjson_output_hdf(hdf, 0);
-    exit(ret);
+
+    hash_destroy(&dbh);
 }

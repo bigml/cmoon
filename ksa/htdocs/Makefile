@@ -1,7 +1,13 @@
-BASEDIR = ../../
-include $(BASEDIR)Make.env
 LOCALBASE = ../
 include $(LOCALBASE)Make.env
+include $(BASEDIR)Make.env
 
-release:
-	scp -rp * $(USER_DEST)@$(SITE_DEST):$(PATH_DEST_DOC)
+SUBDIR = js css
+
+all: $(SUBDIR)
+	@$(MULTIMAKE) $(SUBDIR)
+
+clean:
+	@$(MULTIMAKE) -m clean $(SUBDIR)
+
+install:

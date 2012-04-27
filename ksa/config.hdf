@@ -2,43 +2,68 @@ Config {
     trace_level = 7
 }
 
-Layout {
-    tabs {
-        0 {
-            name = 首页
-            page = index
+Dataset {
+    layout.html {
+        tabs {
+            0 {
+                name = 首页
+                href = /index.html
+            }
+            1 {
+                name = Kosher知识
+                href = /kosher.html
+            }
+            2 {
+                name = 申请流程
+                href = /process.html
+            }
+            3 {
+                name = 获取申请表
+                href = /dld.html
+            }
+            4 {
+                name = 已认证公司产品查询
+                href = /query.html
+            }
+            5 {
+                name = 获证企业名单
+                href = /com_pass.html
+            }
+            6 {
+                name = 认证资质
+                href = /zizhi.html
+            }
+            7 {
+                name = 公告通知
+                href = /notice.html
+            }
+            8 {
+                name = 联系我们
+                href = /about.html
+            }
         }
-        1 {
-            name = Kosher知识
-            page = kosher
-        }
-        2 {
-            name = 申请流程
-            page = process
-        }
-        3 {
-            name = 获取申请表
-            page = dld
-        }
-        4 {
-            name = 已认证公司产品查询
-            page = query
-        }
-        5 {
-            name = 获证企业名单
-            page = com_pass
-        }
-        6 {
-            name = 认证资质
-            page = zizhi
-        }
-        7 {
-            name = 公告通知
-            page = notice
-        }
-        8 {
-            name = 联系我们
-            page = about
+    }
+}
+
+Mevent {
+    0 = skeleton
+}
+
+Db {
+    Dsn {
+        paper = pgsql:dbname=ksa host=localhost user=tina password=loveu
+    }
+    QueryCond {
+    }
+    UpdateCol {
+    }
+    InsertCol {
+        paper {
+            title [maxlen=256,require=true] = title
+            hint [maxlen=256] = hint
+            content [require=true] = content
+            previd [type=int] = previd
+            nextid [type=int] = nextid
         }
     }
 }
