@@ -185,3 +185,9 @@ input, textarea {
 .show {display: block !important;}
 .valid{border:1px solid green !important;}
 .invalid{border:1px solid #800 !important;}
+
+
+#bd-4mineral {
+    position: absolute;
+    top: -10000px;
+}

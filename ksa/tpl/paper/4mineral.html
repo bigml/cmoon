@@ -1,0 +1,11 @@
+<ul id="bd-4mineral">
+  <?cs each:p=Output.papers ?>
+  <li>
+    <h2>
+      <a href="/data/papers/<?cs var:p.id ?>.html" title="<?cs var:p.title ?>">
+        <?cs var:p.title ?>
+      </a>
+    </h2>
+  </li>
+  <?cs /each ?>
+</ul>

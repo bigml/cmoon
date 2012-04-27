@@ -1,6 +1,8 @@
 index {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = 首页
             tabpart = 0
@@ -14,7 +16,9 @@ index {
 
 kosher {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = Kosher知识
             tabpart = 1
@@ -28,7 +32,9 @@ kosher {
 
 process {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = 申请流程
             tabpart = 2
@@ -42,7 +48,9 @@ process {
 
 dld {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = 获取申请表
             tabpart = 3
@@ -56,7 +64,9 @@ dld {
 
 query {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = 已认证公司产品查询
             tabpart = 4
@@ -70,7 +80,9 @@ query {
 
 com_pass {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = 获证企业名单
             tabpart = 5
@@ -84,7 +96,9 @@ com_pass {
 
 zizhi {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = 认证资质
             tabpart = 6
@@ -98,7 +112,9 @@ zizhi {
 
 notice {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = 公告通知
             tabpart = 7
@@ -112,7 +128,9 @@ notice {
 
 about {
     Layout = layout.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             title = 联系我们
             tabpart = 8
@@ -126,7 +144,9 @@ about {
 
 paper_add {
     Layout = layout_nokefu.html
+    DataGeter = paper_of_recentday
     Dataset {
+        limit = 88
         Layout {
             css = <link rel="stylesheet" type="text/css" href="/css/b/paper/add.css" />
             js = <script type="text/javascript" src="/js/b/paper/add.js"></script>

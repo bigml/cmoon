@@ -5,24 +5,17 @@
 NEOERR* paper_of_recentday(HDF *node, HASH *dbh)
 {
     mdb_conn *db = hash_lookup(dbh, "paper");
-    int days;
+    int limit;
     NEOERR *err;
 
     MCS_NOT_NULLB(node, db);
 
-    HDF_GET_INT(node, "days", days);
+    HDF_GET_INT(node, "limit", limit);
+    
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "statu=%d ORDER BY id DESC LIMIT %d",
+                  NULL, PAPER_ST_OK, limit);
 
-    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "statu=%d AND intime > current_date",
-                  NULL, PAPER_ST_OK);
-
-    err = mdb_set_rows(node, db, _COL_PAPER, PRE_OUTPUT".papers.today",
-                       NULL, MDB_FLAG_EMPTY_OK);
-    if (err != STATUS_OK) return nerr_pass(err);
-
-    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "statu=%d AND intime > current_date - %d "
-                  " AND intime < current_date", NULL, PAPER_ST_OK, days);
-
-    return nerr_pass(mdb_set_rows(node, db, _COL_PAPER, PRE_OUTPUT".papers.recent",
+    return nerr_pass(mdb_set_rows(node, db, _COL_PAPER, PRE_OUTPUT".papers",
                                   NULL, MDB_FLAG_EMPTY_OK));
 }
 
