@@ -9,8 +9,8 @@ all: preload $(FILES)
 preload:
 	@mkdir -p b/
 
-b/base.js: pub/jquery-1.4.2.js pub/jquery.cookie.js \
-           pub/bmoon.js \
+b/base.js: pub/jquery-1.7.1.js pub/jquery.cookie.js \
+           pub/jquery.bmoon.js pub/jquery.hotkeys.js pub/jquery.mninpval.js \
            bmoon.voov.js
 
 %.js:

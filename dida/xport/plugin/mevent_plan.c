@@ -26,8 +26,8 @@ struct plan_entry {
 static bool plan_spd_exist(struct plan_entry *e, QueueEntry *q,
                            char *ori, char *id)
 {
-	unsigned char *val = NULL; size_t vsize = 0;
-	NEOERR *err;
+    unsigned char *val = NULL; size_t vsize = 0;
+    NEOERR *err;
 
     if (!ori || !id) return false;
     
@@ -49,9 +49,9 @@ static bool plan_spd_exist(struct plan_entry *e, QueueEntry *q,
 
 static NEOERR* plan_cmd_plan_get(struct plan_entry *e, QueueEntry *q)
 {
-	unsigned char *val = NULL; size_t vsize = 0;
+    unsigned char *val = NULL; size_t vsize = 0;
     int id;
-	NEOERR *err;
+    NEOERR *err;
 
     mdb_conn *db = e->db;
     struct cache *cd = e->cd;
@@ -73,9 +73,9 @@ static NEOERR* plan_cmd_plan_get(struct plan_entry *e, QueueEntry *q)
 
 static NEOERR* plan_cmd_plan_priv_get(struct plan_entry *e, QueueEntry *q)
 {
-	unsigned char *val = NULL; size_t vsize = 0;
+    unsigned char *val = NULL; size_t vsize = 0;
     int id;
-	NEOERR *err;
+    NEOERR *err;
 
     mdb_conn *db = e->db;
     struct cache *cd = e->cd;
@@ -107,9 +107,9 @@ static NEOERR* plan_cmd_plan_priv_get(struct plan_entry *e, QueueEntry *q)
  */
 static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
 {
-	STRING str; string_init(&str);
-	unsigned char *val = NULL; size_t vsize = 0;
-	NEOERR *err;
+    STRING str; string_init(&str);
+    unsigned char *val = NULL; size_t vsize = 0;
+    NEOERR *err;
 
     mdb_conn *db = e->db;
     struct cache *cd = e->cd;
@@ -254,10 +254,10 @@ static NEOERR* plan_cmd_plan_match(struct plan_entry *e, QueueEntry *q)
 
 static NEOERR* plan_cmd_plan_add(struct plan_entry *e, QueueEntry *q)
 {
-	STRING str; string_init(&str);
+    STRING str; string_init(&str);
     char *ori = NULL, *oid = NULL, *tmps;
     int mid;
-	NEOERR *err;
+    NEOERR *err;
 
     struct cache *cd = e->cd;
     mdb_conn *db = e->db;
@@ -281,12 +281,12 @@ static NEOERR* plan_cmd_plan_add(struct plan_entry *e, QueueEntry *q)
     err = mdb_build_incol(q->hdfrcv,
                           hdf_get_obj(g_cfg, CONFIG_PATH".InsertCol.plan"),
                           &str);
-	if (err != STATUS_OK) return nerr_pass(err);
+    if (err != STATUS_OK) return nerr_pass(err);
 
     MDB_EXEC(db, NULL, "INSERT INTO plan %s RETURNING id", NULL, str.buf);
 
     err = mdb_set_row(q->hdfsnd, db, "id", NULL, MDB_FLAG_Z);
-	if (err != STATUS_OK) return nerr_pass(err);
+    if (err != STATUS_OK) return nerr_pass(err);
 
     string_clear(&str);
 
@@ -297,10 +297,10 @@ static NEOERR* plan_cmd_plan_add(struct plan_entry *e, QueueEntry *q)
 
 static NEOERR* plan_cmd_plan_up(struct plan_entry *e, QueueEntry *q)
 {
-	STRING str; string_init(&str);
+    STRING str; string_init(&str);
     int id, mid, caomin = 0;
     char *pmid;
-	NEOERR *err;
+    NEOERR *err;
 
     mdb_conn *db = e->db;
     struct cache *cd = e->cd;
@@ -313,7 +313,7 @@ static NEOERR* plan_cmd_plan_up(struct plan_entry *e, QueueEntry *q)
     }
 
     err = plan_cmd_plan_get(e, q);
-	if (err != STATUS_OK) return nerr_pass(err);
+    if (err != STATUS_OK) return nerr_pass(err);
     
     pmid = hdf_get_value(q->hdfsnd, "mid", NULL);
     if (!pmid || (caomin == 1 && mid != atoi(pmid)))
@@ -321,7 +321,7 @@ static NEOERR* plan_cmd_plan_up(struct plan_entry *e, QueueEntry *q)
 
     err = mdb_build_upcol(q->hdfrcv,
                           hdf_get_obj(g_cfg, CONFIG_PATH".UpdateCol.plan"), &str);
-	if (err != STATUS_OK) return nerr_pass(err);
+    if (err != STATUS_OK) return nerr_pass(err);
 
     if (caomin == 1) {
         MDB_EXEC(db, NULL, "UPDATE plan SET %s WHERE id=%d AND (mid=%d OR mid=0);",

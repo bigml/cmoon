@@ -20,6 +20,8 @@ Db {
     }
     UpdateCol {
     }
+    InsertCol {
+    }
 }
 
 Memcached {

@@ -43,6 +43,9 @@ int main(int argc, char **argv, char **envp)
     err = ltpl_init(&tplh, NULL);
     DIE_NOK_CGI(err);
 
+    err = hash_insert(g_datah, "runtime_templates", (void*)tplh);
+    DIE_NOK_CGI(err);
+
     err = ldb_init(&dbh);
     DIE_NOK_CGI(err);
 

@@ -2,6 +2,7 @@
 #define __LHEADS_H__
 
 #include "lnum.h"
+#include "lcs.h"
 #include "ltypes.h"
 #include "lerr.h"
 #include "ldb.h"

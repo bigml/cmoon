@@ -129,6 +129,11 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
 
         if (outhash != NULL) {
             /*
+             * store template for rend stage use
+             */
+            hdf_set_value(cs->hdf, PRE_RESERVE"."PRE_CFG_LAYOUT, tpl);
+            
+            /*
              * strdup the key, baby, because we'll free the hdf later
              */
             err = hash_insert(outhash, (void*)strdup(hdf_obj_name(child)), (void*)cs);
@@ -267,22 +272,23 @@ void ltpl_destroy(HASH *tplh)
 
 NEOERR* ltpl_render(CGI *cgi, HASH *tplh, session_t *ses)
 {
+    STRING str; string_init(&str);
     CSPARSE *cs;
     HDF *dhdf;
-    STRING str;
     NEOERR *err;
 
-    char *render = NULL, tok[64];
+    char *render = NULL;
 
     render = ses->render;
     cs = (CSPARSE*)hash_lookup(tplh, render);
-    if (!cs) return nerr_raise(LERR_MISS_TPL, "render %s not found", render);
+    dhdf = (HDF*)hash_lookupf(tplh, "%s_hdf", render);
 
-    snprintf(tok, sizeof(tok), "%s_hdf", render);
-    dhdf = (HDF*)hash_lookup(tplh, tok);
+    if (!cs) return nerr_raise(LERR_MISS_TPL, "render %s not found", render);
     if (dhdf) hdf_copy(cgi->hdf, NULL, dhdf);
     
-    ltpl_prepare_rend(cgi->hdf, "layout.html");
+    ltpl_prepare_rend(cgi->hdf, hdf_get_value(cgi->hdf,
+                                              PRE_RESERVE"."PRE_CFG_LAYOUT,
+                                              "layout.html"));
     
     if (ses->tm_cache_browser > 0) {
         hdf_set_valuef(cgi->hdf, "cgiout.other.cache=Cache-Control: max-age=%lu",
@@ -290,7 +296,6 @@ NEOERR* ltpl_render(CGI *cgi, HASH *tplh, session_t *ses)
     }
     cs->hdf = cgi->hdf;
 
-    string_init(&str);
     err = cs_render(cs, &str, mcs_strcb);
     if (err != STATUS_OK) return nerr_pass(err);
 
@@ -301,4 +306,58 @@ NEOERR* ltpl_render(CGI *cgi, HASH *tplh, session_t *ses)
     string_clear(&str);
 
     return STATUS_OK;
+}
+
+/*
+ * we don't pass tplh parameter to it,
+ * because walker don't have it. so, tplh stored in the g_datah
+ */
+NEOERR* ltpl_render2file(CGI *cgi, char *render, char *fname)
+{
+    STRING str; string_init(&str);
+    HASH *tplh;
+    CSPARSE *cs;
+    HDF *dhdf;
+    NEOERR *err;
+
+    MCS_NOT_NULLC(cgi->hdf, render, fname);
+    
+    tplh = hash_lookup(g_datah, "runtime_templates");
+    MCS_NOT_NULLA(tplh);
+
+    cs = hash_lookup(tplh, render);
+    MCS_NOT_NULLA(cs);
+
+    dhdf = hash_lookupf(tplh, "%s_hdf", render);
+    if (dhdf) hdf_copy(cgi->hdf, NULL, dhdf);
+
+    ltpl_prepare_rend(cgi->hdf, hdf_get_value(cgi->hdf,
+                                              PRE_RESERVE"."PRE_CFG_LAYOUT,
+                                              "layout.html"));
+    cs->hdf = cgi->hdf;
+
+    err = cs_render(cs, &str, mcs_strcb);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    err = mfile_makesure_dir(fname);
+    if (err != STATUS_OK) return nerr_pass(err);
+    
+    err = mcs_str2file(str, fname);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    string_clear(&str);
+
+    return STATUS_OK;
+}
+
+NEOERR* ltpl_render2filef(CGI *cgi, char *render, char *fmt, ...)
+{
+    char tok[_POSIX_PATH_MAX];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsnprintf(tok, sizeof(tok), fmt, ap);
+    va_end(ap);
+
+    return ltpl_render2file(cgi, render, tok);
 }

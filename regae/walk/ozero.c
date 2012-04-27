@@ -23,15 +23,18 @@ NEOERR* zero_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 NEOERR* zero_image_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     char fname[LEN_MD5];
+    int ftype;
 	NEOERR *err;
     
-    err = mimg_accept(cgi, IMG_ROOT, fname);
+    err = mimg_accept(cgi, "upfile", ROOT_IMG, fname, &ftype);
 	if (err != STATUS_OK) return nerr_pass(err);
     
     char tok[3] = {0}; strncpy(tok, fname, 2);
     
-    hdf_set_valuef(cgi->hdf, PRE_OUTPUT".imageurl=%s%s/%s.jpg", IMG_URL, tok, fname);
-    hdf_set_valuef(cgi->hdf, PRE_OUTPUT".imagename=%s.jpg", fname);
+    hdf_set_valuef(cgi->hdf, PRE_OUTPUT".imageurl=%s%s/%s.%s",
+                   URL_IMG, tok, fname, mimg_type_int2str(ftype));
+    hdf_set_valuef(cgi->hdf, PRE_OUTPUT".imagename=%s.%s",
+                   fname, mimg_type_int2str(ftype));
 
     return STATUS_OK;
 }

@@ -6,9 +6,13 @@
 __BEGIN_DECLS
 
 #define SITE_DOMAIN    "voov.com"
-#define IMG_URL        "http://www.voov.com/data/"
-#define IMG_ROOT       "/var/www/voov/fly/data/"
 #define TC_ROOT        "/var/log/moon/voov/"
+
+#define URL_DATA       "http://www.voov.com/data/"
+#define URL_IMG         URL_DATA"images/"
+
+#define ROOT_DATA       "/var/www/voov/fly/data/"
+#define ROOT_IMG        ROOT_DATA"images/"
 
 #define PATH_SITE   "/var/www/voov/"
 #define SITE_CONFIG PATH_SITE"config.hdf"
@@ -16,15 +20,16 @@ __BEGIN_DECLS
 #define PATH_CGI    PATH_SITE"run/"
 #define PATH_TPL    PATH_SITE"tpl/"
 #define PATH_MTL    PATH_SITE"mtl/"
+#define PATH_PAGER  PATH_SITE"pager/"
 
 #define PRE_REQ_IP      PRE_CGI".RemoteAddress"
 #define PRE_REQ_URI     PRE_CGI".ScriptName"    /* lutil_file_access() */
 #define PRE_REQ_URI_RW  PRE_QUERY".ScriptName"  /* lutil_file_access_rewrited() */
 #define PRE_REQ_AJAX_FN PRE_QUERY".JsonCallback"/* main() */
 
-#define PRE_CFG_OUTPUT  	"Output"
-#define PRE_CFG_LAYOUT  	"Layout"
-#define PRE_CFG_DATASET 	"Dataset"
+#define PRE_CFG_OUTPUT      "Output"
+#define PRE_CFG_LAYOUT      "Layout"
+#define PRE_CFG_DATASET     "Dataset"
 #define PRE_CFG_REQLIMIT    "ClientReqLimit"
 #define PRE_CFG_FILECACHE   "FileCache"
 #define PRE_CFG_DATAER      "DataGeter"

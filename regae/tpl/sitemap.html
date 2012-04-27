@@ -11,7 +11,7 @@
 <ul>
   <?cs each:p=Output.plans.today ?>
   <li>
-    <a href="/plan/info?id=<?cs var:p.id ?>">
+    <a href="/plan/info?id=<?cs var:p.id ?>" title="<?cs var:p.saddr ?> <?cs var:p.eaddr ?> 拼车">
       <?cs var:p.nick ?>邀人<?cs var:p.sdate ?>从 <?cs var:p.saddr ?> 至 <?cs
       var:p.eaddr ?> 进行拼车
     </a>
@@ -23,7 +23,7 @@
 <ul>
   <?cs each:p=Output.plans.recent ?>
   <li>
-    <a href="/plan/info?id=<?cs var:p.id ?>">
+    <a href="/plan/info?id=<?cs var:p.id ?>" title="<?cs var:p.saddr ?> <?cs var:p.eaddr ?> 拼车">
       <?cs var:p.nick ?>邀人<?cs var:p.sdate ?>从 <?cs var:p.saddr ?> 至 <?cs
       var:p.eaddr ?> 进行拼车
     </a>
