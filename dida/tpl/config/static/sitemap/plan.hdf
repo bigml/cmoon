@@ -1,7 +1,8 @@
 sitemap_plan {
     Layout = sitemaps/plan.xml
-    DataGeter = plan_of_today
+    DataGeter = plan_of_recent
     Dataset {
+        maxday = 1
         limit = 1000
     }
     Output [ftime=%F] = sitemaps/plan/$ftime$.xml

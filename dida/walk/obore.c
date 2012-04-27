@@ -25,6 +25,18 @@ NEOERR* bore_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     hdf_copy(cgi->hdf, PRE_OUTPUT".memory", evt->hdfrcv);
 
+    /*
+     * get recent plan for spider
+     */
+    evt = hash_lookup(evth, "plan");
+    MCS_NOT_NULLA(evt);
+
+    hdf_set_value(evt->hdfsnd, "limit", "100");
+
+    MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_RECENT, FLAGS_SYNC);
+
+    hdf_copy(cgi->hdf, PRE_OUTPUT".plans", evt->hdfrcv);
+
     return STATUS_OK;
 }
 

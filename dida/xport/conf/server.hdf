@@ -90,6 +90,7 @@ Plugin {
         geoaMin = 10
         geoaMax = 20
         geoMax = 35
+        recentMax = 100
         InsertCol {
             plan {
                 mid [type=int, require=true] = mid

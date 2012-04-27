@@ -9,18 +9,11 @@
 __BEGIN_DECLS
 
 /*
- * Description: 获取今天入库的正常路线（内部使用，非接口）
- * Request:
- * Returns: None
- */
-NEOERR* plan_of_today(HDF *hdf, HASH *dbh);
-
-/*
  * Description: 获取最近几天入库的正常路线（内部使用，非接口）
  * Request: days* - 最近的天数
  * Returns: None
  */
-NEOERR* plan_of_recentday(HDF *hdf, HASH *dbh);
+NEOERR* plan_of_recent(HDF *hdf, HASH *dbh, HASH *evth);
 
 /*
  * Description: 根据时间和地点，获取匹配路线

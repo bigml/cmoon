@@ -1,14 +1,16 @@
 #ifndef __MEVENT_PLAN_H__
 #define __MEVENT_PLAN_H__
 
-#define PREFIX_PLAN     "Plan"
+#define PREFIX_PLAN      "Plan"
 #define PREFIX_PLAN_PRIV "PlanPriv"
 #define PREFIX_PLAN_MINE "PlanMine"
-#define PREFIX_SPD      "Spd"
+#define PREFIX_SPD       "Spd"
+#define PREFIX_RECENT    "Recent"
 
-#define PLAN_CC_SEC     60
+#define PLAN_CC_SEC      60
 #define PLAN_MINE_CC_SEC 600
-#define SPD_CC_SEC      60000
+#define SPD_CC_SEC       60000
+#define RECENT_CC_SEC    60000
 
 #define _COL_PLAN "id, mid, ori, ourl, dad, nick, statu, repeat, subscribe, seat, " \
     " fee, attach, cityid, scityid, ecityid, saddr, eaddr, marks, rect, route, " \
@@ -44,6 +46,7 @@ enum {
     REQ_CMD_PLAN_ADD,
     REQ_CMD_PLAN_UP,
     REQ_CMD_PLAN_MINE,
+    REQ_CMD_PLAN_RECENT,
     REQ_CMD_SPD_PEEL
 };
 

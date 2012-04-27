@@ -130,3 +130,8 @@
     color:#112222;
     font-size:108%;
 }
+
+#bd-4mineral {
+    position: absolute;
+    top: -10000px;
+}

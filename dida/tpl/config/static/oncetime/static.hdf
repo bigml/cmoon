@@ -1,6 +1,8 @@
 index {
     Layout = layout.html
+    DataGeter = plan_of_recent
     Dataset {
+        limit = 100
         Layout {
             css = <link rel="stylesheet" type="text/css" href="/css/b/index.css" />
             js << EOM
@@ -20,10 +22,12 @@ EOM
 
 readme {
     Layout = layout.html
+    DataGeter = plan_of_recent
     Dataset {
+        limit = 100
         Layout {
             css = <link rel="stylesheet" type="text/css" href="/css/b/readme.css" />
-            js = <script type="text/javascript" src="/js/b/readme.js"></script>
+            js = <!--<script type="text/javascript" src="/js/b/readme.js"></script>-->
             title = 关于滴嗒
             tabpart = 2
         }
