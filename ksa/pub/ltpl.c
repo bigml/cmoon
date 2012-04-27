@@ -52,14 +52,15 @@ void ltpl_prepare_rend(HDF *hdf, char *tpl)
     if (pos) hdf_set_valuef(hdf, "Layout.actions.%s.class=selected", pos);
 }
 
-NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outhash)
+NEOERR* ltpl_parse_file(HASH *dbh, HASH *evth,
+                        void *lib, char *dir, char *name, HASH *outhash)
 {
     char *tp = NULL, *tpl = NULL, *val = NULL;
     HDF *node = NULL, *dhdf = NULL, *child = NULL, *thdf = NULL;
     CSPARSE *cs = NULL;
     STRING str;
     char fname[_POSIX_PATH_MAX], tok[64], *outfile;
-    NEOERR* (*data_handler)(HDF *hdf, HASH *dbh);
+    NEOERR* (*data_handler)(HDF *hdf, HASH *dbh, HASH *evth);
     NEOERR *err;
     
     memset(fname, 0x0, sizeof(fname));
@@ -150,7 +151,7 @@ NEOERR* ltpl_parse_file(HASH *dbh, void *lib, char *dir, char *name, HASH *outha
                     mtc_err("%s", tp);
                     //continue;
                 } else {
-                    err = (*data_handler)(cs->hdf, dbh);
+                    err = (*data_handler)(cs->hdf, dbh, evth);
                     TRACE_NOK(err);
                 }
             }
@@ -204,22 +205,26 @@ NEOERR* ltpl_parse_dir(char *dir, HASH *outhash)
 
     if (!dir) return nerr_raise(NERR_ASSERT, "can't read null directory");
 
-    HASH *dbh;
+    HASH *dbh, *evth;
     void *lib = dlopen(NULL, RTLD_NOW|RTLD_GLOBAL);
     if (!lib) return nerr_raise(NERR_SYSTEM, "dlopen %s", dlerror());
     
     err = ldb_init(&dbh);
     if (err != STATUS_OK) return nerr_pass(err);
+
+    err = levt_init(&evth);
+    if (err != STATUS_OK) return nerr_pass(err);
     
     n = scandir(dir, &eps, ltpl_config, alphasort);
     for (int i = 0; i < n; i++) {
         mtc_dbg("parse file %s", eps[i]->d_name);
-        err = ltpl_parse_file(dbh, lib, dir, eps[i]->d_name, outhash);
+        err = ltpl_parse_file(dbh, evth, lib, dir, eps[i]->d_name, outhash);
         TRACE_NOK(err);
         free(eps[i]);
     }
 
     ldb_destroy(dbh);
+    levt_destroy(evth);
     dlclose(lib);
     
     if (n > 0) free(eps);
