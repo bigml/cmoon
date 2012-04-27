@@ -21,7 +21,20 @@ bmoon.spd58 = {
             o.parseList();
         }
 
-        setTimeout(function() {window.location.reload();}, 10*60*1000);
+        setTimeout(function() {
+            var pn = $.cookie('_dida_pn');
+
+            if (!pn) pn = '1';
+            pn = parseInt(pn) + 1;
+
+            if (pn < 10) {
+                $.cookie('_dida_pn', pn, {path: '/'});
+                window.location = href.match(/.*58.com\/pinche\//)[0] + 'pn' + pn;
+            } else {
+                $.cookie('_dida_pn', 1, {path: '/'});
+                window.location = href.match(/.*58.com\/pinche\//)[0];
+            }
+        }, 2*60*1000);
     },
 
     bindClick: function() {
@@ -86,45 +99,41 @@ bmoon.spd58 = {
         contact = contact && contact[0] || '';
         city = city && city[1] || $('#topbar .bar_left h2').html() || '';
 
-        $.getJSON('http://user.58.com/userdata/?callback=?',
-                  {userid: uid},
-                  function(data) {
-                      var ori = '58';
-                      
-                      $.getJSON(g_site_admin + 'json/spd/do?JsonCallback=?',
-                            {
-                                _op: 'add',
+        var ori = '58';
+        
+        $.getJSON(g_site_admin + 'json/spd/do?JsonCallback=?',
+                  {
+                      _op: 'add',
 
-                                plan: JSON.stringify({
-                                    mid: 0,
-                                    phone: bmoon.utl.clotheHTML(phone),
-                                    contact: bmoon.utl.clotheHTML(contact),
-                                    ori: ori,
-                                    oid: id,
-                                    ourl: location.href,
-                                    dad: dad,
-                                    nick: uname,
-                                    saddr: saddr,
-                                    eaddr: eaddr,
-                                    marks: marks, // convert
-                                    city: city, // need convert to cityid
-                                    repeat: repeat,
-                                    sdate: sdate,
-                                    stime: stime,
-                                    attach: attach
-                                }),
-                                
-                                _type_object: 'plan',
-                                
-                            }, function(mydata) {
-                                if (mydata.success == 1) {
-                                    window.opener = null;
-                                    window.close();
-                                } else {
-                                    console.log(mydata.errmsg);
-                                    console.log(mydata.errtrace);
-                                }
-                            });
+                      plan: JSON.stringify({
+                          mid: 0,
+                          phone: bmoon.utl.clotheHTML(phone),
+                          contact: bmoon.utl.clotheHTML(contact),
+                          ori: ori,
+                          oid: id,
+                          ourl: location.href,
+                          dad: dad,
+                          nick: uname,
+                          saddr: saddr,
+                          eaddr: eaddr,
+                          marks: marks, // convert
+                          city: city, // need convert to cityid
+                          repeat: repeat,
+                          sdate: sdate,
+                          stime: stime,
+                          attach: attach
+                      }),
+                      
+                      _type_object: 'plan',
+                      
+                  }, function(mydata) {
+                      if (mydata.success == 1) {
+                          window.opener = null;
+                          window.close();
+                      } else {
+                          console.log(mydata.errmsg);
+                          console.log(mydata.errtrace);
+                      }
                   });
         
         console.log('dad ' + dad);

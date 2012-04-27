@@ -23,7 +23,20 @@ bmoon.spdganji = {
             o.parseList();
         }
 
-        setTimeout(function() {window.location.reload();}, 10*60*1000);
+        setTimeout(function() {
+            var pn = $.cookie('_dida_pn');
+
+            if (!pn) pn = '1';
+            pn = parseInt(pn) + 1;
+
+            if (pn < 10) {
+                $.cookie('_dida_pn', pn, {path: '/'});
+                window.location = href.match(/.*ganji.com\/pincheshangxiaban\//)[0] + 'f' + (pn-1)*50;
+            } else {
+                $.cookie('_dida_pn', 1, {path: '/'});
+                window.location = href.match(/.*ganji.com\/pincheshangxiaban\//)[0];
+            }
+        }, 2*60*1000);
     },
 
     bindClick: function() {

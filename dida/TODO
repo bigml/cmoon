@@ -1,4 +1,3 @@
-spd js 自动往后跳
 个人主页/member/home?
 联系方式，IE 下获取不到图片有把叉
 /system/view 表格会撑破
@@ -29,3 +28,4 @@ DONE urls.txt 参数明确 (plan/leave 时无 scityid 不应报错)
 DONE 加速地图载入（baidu）
 DONE inbox 的展现
 DONE 用户 dashboard
+DONE spd js 自动往后跳
