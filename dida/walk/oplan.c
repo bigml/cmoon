@@ -215,7 +215,7 @@ NEOERR* plan_info_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
                    hdf_get_value(evt->hdfrcv, "saddr", "地球"),
                    hdf_get_value(evt->hdfrcv, "eaddr", "火星"));
     
-    hdf_set_valuef(cgi->hdf, PRE_CFG_LAYOUT".title=%s邀人%s从 %s 至 %s 进行拼车",
+    hdf_set_valuef(cgi->hdf, PRE_CFG_LAYOUT".title=%s 邀人 %s 从 %s 至 %s 拼车",
                    hdf_get_value(evt->hdfrcv, "nick", "张三"),
                    hdf_get_value(evt->hdfrcv, "sdate", "每天"),
                    hdf_get_value(evt->hdfrcv, "saddr", "地球"),
