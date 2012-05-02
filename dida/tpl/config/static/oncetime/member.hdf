@@ -2,7 +2,7 @@ regist {
     Layout = layout.html
     DataGeter = plan_of_recent
     Dataset {
-        limit = 100
+        limit = 80
         Layout {
             css = <link rel="stylesheet" type="text/css" href="/css/b/member/regist.css" />
             js = <script type="text/javascript" src="/js/b/member/regist.js"></script>
@@ -19,7 +19,7 @@ reset {
     Layout = layout.html
     DataGeter = plan_of_recent
     Dataset {
-        limit = 100
+        limit = 80
         Layout {
             css = <link rel="stylesheet" type="text/css" href="/css/b/member/reset.css" />
             js = <script type="text/javascript" src="/js/b/member/reset.js"></script>

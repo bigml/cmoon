@@ -379,11 +379,11 @@ static NEOERR* plan_cmd_plan_mine(struct plan_entry *e, QueueEntry *q)
 
 static NEOERR* plan_cmd_plan_recent(struct plan_entry *e, QueueEntry *q)
 {
-    unsigned char *val = NULL; size_t vsize = 0;
+    //unsigned char *val = NULL; size_t vsize = 0;
     int maxday, limit;
     NEOERR *err;
 
-    struct cache *cd = e->cd;
+    //struct cache *cd = e->cd;
     mdb_conn *db = e->db;
 
     REQ_FETCH_PARAM_INT(q->hdfrcv, "maxday", maxday);
@@ -391,25 +391,29 @@ static NEOERR* plan_cmd_plan_recent(struct plan_entry *e, QueueEntry *q)
 
     if (limit <= 0) limit = hdf_get_int_value(g_cfg, CONFIG_PATH".recentMax", 100);
 
+    /*
     if (cache_getf(cd, &val, &vsize, PREFIX_RECENT"%d_%d", maxday, limit)) {
         unpack_hdf(val, vsize, &q->hdfsnd);
     } else {
+    */
         if (maxday > 0) {
             MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d AND intime > "
-                          " current_date - %d LIMIT %d", NULL,
+                          " current_date - %d ORDER BY RANDOM() LIMIT %d", NULL,
                           PLAN_ST_PAUSE, maxday - 1, limit);
         } else {
             /*
              * don't care intime
              */
-            MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d ORDER BY id DESC "
+            MDB_QUERY_RAW(db, "plan", _COL_PLAN, "statu < %d ORDER BY RANDOM() "
                           " LIMIT %d", NULL, PLAN_ST_PAUSE, limit);
         }
         err = mdb_set_rows(q->hdfsnd, db, _COL_PLAN, NULL, NULL, MDB_FLAG_EMPTY_OK);
         if (err != STATUS_OK) return nerr_pass(err);
 
+        /*
         CACHE_HDF(q->hdfsnd, RECENT_CC_SEC, PREFIX_RECENT"%d_%d", maxday, limit);
     }
+        */
     
     return STATUS_OK;
 }

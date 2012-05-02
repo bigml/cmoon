@@ -11,9 +11,8 @@
 <ul>
   <?cs each:p=Output.plans ?>
   <li>
-    <a href="/plan/info?id=<?cs var:p.id ?>" title="<?cs var:p.saddr ?> <?cs var:p.eaddr ?> 拼车">
-      <?cs var:p.nick ?>邀人<?cs var:p.sdate ?>从 <?cs var:p.saddr ?> 至 <?cs
-      var:p.eaddr ?> 进行拼车
+    <a href="/plan/info?id=<?cs var:p.id ?>" title="<?cs var:p.saddr ?>至<?cs var:p.eaddr ?>拼车,拼车回<?cs var:p.eaddr ?>">
+      <?cs var:p.nick ?>邀人<?cs var:p.sdate ?>从<?cs var:p.saddr ?>拼车回<?cs var:p.eaddr ?>
     </a>
   </li>
   <?cs /each ?>

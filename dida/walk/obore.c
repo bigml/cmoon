@@ -31,7 +31,7 @@ NEOERR* bore_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     evt = hash_lookup(evth, "plan");
     MCS_NOT_NULLA(evt);
 
-    hdf_set_value(evt->hdfsnd, "limit", "100");
+    hdf_set_value(evt->hdfsnd, "limit", "50");
 
     MEVENT_TRIGGER(evt, NULL, REQ_CMD_PLAN_RECENT, FLAGS_SYNC);
 
