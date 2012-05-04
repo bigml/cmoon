@@ -14,27 +14,14 @@ bmoon.spd58 = {
         var o = bmoon.spd58.init();
 
         var href = location.href;
-        
-        if (href.match(/.*\/([0-9]+)x\.shtml$/)) {
+
+        if (href.match(/www.58.com\/pinche\/changecity\//)) {
+            o.parseDir();
+        } else if (href.match(/.*\/([0-9]+)x\.shtml$/)) {
             o.parseNode(href.match(/.*\/([0-9]+)x\.shtml$/)[1]);
         } else if (href.match(/.*58.com\/pinche\//)) {
             o.parseList();
         }
-
-        setTimeout(function() {
-            var pn = $.cookie('_dida_pn');
-
-            if (!pn) pn = '1';
-            pn = parseInt(pn) + 1;
-
-            if (pn < 10) {
-                $.cookie('_dida_pn', pn, {path: '/'});
-                window.location = href.match(/.*58.com\/pinche\//)[0] + 'pn' + pn;
-            } else {
-                $.cookie('_dida_pn', 1, {path: '/'});
-                window.location = href.match(/.*58.com\/pinche\//)[0];
-            }
-        }, 2*60*1000);
     },
 
     bindClick: function() {
@@ -156,8 +143,7 @@ bmoon.spd58 = {
     parseList: function() {
         var o = bmoon.spd58.init();
 
-        var
-        ids = [], urls = {},
+        var ids = [], urls = {},
         objs = $('a.t', '#infolist'),
         reg = /.*\/pinche\/([0-9]+)x\.shtml$/;
 
@@ -168,25 +154,56 @@ bmoon.spd58 = {
             }
         });
 
-        $.getJSON(g_site_admin + 'json/spd/pre?JsonCallback=?',
-                 {
-                     ori: '58',
-                     oids: ids
-                 }, function(data) {
-                     if (data.success == 1) {
-                         if (bmoon.utl.type(data.oids) == 'Object') {
-                             $.each(data.oids, function(key, val) {
-                                 console.log(val);
-                                 setTimeout(function() {window.open(urls[val]);},
-                                            Math.random()*50*1000);
+        $.getJSON(g_site_admin + 'json/spd/pre?JsonCallback=?', {
+            ori: '58',
+            oids: ids
+        }, function(data) {
+            if (data.success == 1) {
+                if (bmoon.utl.type(data.oids) == 'Object') {
+                    $.each(data.oids, function(key, val) {
+                        console.log(val);
+                        setTimeout(function() {window.open(urls[val]);},
+                                   Math.random()*50*1000);
                              });
-                         } else {
-                             console.log('dida ALL DONE');
-                         }
-                     } else {
-                         alert(data.errmsg || '操作失败');
-                     }
-                 })
+                } else {
+                    console.log('dida ALL DONE');
+                }
+            } else {
+                alert(data.errmsg || '操作失败');
+            }
+        });
+        
+        setTimeout(function() {
+            var pn = $.cookie('_dida_pn');
+
+            if (!pn) pn = '1';
+            pn = parseInt(pn) + 1;
+
+            if (pn < 10) {
+                $.cookie('_dida_pn', pn, {path: '/'});
+                window.location = href.match(/.*58.com\/pinche\//)[0] + 'pn' + pn;
+            } else {
+                //$.cookie('_dida_pn', 1, {path: '/'});
+                //window.location = href.match(/.*58.com\/pinche\//)[0];
+                window.opener = null;
+                window.close();
+            }
+        }, 60*1000);
+    },
+
+    parseDir: function() {
+        var o = bmoon.spd58.init();
+
+        var cs = $('#clist a'),
+        pos = 0;
+
+        function get() {
+            for (var i = pos; i < 10 && pos < cs.length; i++, pos++) {
+                window.open($(cs[i]).attr('href'));
+            }
+            setTimeout(get, 10*60*1000);
+        }
+        get();
     }
 };
 
