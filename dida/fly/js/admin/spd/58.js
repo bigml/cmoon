@@ -169,7 +169,7 @@ bmoon.spd58 = {
                     console.log('dida ALL DONE');
                 }
             } else {
-                alert(data.errmsg || '操作失败');
+                console.log(data.errmsg || '操作失败');
             }
         });
         
@@ -181,7 +181,7 @@ bmoon.spd58 = {
 
             if (pn < 10) {
                 $.cookie('_dida_pn', pn, {path: '/'});
-                window.location = href.match(/.*58.com\/pinche\//)[0] + 'pn' + pn;
+                window.location = location.href.match(/.*58.com\/pinche\//)[0] + 'pn' + pn;
             } else {
                 //$.cookie('_dida_pn', 1, {path: '/'});
                 //window.location = href.match(/.*58.com\/pinche\//)[0];
