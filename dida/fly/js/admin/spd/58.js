@@ -198,7 +198,7 @@ bmoon.spd58 = {
         pos = 0;
 
         function get() {
-            for (var i = pos; i < 10 && pos < cs.length; i++, pos++) {
+            for (var i = 0; i < 10 && pos < cs.length; i++, pos++) {
                 window.open($(cs[i]).attr('href'));
             }
             setTimeout(get, 10*60*1000);
