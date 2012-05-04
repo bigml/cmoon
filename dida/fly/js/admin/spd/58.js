@@ -186,9 +186,10 @@ bmoon.spd58 = {
                 //$.cookie('_dida_pn', 1, {path: '/'});
                 //window.location = href.match(/.*58.com\/pinche\//)[0];
                 window.opener = null;
+                window.open('', '_self', '');
                 window.close();
             }
-        }, 60*1000);
+        }, 40*1000);
     },
 
     parseDir: function() {
@@ -199,7 +200,9 @@ bmoon.spd58 = {
 
         function get() {
             for (var i = 0; i < 10 && pos < cs.length; i++, pos++) {
-                window.open($(cs[pos]).attr('href'));
+                setTimeout(function() {
+                    window.open($(cs[pos]).attr('href'));
+                }, Math.random()*30*1000)
             }
             setTimeout(get, 10*60*1000);
         }
