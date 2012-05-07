@@ -179,7 +179,7 @@ bmoon.spd58 = {
             if (!pn) pn = '1';
             pn = parseInt(pn) + 1;
 
-            if (pn < 10) {
+            if (pn < 7) {
                 $.cookie('_dida_pn', pn, {path: '/'});
                 window.location = location.href.match(/.*58.com\/pinche\//)[0] + 'pn' + pn;
             } else {
@@ -189,7 +189,7 @@ bmoon.spd58 = {
                 window.open('', '_self', '');
                 window.close();
             }
-        }, 40*1000);
+        }, 60*1000);
     },
 
     parseDir: function() {
@@ -199,7 +199,7 @@ bmoon.spd58 = {
         pos = 0;
 
         function get() {
-            for (var i = 0; i < 10 && pos < cs.length; i++, pos++) {
+            for (var i = 0; i < 5 && pos < cs.length; i++, pos++) {
                 window.open($(cs[pos]).attr('href'));
             }
             setTimeout(get, 10*60*1000);
