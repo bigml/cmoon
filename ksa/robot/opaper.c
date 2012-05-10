@@ -41,6 +41,7 @@ NEOERR* paper_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
      * produce static html
      */
     hdf_copy(cgi->hdf, PRE_OUTPUT, hdf_get_obj(cgi->hdf, PRE_QUERY));
+    hdf_set_copy(cgi->hdf, PRE_LAYOUT".title", PRE_QUERY".title");
     err = ltpl_render2filef(cgi, "paper", "%s%d.html", ROOT_PAPER, id);
     TRACE_NOK(err);
     
