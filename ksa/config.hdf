@@ -61,6 +61,8 @@ Db {
         paper {
             title [maxlen=256,require=true] = title
             hint [maxlen=256] = hint
+            keyword [maxlen=256] = keyword
+            description [maxlen=512] = description
             content [require=true] = content
             previd [type=int] = previd
             nextid [type=int] = nextid

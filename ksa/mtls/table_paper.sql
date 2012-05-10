@@ -4,6 +4,8 @@ CREATE TABLE paper (
 
     title varchar(256) NOT NULL DEFAULT '',
     hint varchar(256) NOT NULL DEFAULT '',
+    keyword varchar(256) NOT NULL DEFAULT '',
+    description varchar(512) NOT NULL DEFAULT '',
     content text NOT NULL DEFAULT '',
 
     previd int NOT NULL DEFAULT 0,

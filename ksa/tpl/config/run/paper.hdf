@@ -6,3 +6,7 @@ paper {
         }
     }
 }
+
+paper_preview {
+    Layout = paper/preview.html
+}

@@ -41,6 +41,8 @@ NEOERR* paper_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
      * produce static html
      */
     hdf_copy(cgi->hdf, PRE_OUTPUT, hdf_get_obj(cgi->hdf, PRE_QUERY));
+    hdf_set_copy(cgi->hdf, PRE_LAYOUT".keywords", PRE_QUERY".keyword");
+    hdf_set_copy(cgi->hdf, PRE_LAYOUT".description", PRE_QUERY".description");
     hdf_set_copy(cgi->hdf, PRE_LAYOUT".title", PRE_QUERY".title");
     err = ltpl_render2filef(cgi, "paper", "%s%d.html", ROOT_PAPER, id);
     TRACE_NOK(err);
@@ -52,6 +54,18 @@ NEOERR* paper_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
      * or, add to your crontab
      */
     //mtc_dbg("%d", mutil_systemf("%ssitemap", PATH_PAGER));
+    
+    return STATUS_OK;
+}
+
+NEOERR* paper_preview_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+
+    MCS_NOT_NULLA(cgi->hdf);
+
+    hdf_set_copy(cgi->hdf, PRE_OUTPUT".s", PRE_QUERY".s");
+
+    mstr_script_escape(cgi->hdf, PRE_OUTPUT".s");
     
     return STATUS_OK;
 }

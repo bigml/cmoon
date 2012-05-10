@@ -16,6 +16,7 @@ enum {
 NEOERR* paper_of_recentday(HDF *node, HASH *dbh);
 
 NEOERR* paper_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+NEOERR* paper_preview_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 __END_DECLS
 #endif /* __OPAPER_H__ */
