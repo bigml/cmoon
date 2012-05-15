@@ -115,7 +115,7 @@
 #bd-content {
     clear: both;
     padding: 1em 2em;
-    line-height: 18px;
+    /*line-height: 18px;*/
     border: 1px solid #78f1fe;
     background: #FFF;
     overflow: auto;
