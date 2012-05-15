@@ -1,0 +1,36 @@
+<?cs include:"admin/paper/nav.html" ?>
+
+<div class="raw-content">
+  <?cs if:Output.papers.0.id ?>
+  <table class="list">
+    <tr>
+      <th>标题</th>
+      <th>所属分类</th>
+      <th>创建时间</th>
+    </tr>
+
+    <?cs each:p=Output.papers ?>
+    <tr>
+      <td><?cs var:p.title ?></td>
+      <td><?cs var:p.pid ?></td>
+      <td><?cs var:p.intime ?></td>
+    </tr>
+    <?cs /each ?>
+  </table>
+  <?cs else ?>
+  <p class="page-hint">您还没有任何文章。<a class="btn" href="/paper/new">去添加文章</a></p>
+  <?cs /if ?>
+</div>
+
+<div id="paper-nav" class="page-nav"></div>
+
+<script>
+  var mgd = mgd || {};
+
+  mgd.npp = <?cs var:Output._npp ?>;
+  mgd.npg = <?cs var:Output._npg ?>;
+  mgd.nst = <?cs var:Output._nst ?>;
+  mgd.ntt = <?cs var:Output._ntt ?>;
+
+  mgd._done = 1;
+</script>

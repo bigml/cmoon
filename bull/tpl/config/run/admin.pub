@@ -1,0 +1,16 @@
+Dataset.Layout {
+    actions_1 {
+        0 {
+            name = 文章管理
+            href = /admin/paper
+        }
+        1 {
+            name = 导航管理
+            href = /admin/nav
+        }
+        2 {
+            name = 友情连接
+            href = /admin/links
+        }
+    }
+}

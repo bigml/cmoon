@@ -1,0 +1,12 @@
+Dataset {
+    SubNavs {
+        0 {
+            name = 文章列表
+            href = /admin/paper
+        }
+        1 {
+            name = 添加新文章
+            href = /admin/paper/new
+        }
+    }
+}

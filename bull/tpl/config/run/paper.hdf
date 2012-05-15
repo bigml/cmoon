@@ -1,0 +1,3 @@
+paper_preview {
+    Layout = admin/paper/preview.html
+}

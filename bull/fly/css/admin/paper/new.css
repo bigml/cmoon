@@ -1,0 +1,11 @@
+dl.op dt {clear: left; float:left; width: 140px; margin: 5px 13px 5px 0; text-align: right;}
+dl.op dd {float:left; margin: 5px 0;}
+
+input.title, input.hint {
+    width: 400px;
+    margin-right: 1em;
+}
+
+textarea.content {
+    padding: 5px;
+}

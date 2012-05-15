@@ -1,0 +1,28 @@
+LOCALBASE = ../../
+include $(LOCALBASE)Make.env
+include $(BASEDIR)Make.env
+
+FILES = b/base.css \
+        b/admin/paper/paper.css b/admin/paper/new.css
+
+all: preload $(FILES)
+
+preload:
+	@mkdir -p b/
+	@mkdir -p b/admin/paper/
+
+b/base.css: reset.css base.css layout.css modules/overlay.css
+
+b/admin/paper/paper.css: modules/accordion.css modules/box.css \
+                         admin/admin.css
+b/admin/paper/new.css: modules/accordion.css modules/box.css \
+                       modules/noty/jquery.noty.css modules/noty/noty_theme_mitgux.css \
+                       admin/mku_skin.css admin/mku_set.css \
+                       admin/admin.css admin/paper/new.css
+
+%.css:
+	$(CSSGLUE) $^ > $@
+
+
+clean:
+	@rm -f $(FILES)

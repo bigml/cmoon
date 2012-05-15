@@ -1,0 +1,51 @@
+Config {
+    trace_level = 7
+}
+
+Dataset {
+    layout.html {
+        tabs {
+            0 {
+                name = 首页
+                href = /index.html
+                class = selected
+            }
+            1 {
+                name = 来的来访
+                href = /index.html
+            }
+        }
+    }
+}
+
+Db {
+    Dsn {
+    	main = pgsql:dbname=csgs host=localhost user=fu password=qiang
+    }
+    QueryCond {
+    }
+    UpdateCol {
+    }
+    InsertCol {
+    }
+}
+
+Memcached {
+    ip = 127.0.0.1
+    port = 11211
+}
+
+Mevent {
+    0 = skeleton
+}
+
+ClientReqLimit {
+    test_request_data_get = 1
+}
+
+FileCache {
+    0 {
+        uri = ^/test/request$
+        tm_cache = 1800
+    }
+}
