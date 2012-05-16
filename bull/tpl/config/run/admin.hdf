@@ -28,6 +28,22 @@ admin_paper [merge="admin.pub,paper.pub"] {
     }
 }
 
+admin_paper_edit [merge="admin.pub,paper.pub"] {
+	Layout = layout.html
+    Dataset {
+        Layout {
+            css = <link rel="stylesheet" type="text/css" href="/css/b/admin/paper/edit.css" />
+            js = <script type="text/javascript" src="/js/b/admin/paper/edit.js"></script>
+            title = 修改文章
+            actionpart = 0
+            subnavpart = 0
+        }
+        Include {
+            content = admin/paper/edit.html
+        }
+    }
+}
+
 admin_paper_new [merge="admin.pub,paper.pub"] {
 	Layout = layout.html
     Dataset {

@@ -19,7 +19,13 @@ NEOERR* admin_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 NEOERR* admin_paper_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
+NEOERR* admin_paper_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
+NEOERR* admin_paper_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
 NEOERR* admin_paper_new_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
+NEOERR* admin_paper_edit_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 __END_DECLS
 #endif /* __OADMIN_H__ */

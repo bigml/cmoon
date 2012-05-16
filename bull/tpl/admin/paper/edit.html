@@ -1,0 +1,44 @@
+<?cs include:"admin/paper/nav.html" ?>
+
+<div class="raw-content">
+  <dl class="op" id="paper-info">
+    <dt>标题 (1 ~ 200 个字)</dt>
+    <dd>
+      <input type="text" name="title" class="title VAL_NEWPAPER vrequire" vmax="256"
+             value="<?cs var:Output.paper.title ?>" />*
+    </dd>
+
+    <dt>关键字</dt>
+    <dd>
+      <input type="text" name="keyword" class="hint VAL_NEWPAPER" vmax="256"
+             value="<?cs var:Output.paper.keyword ?>" />
+    </dd>
+    
+    <dt>描述</dt>
+    <dd>
+      <textarea id="des" name="des" class="des VAL_NEWPAPER"><?cs var:Output.paper.des ?></textarea>
+    </dd>
+    
+    <dt>内容</dt>
+    <dd>
+      <textarea id="content" name="content" draggable="true" class="content VAL_NEWPAPER vrequire"><?cs var:Output.paper.content ?></textarea>
+    </dd>
+
+    <dt>&nbsp;</dt>
+    <dd>
+      <input type="button" id="submit" class="btn" value="确认修改" />
+      <span class="indicator"></span>
+    </dd>
+  </dl>
+  
+</div>
+
+<div class="clearer"></div>
+
+<script>
+  var mgd = mgd || {};
+
+  mgd.paperid = <?cs var:Output.paper.id ?>
+
+  mgd._done = 1;
+</script>

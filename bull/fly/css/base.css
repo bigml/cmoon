@@ -13,6 +13,7 @@ pre {
     white-space: -o-pre-wrap;    / Opera 7 /
     word-wrap: break-word;       / Internet Explorer 5.5+ /
 }
+img {vertical-align: middle;}
 
 :focus {outline-style:none;}
 input[type=checkbox] {vertical-align:middle; margin-top:-2px; margin-bottom:1px;}

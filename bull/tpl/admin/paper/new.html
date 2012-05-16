@@ -4,7 +4,12 @@
   <dl class="op" id="paper-info">
     <dt>标题 (1 ~ 200 个字)</dt>
     <dd>
-      <input type="text" name="title" class="title VAL_NEWPAPER vrequire" vmax="256" />
+      <input type="text" name="title" class="title VAL_NEWPAPER vrequire" vmax="256" />*
+    </dd>
+
+    <dt>添加到分类</dt>
+    <dd>
+      <input type="text" id="page-class" class="VAL_NEWPAPER" />
     </dd>
 
     <dt>关键字</dt>
@@ -14,7 +19,7 @@
     
     <dt>描述</dt>
     <dd>
-      <input type="text" name="description" class="hint VAL_NEWPAPER" vmax="512" />
+      <textarea id="des" name="des" class="des VAL_NEWPAPER"></textarea>
     </dd>
     
     <dt>内容</dt>

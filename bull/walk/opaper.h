@@ -4,9 +4,9 @@
 
 __BEGIN_DECLS
 
-#define _COL_PAPER "id, pid, statu, title, keyword, des, content, " \
-    " to_char(intime, 'YYYY-MM-DD') as intime, "                    \
-    " to_char(uptime, 'YYYY-MM-DD') as uptime"                      \
+#define _COL_PAPER "id, pid, statu, title, keyword, des, content, "     \
+    " to_char(intime, 'YYYY-MM-DD HH:mm:SS') as intime, "               \
+    " to_char(uptime, 'YYYY-MM-DD HH:mm:SS') as uptime"                 \
     
 enum {
     PAPER_ST_OK = 0,
@@ -15,6 +15,11 @@ enum {
 };
 
 NEOERR* paper_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
+NEOERR* paper_class_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
+NEOERR* paper_matchtitle_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
+
 NEOERR* paper_preview_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses);
 
 __END_DECLS

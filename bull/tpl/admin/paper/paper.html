@@ -2,25 +2,48 @@
 
 <div class="raw-content">
   <?cs if:Output.papers.0.id ?>
-  <table class="list">
-    <tr>
-      <th>标题</th>
-      <th>所属分类</th>
-      <th>创建时间</th>
-    </tr>
+  <table class="list tablesorter" id="paper-list">
+    <thead>
+      <tr>
+        <th>标题</th>
+        <th>所属分类</th>
+        <th>文章状态</th>
+        <th>修改时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
 
+    <tbody>
     <?cs each:p=Output.papers ?>
     <tr>
       <td><?cs var:p.title ?></td>
-      <td><?cs var:p.pid ?></td>
-      <td><?cs var:p.intime ?></td>
+      <td class="pids" id="pid-<?cs var:p.id ?>" relid="<?cs var:p.id ?>" relpid="<?cs var:p.pid ?>"></td>
+      <td><?cs if:p.statu==#0 ?>正常显示<?cs else ?>暂停显示<?cs /if ?></td>
+      <td><?cs var:p.uptime ?></td>
+      <td>
+        <a href="/admin/paper/edit?id=<?cs var:p.id ?>" title="编辑">
+        <img src="/img/bg/delete.png" alt="delete" />
+        </a>
+
+        <?cs if:p.statu==#0 ?>
+        <a href="javascript:void(0);" class="del" title="暂停显示" rel="<?cs var:p.id ?>">
+        <img src="/img/bg/delete.png" alt="delete" />
+        <?cs else ?>
+        <a href="javascript:void(0);" class="revert" title="恢复显示" rel="<?cs var:p.id ?>">
+        <img src="/img/bg/delete.png" alt="revert" />
+        <?cs /if ?>
+        </a>
+      </td>
     </tr>
     <?cs /each ?>
+    </tbody>
   </table>
   <?cs else ?>
   <p class="page-hint">您还没有任何文章。<a class="btn" href="/paper/new">去添加文章</a></p>
   <?cs /if ?>
 </div>
+
+<div class="clearer"></div>
 
 <div id="paper-nav" class="page-nav"></div>
 

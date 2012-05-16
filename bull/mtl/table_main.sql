@@ -28,6 +28,7 @@ CREATE TABLE paper (
     PRIMARY KEY (id)
 );
 CREATE INDEX paper_index ON paper (pid, statu);
+CREATE TRIGGER tg_uptime_paper BEFORE UPDATE ON paper FOR EACH ROW EXECUTE PROCEDURE update_time();
 
 CREATE TABLE nav (
 	pos SERIAL,
