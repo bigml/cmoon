@@ -30,6 +30,7 @@ NEOERR* pos_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     MDB_EXEC(db, NULL, "UPDATE city SET %s WHERE id=%d;", NULL, str.buf, id);
     
+    string_clear(&str);
 
     return STATUS_OK;
 }

@@ -31,7 +31,7 @@ b/index.css: modules/indicator.css modules/dateinput/dateinput.css \
              index/index.css
 b/readme.css: readme.css
 
-b/admin/spd/post.css: modules/indicator.css modules/indicator.css admin/spd/post.css
+b/admin/spd/post.css: modules/indicator.css admin/spd/post.css
 b/admin/spd/robot.css: admin/spd/robot.css
 
 b/member/regist.css: modules/noty/jquery.noty.css modules/noty/noty_theme_mitgux.css \
