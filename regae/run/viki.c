@@ -118,7 +118,7 @@ int main(int argc, char **argv, char **envp)
                     } else {
                         session->render = strdup("503");
                     }
-                    nerr_ignore(&err);
+                    TRACE_NOK(err);
                     err = ltpl_render(cgi, tplh, session);
                     TRACE_NOK(err);
                 }
