@@ -50,8 +50,9 @@ bmoon.admpapernew = {
         var o = bmoon.admpapernew.init();
 
         o.e_submit.click(o.savePaper);
+
         o.e_page_class.focus(o.inTip);
-        o.e_page_class.blur(o.outTip);
+        o.e_page_class.blur(bmoon.admin.outTip);
 
         $('input, textarea', o.e_paper_info).change(function() {
             o.e_paper_info.data('_postData')[$(this).attr('name')] = $(this).val();
@@ -87,45 +88,14 @@ bmoon.admpapernew = {
     inTip: function() {
         var o = bmoon.admpapernew.init();
 
-        var me = o.e_page_class,
-        v = me.val();
+        var me = $(this);
 
-        if (!me.inputTipID) {
-            me.inputTipID = setInterval(function() {
-                if (me.val() != v) {
-                    v = me.val();
-                    o.getClassTip();
-                }
-            }, 500);
-        }
-    },
-
-    outTip: function() {
-        var o = bmoon.admpapernew.init();
-
-        var me = o.e_page_class;
-
-        me.inputTipID && clearInterval(me.inputTipID);
-        me.inputTipID = 0;
-    },
-
-    getClassTip: function() {
-        var o = bmoon.admpapernew.init();
-
-        var me = o.e_page_class,
-        v = me.val();
-
-        $.getJSON('/json/paper/matchtitle', {title: v}, function(data) {
-            if (data.success == 1 && bmoon.utl.type(data.titles) == 'Array') {
-                me.mntips(data.titles, {
-                    rowspec: ['title'],
-                    clickRow: function(row) {
-                        o.outTip();
-                        me.val(row.title);
-                        o.e_paper_info.data('_postData').pid = row.id;
-                        $('input[name="keyword"]').focus();
-                    }
-                });
+        bmoon.admin.inTip(me, {
+            clickRow: function (row) {
+                bmoon.admin.outTip();
+                me.val(row.title);
+                o.e_paper_info.data('_postData').pid = row.id;
+                $('input[name="keyword"]').focus();
             }
         });
     }

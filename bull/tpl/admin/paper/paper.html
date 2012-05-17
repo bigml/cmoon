@@ -28,6 +28,7 @@
         <?cs if:p.statu==#0 ?>
         <a href="javascript:void(0);" class="del" title="暂停显示" rel="<?cs var:p.id ?>">
         <img src="/img/bg/delete.png" alt="delete" />
+        </a>
         <?cs else ?>
         <a href="javascript:void(0);" class="revert" title="恢复显示" rel="<?cs var:p.id ?>">
         <img src="/img/bg/delete.png" alt="revert" />
@@ -42,8 +43,6 @@
   <p class="page-hint">您还没有任何文章。<a class="btn" href="/paper/new">去添加文章</a></p>
   <?cs /if ?>
 </div>
-
-<div class="clearer"></div>
 
 <div id="paper-nav" class="page-nav"></div>
 

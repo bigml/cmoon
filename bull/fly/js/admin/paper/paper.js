@@ -20,12 +20,6 @@ bmoon.admpaperpaper = {
         var o = bmoon.admpaperpaper.init();
 
         o.getClass();
-        o.e_paper.tablesorter({
-            headers: {
-                1: {sorter: false},
-                4: {sorter: false}
-            }
-        });
         
         bmoon.utl.after(o.rendNav, 'mgd.ntt != undefined', 10);
 
@@ -59,6 +53,11 @@ bmoon.admpaperpaper = {
             if (data.success == 1 && bmoon.utl.type(data.papers) == 'Array') {
                 $.each(data.papers, function(i, o) {
                     $('#pid-'+o.id).html(o.title);
+                });
+                o.e_paper.tablesorter({
+                    headers: {
+                        4: {sorter: false}
+                    }
                 });
             }
         });

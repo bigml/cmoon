@@ -1,6 +1,6 @@
 #include "mheads.h"
 #include "lheads.h"
-#include "oadmin.h"
+#include "opaper.h"
 
 NEOERR* paper_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {

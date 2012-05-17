@@ -1,0 +1,8 @@
+Dataset {
+    SubNavs {
+        0 {
+            name = 导航管理
+            href = /admin/nav
+        }
+    }
+}

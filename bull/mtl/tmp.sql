@@ -1,1 +1,1 @@
-alter table paper add column keyword varchar(500) not null default '';
+alter table nav add column statu smallint not null default 0;

@@ -24,6 +24,7 @@
 #include "ozero.h"
 #include "omember.h"
 #include "opaper.h"
+#include "onav.h"
 #include "oadmin.h"
 
 #endif    /* __LHEADS_H__ */

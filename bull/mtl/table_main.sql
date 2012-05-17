@@ -32,6 +32,7 @@ CREATE TRIGGER tg_uptime_paper BEFORE UPDATE ON paper FOR EACH ROW EXECUTE PROCE
 
 CREATE TABLE nav (
 	pos SERIAL,
+    statu smallint NOT NULL DEFAULT 0, --0 normal, 1 pause, 2 delete
 	pid int NOT NULL DEFAULT 0,
     PRIMARY KEY(pos)
 );

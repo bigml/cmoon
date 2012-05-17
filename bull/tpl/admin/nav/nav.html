@@ -1,0 +1,51 @@
+<?cs include:"macro/admin.cs" ?>
+<?cs include:"admin/nav/pub.html" ?>
+
+<div class="raw-content">
+  <?cs if:!?Output.navs.0.pos ?>
+  <div class="page-hint">暂无导航</div>
+  <?cs /if ?>
+  
+  <div class="boxed-group">
+    <h3>系统导航</h3>
+    <div class="boxed-group-inner full-width">
+      <table id="nav-list" class="list tablesorter">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>标题</th>
+            <th>分类ID</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <?cs set:count=#1 ?>
+          <?cs each:n=Output.navs ?>
+          <tr>
+            <td class="decimal text-center"><?cs var:count ?></td>
+            <td><input class="llong title" type="text" value="<?cs var:n.title ?>" rel="<?cs var:n.pos ?>" /></td>
+            <td class="text-center"><?cs var:n.pid ?></td>
+            <td class="text-center">
+              <a href="javascript:void(0);" class="del" title="删除" rel="<?cs var:n.pos ?>">
+                <img src="/img/bg/delete.png" alt="delete" />
+              </a>
+            </td>
+          </tr>
+          <?cs set:count=count+#1 ?>
+          <?cs /each ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <a id="nav-add" class="minibutton"><span>添加导航</span></a>
+</div>
+
+<script>
+  var mgd = mgd || {};
+  
+  mgd.lastpos = <?cs var:count ?>;
+  
+  mgd._done = 1;
+</script>

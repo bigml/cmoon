@@ -59,3 +59,19 @@ admin_paper_new [merge="admin.pub,paper.pub"] {
         }
     }
 }
+
+admin_nav [merge="admin.pub,nav.pub"] {
+	Layout = layout.html
+    Dataset {
+        Layout {
+            css = <link rel="stylesheet" type="text/css" href="/css/b/admin/nav/nav.css" />
+            js = <script type="text/javascript" src="/js/b/admin/nav/nav.js"></script>
+            title = 文章列表
+            actionpart = 1
+            subnavpart = 0
+        }
+        Include {
+            content = admin/nav/nav.html
+        }
+    }
+}

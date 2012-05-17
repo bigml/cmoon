@@ -10,6 +10,7 @@ static void ltpl_donotcall()
     member_data_get(NULL, NULL, NULL, NULL);
     admin_data_get(NULL, NULL, NULL, NULL);
     paper_data_get(NULL, NULL, NULL, NULL);
+    nav_data_get(NULL, NULL, NULL, NULL);
 }
 
 int ltpl_config(const struct dirent *ent)

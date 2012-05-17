@@ -34,6 +34,10 @@ Db {
                 des [maxlen=500] = des
                 content = content
             }
+            nav {
+                statu [type=int] = statu
+            	pid [type=int] = pid
+            }
         }
     }
     InsertCol {
@@ -44,6 +48,9 @@ Db {
                 keyword [maxlen=500] = keyword
                 des [maxlen=500] = des
                 content = content
+            }
+            nav {
+            	pid [type=int,require=tre] = pid
             }
         }
     }
