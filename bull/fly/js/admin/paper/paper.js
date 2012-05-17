@@ -56,7 +56,7 @@ bmoon.admpaperpaper = {
                 });
                 o.e_paper.tablesorter({
                     headers: {
-                        4: {sorter: false}
+                        3: {sorter: false}
                     }
                 });
             }
@@ -90,7 +90,8 @@ bmoon.admpaperpaper = {
 
         $.getJSON('/json/admin/paper', pdata, function(data) {
             if (data.success == 1) {
-                noty({text:'操作成功', type: 'success', theme: 'noty_theme_mitgux', onClose: bmoon.utl.reload});
+                noty({text:'操作成功', type: 'success', theme: 'noty_theme_mitgux'});
+                me.parent().parent().remove();
             } else {
                 noty({text: data.errmsg, type: 'error', theme: 'noty_theme_mitgux'});
             }

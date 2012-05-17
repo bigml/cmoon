@@ -12,7 +12,7 @@ NEOERR* admin_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     SET_ADMIN_ACTION();
 
-    return STATUS_OK;
+    return nerr_pass(nav_data_get(cgi, dbh, evth, ses));
 }
 
 /*
@@ -31,15 +31,17 @@ NEOERR* admin_paper_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     mdb_pagediv(cgi->hdf, PRE_QUERY, &count, &offset, PRE_OUTPUT, cgi->hdf);
 
-    MDB_PAGEDIV_SET(cgi->hdf, PRE_OUTPUT, db, "paper", "1=1", NULL);
+    MDB_PAGEDIV_SET(cgi->hdf, PRE_OUTPUT, db, "paper", "statu=%d",
+                    NULL, PAPER_ST_OK);
     
-    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "1=1 ORDER BY id DESC "
-                  " LIMIT %d OFFSET %d", NULL, count, offset);
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "statu=%d ORDER BY id DESC "
+                  " LIMIT %d OFFSET %d",
+                  NULL, PAPER_ST_OK, count, offset);
     err = mdb_set_rows(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".papers",
                        NULL, MDB_FLAG_EMPTY_OK);
     if (err != STATUS_OK) return nerr_pass(err);
     
-    return STATUS_OK;
+    return nerr_pass(nav_data_get(cgi, dbh, evth, ses));
 }
 
 NEOERR* admin_paper_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
@@ -95,7 +97,7 @@ NEOERR* admin_paper_new_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses
 
     SET_ADMIN_ACTION();
 
-    return STATUS_OK;
+    return nerr_pass(nav_data_get(cgi, dbh, evth, ses));
 }
 
 NEOERR* admin_paper_edit_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
@@ -116,7 +118,7 @@ NEOERR* admin_paper_edit_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *se
     err = mdb_set_row(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".paper", MDB_FLAG_Z);
     if (err != STATUS_OK) return nerr_pass(err);
 
-    return STATUS_OK;
+    return nerr_pass(nav_data_get(cgi, dbh, evth, ses));
 }
 
 /*
@@ -138,8 +140,9 @@ NEOERR* admin_nav_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
                        NULL, MDB_FLAG_EMPTY_OK);
     if (err != STATUS_OK) return nerr_pass(err);
 
-    return STATUS_OK;
+    return nerr_pass(nav_data_get(cgi, dbh, evth, ses));
 }
+
 NEOERR* admin_nav_data_mod(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mdb_conn *db = hash_lookup(dbh, "main");

@@ -50,16 +50,12 @@ __BEGIN_DECLS
 
 #define HDF_FETCH_INT(hdf, key, ret)                \
     do {                                            \
-        if (hdf_get_value(hdf, key, NULL)) {        \
-            ret = hdf_get_int_value(hdf, key, 0);   \
-        }                                           \
+        ret = hdf_get_int_value(hdf, key, 0);       \
     } while (0)
 
 #define HDF_FETCH_ULONG(hdf, key, ret)                              \
     do {                                                            \
-        if (hdf_get_value(hdf, key, NULL)) {                        \
-            ret = strtoul(hdf_get_value(hdf, key, NULL), NULL, 10); \
-        }                                                           \
+        ret = strtoul(hdf_get_value(hdf, key, NULL), NULL, 10);     \
     } while (0)
 
 #define HDF_FETCH_STR(hdf, key, ret)            \

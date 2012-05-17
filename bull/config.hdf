@@ -4,17 +4,6 @@ Config {
 
 Dataset {
     layout.html {
-        tabs {
-            0 {
-                name = 首页
-                href = /index.html
-                class = selected
-            }
-            1 {
-                name = 来的来访
-                href = /index.html
-            }
-        }
     }
 }
 

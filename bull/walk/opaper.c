@@ -4,7 +4,22 @@
 
 NEOERR* paper_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
-    return STATUS_OK;
+    mdb_conn *db = hash_lookup(dbh, "main");
+    char *mname;
+    int id;
+    NEOERR *err;
+
+    HDF_GET_INT(cgi->hdf, PRE_QUERY".id", id);
+
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "id=%d AND statu=%d",
+                  NULL, id, PAPER_ST_OK);
+    err = mdb_set_row(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".paper",
+                      MDB_FLAG_EMPTY_OK);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    hdf_set_copy(cgi->hdf, PRE_LAYOUT".title", PRE_OUTPUT".paper.title");
+    
+    return nerr_pass(nav_data_get(cgi, dbh, evth, ses));
 }
 
 NEOERR* paper_class_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
@@ -25,7 +40,7 @@ NEOERR* paper_class_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     }
 
     if (pid == 0) {
-        hdf_set_valuef(cgi->hdf, PRE_OUTPUT".papers.%d.title=顶极分类", id);
+        hdf_set_valuef(cgi->hdf, PRE_OUTPUT".papers.%d.title=顶级分类", id);
     } else {
         MDB_QUERY_RAW(db, "paper", "title", "id=%d", NULL, pid);
         
@@ -53,7 +68,8 @@ NEOERR* paper_matchtitle_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *se
 
     HDF_GET_STR(cgi->hdf, PRE_QUERY".title", title);
 
-    MDB_QUERY_RAW(db, "paper", "id, title", "title LIKE '%%%s%%'", NULL, title);
+    MDB_QUERY_RAW(db, "paper", "id, title", "statu=%d AND "
+                  " title LIKE '%%%s%%'", NULL, PAPER_ST_OK, title);
     err = mdb_set_rows(cgi->hdf, db, "id, title", PRE_OUTPUT".titles",
                        NULL, MDB_FLAG_EMPTY_OK);
     if (err != STATUS_OK) return nerr_pass(err);
