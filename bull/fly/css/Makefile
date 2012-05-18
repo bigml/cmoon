@@ -13,7 +13,7 @@ preload:
 	@mkdir -p b/admin/paper/
 	@mkdir -p b/admin/nav/
 
-b/base.css: reset.css base.css layout.css modules/overlay.css
+b/base.css: reset.css base.css layout.css modules/overlay.css modules/cycle.css
 
 b/admin/paper/paper.css: modules/accordion.css modules/box.css \
                          modules/noty/jquery.noty.css modules/noty/noty_theme_mitgux.css \

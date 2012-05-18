@@ -172,6 +172,8 @@ bmoon.bull = {
             o.c_username = bmoon.utl.randomName();
             $.cookie('username', o.c_username, {'path': '/', 'expires': 36500});
         }
+
+        $('.slideshow').cycle({fx: 'fade'});
         /*
         if (!o.c_city) {
             $.getJSON('/json/city/ip', null, function(data) {

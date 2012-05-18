@@ -17,6 +17,7 @@ b/base.js: pub/jquery-1.7.1.js pub/jquery.cookie.js pub/jquery.md5.js \
            pub/jquery.bmoon.js pub/jquery.hotkeys.js pub/jquery.mninpval.js \
            pub/jquerytools/src/toolbox/toolbox.expose.js \
            pub/jquerytools/src/overlay/overlay.js \
+           pub/cycle/jquery.cycle.all.js \
            pub/bmoon.js bmoon.bull.js
 
 b/admin/paper/paper.js: pub/noty/js/jquery.noty.js \

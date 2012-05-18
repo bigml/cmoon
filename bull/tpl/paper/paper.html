@@ -1,5 +1,9 @@
-<h2><?cs var:Output.paper.title ?></h2>
+<?cs include:"modules/contact.html" ?>
 
-<?cs escape: "html" ?>
-<div id="paper-content"><?cs var: mkd.escape(Output.paper.content) ?></div>
-<?cs /escape ?>
+<div class="fright w640">
+  <h2 class="title"><?cs var:Output.paper.title ?></h2>
+
+  <?cs escape: "html" ?>
+  <div id="paper-content"><?cs var: mkd.escape(Output.paper.content) ?></div>
+  <?cs /escape ?>
+</div>

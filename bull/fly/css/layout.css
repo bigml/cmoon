@@ -13,7 +13,6 @@
     margin: 0 auto;
 }
 #bd-top {
-    height: 80px;
     margin-top: 20px;
 }
 #bd-bot {
@@ -26,7 +25,6 @@
     text-align: center;
     padding: 2ex 0;
 }
-#bd-top img {float: left;}
 #bd-bot p {text-indent: 0; margin: 2px;}
 #bd-bot p.right {text-align: right;}
 
@@ -92,6 +90,11 @@
     border:1px solid #AAAAAA;
     color:#112222;
     font-size:108%;
+}
+
+#bd-content .title {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #C8C2B7;
 }
 
 #bd-action {

@@ -51,6 +51,7 @@ table.list th {background-color: #eee; border-left:1px solid #CCCCCC; border-bot
 table.list td {border-left:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC; padding:4px 4px;}
 table.list td span {margin-left: 10px;}
 table.list tr:hover {background-color: #FFFFCC;}
+table.wider td {padding: 4px;}
 
 .hide {display: none !important;}
 .show {display: block !important;}
@@ -89,12 +90,19 @@ table.list tr:hover {background-color: #FFFFCC;}
 }
 /* 设计 span 的 width，需结合float使用，参考 fright */
 .w100 {width: 100px;}
+.w200 {width: 200px;}
+.w230 {width: 230px;}
+.w640 {width: 640px;}
 
+.mg1 {margin: 1em;b}
+.mg2 {margin: 2em;}
 .mr2 {margin-right: 2em;}
 .mr5 {margin-right: 5em;}
 .ml2 {margin-left: 2em;}
 .ml5 {margin-left: 5em;}
 
+.pd1 {padding: 1em;}
+.pd2 {padding: 2em;}
 .pr2 {padding-right: 2em;}
 .pr5 {padding-right: 5em;}
 .pl2 {padding-left: 2em;}
