@@ -115,6 +115,8 @@ NEOERR* ltpl_parse_file(HASH *dbh, HASH *evth,
         JUMP_NOK(err, wnext);
         err = mcs_register_mkd_functions(cs);
         JUMP_NOK(err, wnext);
+        err = mcs_register_string_uslice(cs);
+        JUMP_NOK(err, wnext);
 
         tpl = hdf_get_value(child, PRE_CFG_LAYOUT, "null.html");
         snprintf(fname, sizeof(fname), "%s/%s", PATH_TPL, tpl);

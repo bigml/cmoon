@@ -3,7 +3,7 @@
   <ul class="paper-list">
     <?cs each:p=Output.papersone ?>
     <li>
-      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:p.title ?></a></span>
+      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:string.uslice(p.title, 0, 13) ?></a></span>
       <span class="intime"><?cs var:p.inday ?></span>
     </li>
     <?cs /each ?>
@@ -15,7 +15,7 @@
   <ul class="paper-list">
     <?cs each:p=Output.paperstwo ?>
     <li>
-      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:p.title ?></a></span>
+      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:string.uslice(p.title, 0, 13) ?></a></span>
       <span class="intime"><?cs var:p.inday ?></span>
     </li>
     <?cs /each ?>
@@ -27,7 +27,7 @@
   <ul class="paper-list">
     <?cs each:p=Output.papersthree ?>
     <li>
-      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:p.title ?></a></span>
+      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:string.uslice(p.title, 0, 13) ?></a></span>
       <span class="intime"><?cs var:p.inday ?></span>
     </li>
     <?cs /each ?>
