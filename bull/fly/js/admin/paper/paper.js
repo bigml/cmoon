@@ -6,7 +6,7 @@ bmoon.admpaperpaper = {
         var o = bmoon.admpaperpaper;
         if (o.inited) return o;
 
-        o.e_nav = $('#inbox-nav');
+        o.e_nav = $('#paper-nav');
         o.e_paper = $('#paper-list');
         o.e_paper_del = $('a.del', o.e_paper);
         o.e_paper_rev = $('a.revert', o.e_paper);

@@ -1,3 +1,16 @@
+index {
+	Layout = layout.html
+    Dataset {
+        Layout {
+            css = <link rel="stylesheet" type="text/css" href="/css/b/paper/paper.css" />
+            js = <script type="text/javascript" src="/js/b/paper/index.js"></script>
+        }
+        Include {
+            content = paper/index.html
+        }
+    }
+}
+
 paper {
 	Layout = layout.html
     Dataset {

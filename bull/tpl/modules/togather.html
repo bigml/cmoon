@@ -1,0 +1,35 @@
+<div class="fleft w280">
+  <h3 class="group-title">新闻动态</h3>
+  <ul class="paper-list">
+    <?cs each:p=Output.papersone ?>
+    <li>
+      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:p.title ?></a></span>
+      <span class="intime"><?cs var:p.inday ?></span>
+    </li>
+    <?cs /each ?>
+  </ul>
+</div>
+
+<div class="fleft w280 ml2">
+  <h3 class="group-title">商标注册</h3>
+  <ul class="paper-list">
+    <?cs each:p=Output.paperstwo ?>
+    <li>
+      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:p.title ?></a></span>
+      <span class="intime"><?cs var:p.inday ?></span>
+    </li>
+    <?cs /each ?>
+  </ul>
+</div>
+
+<div class="fleft w280 ml2">
+  <h3 class="group-title">法律法规</h3>
+  <ul class="paper-list">
+    <?cs each:p=Output.papersthree ?>
+    <li>
+      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:p.title ?></a></span>
+      <span class="intime"><?cs var:p.inday ?></span>
+    </li>
+    <?cs /each ?>
+  </ul>
+</div>

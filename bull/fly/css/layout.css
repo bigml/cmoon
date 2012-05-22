@@ -92,11 +92,6 @@
     font-size:108%;
 }
 
-#bd-content .title {
-    padding-bottom: 8px;
-    border-bottom: 1px solid #C8C2B7;
-}
-
 #bd-action {
     -moz-border-radius: 5px 5px 5px 5px;
     border: 1px solid #DDDDDD;

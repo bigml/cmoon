@@ -1,0 +1,19 @@
+<div class="fright w640">
+  <h2 class="title"><?cs var:Output.paper.title ?></h2>
+
+  <?cs escape: "html" ?>
+  <div id="paper-content"><?cs var: mkd.escape(Output.paper.content) ?></div>
+  <?cs /escape ?>
+
+  <?cs if:?Output.papers.0.id ?>
+  <ul class="paper-list">
+    <?cs each:p=Output.papers ?>
+    <li class="clearfix">
+      <span class="title"><a href="/paper?id=<?cs var:p.id ?>"><?cs var:p.title ?></a></span>
+      <span class="intime"><?cs var:p.intime ?></span>
+    </li>
+    <?cs /each ?>
+  </ul>
+  <div id="paper-nav" class="page-nav"></div>
+  <?cs /if ?>
+</div>

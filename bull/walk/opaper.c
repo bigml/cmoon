@@ -11,15 +11,62 @@ NEOERR* paper_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     HDF_GET_INT(cgi->hdf, PRE_QUERY".id", id);
 
+    /*
+     * paper
+     */
     MDB_QUERY_RAW(db, "paper", _COL_PAPER, "id=%d AND statu=%d",
                   NULL, id, PAPER_ST_OK);
     err = mdb_set_row(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".paper",
                       MDB_FLAG_EMPTY_OK);
     if (err != STATUS_OK) return nerr_pass(err);
 
+    /*
+     * papers
+     */
+    int count, offset;
+
+    mdb_pagediv(cgi->hdf, PRE_QUERY, &count, &offset, PRE_OUTPUT, cgi->hdf);
+    MDB_PAGEDIV_SET(cgi->hdf, PRE_OUTPUT, db, "paper", "pid=%d AND statu=%d",
+                    NULL, id, PAPER_ST_OK);
+
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=%d AND statu=%d",
+                  NULL, id, PAPER_ST_OK);
+    err = mdb_set_rows(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".papers",
+                       NULL, MDB_FLAG_EMPTY_OK);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    /*
+     * PRE_LAYOUT
+     */
     hdf_set_copy(cgi->hdf, PRE_LAYOUT".title", PRE_OUTPUT".paper.title");
     
     return nerr_pass(nav_data_get(cgi, dbh, evth, ses));
+}
+
+NEOERR* index_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mdb_conn *db = hash_lookup(dbh, "main");
+    NEOERR *err;
+
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=11 AND statu=%d",
+                  NULL, PAPER_ST_OK);
+    err = mdb_set_rows(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".papersone",
+                       NULL, MDB_FLAG_EMPTY_OK);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=12 AND statu=%d",
+                  NULL, PAPER_ST_OK);
+    err = mdb_set_rows(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".paperstwo",
+                       NULL, MDB_FLAG_EMPTY_OK);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=13 AND statu=%d",
+                  NULL, PAPER_ST_OK);
+    err = mdb_set_rows(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".papersthree",
+                       NULL, MDB_FLAG_EMPTY_OK);
+    if (err != STATUS_OK) return nerr_pass(err);
+
+    return nerr_pass(paper_data_get(cgi, dbh, evth, ses));
 }
 
 NEOERR* paper_class_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)

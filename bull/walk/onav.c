@@ -22,8 +22,13 @@ NEOERR* nav_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     HDF *node = hdf_get_child(cgi->hdf, PRE_LAYOUT".tabs");
     while (node) {
         hdf_set_copy(node, "name", "title");
-        hdf_set_valuef(node, "href=/paper?_tab=%d&id=%s",
-                       cnt++, hdf_get_value(node, "pid", NULL));
+        if (cnt == 0) {
+            hdf_set_valuef(node, "href=/index?_tab=%d&id=%s",
+                           cnt++, hdf_get_value(node, "pid", NULL));
+        } else {
+            hdf_set_valuef(node, "href=/paper?_tab=%d&id=%s",
+                           cnt++, hdf_get_value(node, "pid", NULL));
+        }
         
         node = hdf_obj_next(node);
     }

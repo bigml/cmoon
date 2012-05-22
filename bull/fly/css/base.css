@@ -58,6 +58,8 @@ table.wider td {padding: 4px;}
 .valid {border: 1px solid green !important;}
 .invalid {border: 1px solid #800 !important;}
 .clearer {clear: both !important;}
+.cleft {clear: left;}
+.cright {clear: right;}
 .sep {display: block; clear: both; height: 3em;}
 .sepl {display: block; clear: both; height: 1em;}
 .decimal {font: 12px Georgia; font-weight: bold;}
@@ -92,6 +94,7 @@ table.wider td {padding: 4px;}
 .w100 {width: 100px;}
 .w200 {width: 200px;}
 .w230 {width: 230px;}
+.w280 {width: 280px;}
 .w640 {width: 640px;}
 
 .mg1 {margin: 1em;b}
