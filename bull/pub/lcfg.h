@@ -5,10 +5,10 @@
 
 __BEGIN_DECLS
 
-#define SITE_DOMAIN    "csgs.com"
+#define SITE_DOMAIN    "hnycsb.com"
 #define TC_ROOT        "/var/log/moon/bull/"
 
-#define URL_DATA       "http://www.csgs.com/data/"
+#define URL_DATA       "http://www.hnycsb.com/data/"
 #define URL_IMG         URL_DATA"images/"
 
 #define ROOT_DATA       "/var/www/bull/fly/data/"

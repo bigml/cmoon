@@ -1,5 +1,5 @@
-; var g_site_domain = "csgs.com",
-g_site_www = "http://www.csgs.com/";
+; var g_site_domain = "hnycsb.com",
+g_site_www = "http://www.hnycsb.com/";
 
 var bmoon = bmoon || {};
 bmoon.bull = {
