@@ -5,9 +5,8 @@
 __BEGIN_DECLS
 
 #define _COL_PAPER "id, pid, statu, title, keyword, des, content, "     \
-    " to_char(intime, 'YYYY-MM-DD HH:mm:SS') as intime, "               \
     " to_char(intime, 'YYYY-MM-DD') as inday, "                         \
-    " to_char(uptime, 'YYYY-MM-DD HH:mm:SS') as uptime"                 \
+    " to_char(uptime, 'YYYY-MM-DD HH:mm:SS') as intime"                 \
     
 enum {
     PAPER_ST_OK = 0,
