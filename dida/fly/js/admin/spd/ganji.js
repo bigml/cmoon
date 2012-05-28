@@ -174,7 +174,7 @@ bmoon.spdganji = {
 
             if (pn < 7) {
                 $.cookie('_dida_pn', pn, {path: '/'});
-                window.location = href.match(/.*ganji.com\/pincheshangxiaban\//)[0] + 'f' + (pn-1)*50;
+                window.location = location.href.match(/.*ganji.com\/pincheshangxiaban\//)[0] + 'f' + (pn-1)*50;
             } else {
                 //$.cookie('_dida_pn', 1, {path: '/'});
                 //window.location = href.match(/.*ganji.com\/pincheshangxiaban\//)[0];
@@ -182,7 +182,7 @@ bmoon.spdganji = {
                 window.open('', '_self', '');
                 window.close();
             }
-        }, 60*1000);
+        }, 6*1000);
     },
 
     parseDir: function() {
