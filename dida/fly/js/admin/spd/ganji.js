@@ -122,27 +122,29 @@ bmoon.spdganji = {
     parseList: function() {
         var o = bmoon.spdganji.init();
 
-        var
-        ids = [], urls = {},
+        var ids = [], ids2 = [],
+        urls = {},
+        cnt = 0,
         objs = $('a', '#con_one_1'),
         reg = /.*\/pincheshangxiaban\/(.*)\.htm$/;
 
         $.each(objs, function(i, obj) {
             if ($(obj).attr('href').match(reg)) {
                 var id = o.area + $(obj).attr('href').match(reg)[1];
-                ids.push(id);
+                if (cnt++ < 30) {
+                    ids.push(id);
+                } else {
+                    ids2.push(id);
+                }
                 urls[id] = 'http://' + o.area + '.ganji.com' + $(obj).attr('href');
             }
         });
 
-        $.getJSON(g_site_admin + 'json/spd/pre?JsonCallback=?', {
-            ori: 'ganji',
-            oids: ids
-        }, function(data) {
+        function callback(data) {
             if (data.success == 1) {
                 if (bmoon.utl.type(data.oids) == 'Object') {
                     $.each(data.oids, function(key, val) {
-                                 console.log(val);
+                        console.log(val);
                         setTimeout(function() {window.open(urls[val]);},
                                    Math.random()*50*1000);
                     });
@@ -152,7 +154,17 @@ bmoon.spdganji = {
             } else {
                 alert(data.errmsg || '操作失败');
             }
-        });
+        }
+
+        $.getJSON(g_site_admin + 'json/spd/pre?JsonCallback=?', {
+            ori: 'ganji',
+            oids: ids
+        }, callback);
+
+        $.getJSON(g_site_admin + 'json/spd/pre?JsonCallback=?', {
+            ori: 'ganji',
+            oids: ids2
+        }, callback);
         
         setTimeout(function() {
             var pn = $.cookie('_dida_pn');
@@ -181,7 +193,7 @@ bmoon.spdganji = {
 
         function get() {
             for (var i = 0; i < 2 && pos < cs.length; pos++) {
-                var href = 'http://' + cs[i] + '.ganji.com/pincheshangxiaban/';
+                var href = 'http://' + cs[pos] + '.ganji.com/pincheshangxiaban/';
                 window.open(href);
                 i++;
             }

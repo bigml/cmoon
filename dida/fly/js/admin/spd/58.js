@@ -269,7 +269,7 @@ bmoon.spd58 = {
             }
             */
             for (var i = 0; i < 2 && pos < cs.length; pos++) {
-                var href = 'http://' + cs[i] + '.58.com/pinche/';
+                var href = 'http://' + cs[pos] + '.58.com/pinche/';
                 window.open(href);
                 i++;
             }
