@@ -3,6 +3,7 @@
 // @namespace     http://www.imdida.org/
 // @description   get ganji's pinche imformation
 // @include       http://*.ganji.com/pincheshangxiaban/*
+// @include       http://www.ganji.com/index.htm
 // @exclude       http://diveintogreasemonkey.org/*
 // @exclude       http://www.diveintogreasemonkey.org/*
 // ==/UserScript==

@@ -251,8 +251,11 @@ bmoon.spd58 = {
 
         o.dcities = dcities;
         o.zcities = zcities;
+
+        cs = ['bj', 'cd', 'cs', 'gz', 'hz', 'jn', 'sh', 'sz', 'su', 'tj', 'wh'];
         
         function get() {
+            /*
             for (var i = 0; i < 5 && pos < cs.length; pos++) {
                 var href = $(cs[pos]).attr('href'),
                 c = href.match(/http:\/\/(.*).58.com/)[1];
@@ -264,8 +267,15 @@ bmoon.spd58 = {
                     i++;
                 }
             }
+            */
+            for (var i = 0; i < 2 && pos < cs.length; pos++) {
+                var href = 'http://' + cs[i] + '.58.com/pinche/';
+                window.open(href);
+                i++;
+            }
             setTimeout(get, 10*60*1000);
         }
+
         get();
     }
 };

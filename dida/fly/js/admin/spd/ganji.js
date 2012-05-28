@@ -16,27 +16,14 @@ bmoon.spdganji = {
         var href = location.href;
 
         o.area = href.match(/http:\/\/(.*).ganji.*/)[1];
-        
-        if (href.match(/.*\/([0-9|_]+x)\.htm$/)) {
+
+        if (href.match(/www.ganji.com\/index.htm/)) {
+            o.parseDir();
+        } else if (href.match(/.*\/([0-9|_]+x)\.htm$/)) {
             o.parseNode(o.area + href.match(/.*\/([0-9|_]+x)\.htm$/)[1]);
         } else if (href.match(/.*ganji.com\/pincheshangxiaban\//)){
             o.parseList();
         }
-
-        setTimeout(function() {
-            var pn = $.cookie('_dida_pn');
-
-            if (!pn) pn = '1';
-            pn = parseInt(pn) + 1;
-
-            if (pn < 10) {
-                $.cookie('_dida_pn', pn, {path: '/'});
-                window.location = href.match(/.*ganji.com\/pincheshangxiaban\//)[0] + 'f' + (pn-1)*50;
-            } else {
-                $.cookie('_dida_pn', 1, {path: '/'});
-                window.location = href.match(/.*ganji.com\/pincheshangxiaban\//)[0];
-            }
-        }, 2*60*1000);
     },
 
     bindClick: function() {
@@ -148,25 +135,61 @@ bmoon.spdganji = {
             }
         });
 
-        $.getJSON(g_site_admin + 'json/spd/pre?JsonCallback=?',
-                 {
-                     ori: 'ganji',
-                     oids: ids
-                 }, function(data) {
-                     if (data.success == 1) {
-                         if (bmoon.utl.type(data.oids) == 'Object') {
-                             $.each(data.oids, function(key, val) {
+        $.getJSON(g_site_admin + 'json/spd/pre?JsonCallback=?', {
+            ori: 'ganji',
+            oids: ids
+        }, function(data) {
+            if (data.success == 1) {
+                if (bmoon.utl.type(data.oids) == 'Object') {
+                    $.each(data.oids, function(key, val) {
                                  console.log(val);
-                                 setTimeout(function() {window.open(urls[val]);},
-                                            Math.random()*50*1000);
-                             });
-                         } else {
-                             console.log('dida ALL DONE');
-                         }
-                     } else {
-                         alert(data.errmsg || '操作失败');
-                     }
-                 })
+                        setTimeout(function() {window.open(urls[val]);},
+                                   Math.random()*50*1000);
+                    });
+                } else {
+                    console.log('dida ALL DONE');
+                }
+            } else {
+                alert(data.errmsg || '操作失败');
+            }
+        });
+        
+        setTimeout(function() {
+            var pn = $.cookie('_dida_pn');
+
+            if (!pn) pn = '1';
+            pn = parseInt(pn) + 1;
+
+            if (pn < 7) {
+                $.cookie('_dida_pn', pn, {path: '/'});
+                window.location = href.match(/.*ganji.com\/pincheshangxiaban\//)[0] + 'f' + (pn-1)*50;
+            } else {
+                //$.cookie('_dida_pn', 1, {path: '/'});
+                //window.location = href.match(/.*ganji.com\/pincheshangxiaban\//)[0];
+                window.opener = null;
+                window.open('', '_self', '');
+                window.close();
+            }
+        }, 60*1000);
+    },
+
+    parseDir: function() {
+        var o = bmoon.spdganji.init();
+
+        var cs = ['cs', 'bj', 'sh', 'gz', 'sz', 'wh', 'nj', 'tj', 'hz'],
+        pos = 0;
+
+        function get() {
+            for (var i = 0; i < 2 && pos < cs.length; pos++) {
+                var href = 'http://' + cs[i] + '.ganji.com/pincheshangxiaban/';
+                window.open(href);
+                i++;
+            }
+
+            setTimeout(get, 10*60*1000);
+        }
+
+        get();
     }
 };
 
