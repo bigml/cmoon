@@ -182,7 +182,7 @@ bmoon.spdganji = {
                 window.open('', '_self', '');
                 window.close();
             }
-        }, 6*1000);
+        }, 60*1000);
     },
 
     parseDir: function() {
