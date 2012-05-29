@@ -172,7 +172,7 @@ bmoon.spdganji = {
             if (!pn) pn = '1';
             pn = parseInt(pn) + 1;
 
-            if (pn < 7) {
+            if (pn < 4) {
                 $.cookie('_dida_pn', pn, {path: '/'});
                 window.location = location.href.match(/.*ganji.com\/pincheshangxiaban\//)[0] + 'f' + (pn-1)*50;
             } else {
@@ -188,17 +188,24 @@ bmoon.spdganji = {
     parseDir: function() {
         var o = bmoon.spdganji.init();
 
-        var cs = ['cs', 'bj', 'sh', 'gz', 'sz', 'wh', 'nj', 'tj', 'hz'],
+        var cs = [
+            'cs', 'bj', 'sh', 'gz', 'sz', 'wh', 'nj', 'tj', 'hz',
+            'cd', 'cq', 'cc', 'dl', 'dg', 'fz', 'foshan', 'gy',
+            'gl', 'hrb', 'hf', 'ngm', 'hn', 'jn', 'km', 'lz',
+            'xz', 'nj', 'nb', 'nn', 'nc', 'qd', 'sy', 'sjz',
+            'su', 'ty', 'wx', 'xj', 'wei', 'xa', 'xm', 'xn',
+            'yc', 'yichang', 'yantai', 'zz', 'zhuhai'
+        ],
         pos = 0;
 
         function get() {
-            for (var i = 0; i < 2 && pos < cs.length; pos++) {
+            for (var i = 0; i < 1 && pos < cs.length; pos++) {
                 var href = 'http://' + cs[pos] + '.ganji.com/pincheshangxiaban/';
                 window.open(href);
                 i++;
             }
 
-            setTimeout(get, 10*60*1000);
+            setTimeout(get, 5*60*1000);
         }
 
         get();

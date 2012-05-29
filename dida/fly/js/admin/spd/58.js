@@ -179,7 +179,7 @@ bmoon.spd58 = {
             if (!pn) pn = '1';
             pn = parseInt(pn) + 1;
 
-            if (pn < 7) {
+            if (pn < 4) {
                 $.cookie('_dida_pn', pn, {path: '/'});
                 window.location = location.href.match(/.*58.com\/pinche\//)[0] + 'pn' + pn;
             } else {
@@ -252,7 +252,8 @@ bmoon.spd58 = {
         o.dcities = dcities;
         o.zcities = zcities;
 
-        cs = ['bj', 'cd', 'cs', 'gz', 'hz', 'jn', 'sh', 'sz', 'su', 'tj', 'wh'];
+        cs = ['bj', 'cd', 'cs', 'gz', 'hz', 'jn', 'sh', 'sz', 'su', 'tj', 'wh',
+             'dg', 'dl', 'lz', 'ty', 'zz', 'xa', 'nj', 'nc', 'qd', 'km'];
         
         function get() {
             /*
@@ -268,12 +269,12 @@ bmoon.spd58 = {
                 }
             }
             */
-            for (var i = 0; i < 2 && pos < cs.length; pos++) {
+            for (var i = 0; i < 1 && pos < cs.length; pos++) {
                 var href = 'http://' + cs[pos] + '.58.com/pinche/';
                 window.open(href);
                 i++;
             }
-            setTimeout(get, 10*60*1000);
+            setTimeout(get, 5*60*1000);
         }
 
         get();
