@@ -4,6 +4,7 @@
 // @description   get ganji's pinche imformation
 // @include       http://*.ganji.com/pincheshangxiaban/*
 // @include       http://www.ganji.com/index.htm
+// @exclude       http://p.yigao.com/*
 // @exclude       http://diveintogreasemonkey.org/*
 // @exclude       http://www.diveintogreasemonkey.org/*
 // ==/UserScript==

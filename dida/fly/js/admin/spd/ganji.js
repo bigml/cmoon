@@ -191,7 +191,7 @@ bmoon.spdganji = {
         var cs = [
             'cs', 'bj', 'sh', 'gz', 'sz', 'wh', 'nj', 'tj', 'hz',
             'cd', 'cq', 'cc', 'dl', 'dg', 'fz', 'foshan', 'gy',
-            'gl', 'hrb', 'hf', 'ngm', 'hn', 'jn', 'km', 'lz',
+            'gl', 'hrb', 'hf', 'hn', 'jn', 'km', 'lz',
             'xz', 'nj', 'nb', 'nn', 'nc', 'qd', 'sy', 'sjz',
             'su', 'ty', 'wx', 'xj', 'wei', 'xa', 'xm', 'xn',
             'yc', 'yichang', 'yantai', 'zz', 'zhuhai'
