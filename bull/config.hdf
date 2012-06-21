@@ -9,7 +9,8 @@ Dataset {
 
 Db {
     Dsn {
-    	main = pgsql:dbname=csgs host=localhost user=fu password=qiang
+#    	main = pgsql:dbname=net77661696 host=localhost user=net77661696 password=336okKwO
+        main = pgsql:dbname=csgs host=localhost user=fu password=qiang
     }
     QueryCond {
     }

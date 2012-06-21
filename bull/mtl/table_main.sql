@@ -35,3 +35,10 @@ CREATE TABLE nav (
 	pid int NOT NULL DEFAULT 0,
     PRIMARY KEY(pos)
 );
+
+CREATE TABLE mp3 (
+    id SERIAL,
+    mid int NOT NULL DEFAULT 0,
+    title varchar(300) NOT NULL DEFAULT '',
+    PRIMARY KEY (id)
+);

@@ -266,12 +266,12 @@ bmoon.bull = {
             o.loginoverlay.close();
             o.mnick.text(o.c_mname);
             //o.guest.addClass('hide');
-            //o.member.removeClass('hide');
+            o.member.removeClass('hide');
             o.loginmname.val(o.c_mname);
             return true;
         } else {
-            //o.member.addClass('hide');
             //o.guest.removeClass('hide');
+            o.member.addClass('hide');
             return false;
         }
     },

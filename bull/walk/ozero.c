@@ -38,3 +38,23 @@ NEOERR* zero_image_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 
     return STATUS_OK;
 }
+
+NEOERR* zero_mp3_data_add(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mdb_conn *db = hash_lookup(dbh, "main");
+    int mid, stage;
+    char *title;
+    NEOERR *err;
+
+    HDF_GET_INT(cgi->hdf, PRE_QUERY".mid", mid);
+    HDF_GET_INT(cgi->hdf, PRE_QUERY".stage", stage);
+    HDF_GET_STR(cgi->hdf, PRE_QUERY".title", title);
+
+    MDB_QUERY_RAW(db, "mp3", "mid", "mid=%d", NULL, mid);
+    if (mdb_get_rows(db) > 0) return nerr_raise(NERR_ASSERT, "%d already in", mid);
+
+    MDB_EXEC(db, NULL, "INSERT INTO mp3 (stage, mid, title) VALUES (%d, %d, '%s')",
+             NULL, stage, mid, title);
+
+    return STATUS_OK;
+}

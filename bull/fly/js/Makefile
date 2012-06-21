@@ -5,7 +5,8 @@ include $(BASEDIR)Make.env
 FILES = b/base.js \
         b/admin/paper/paper.js b/admin/paper/new.js b/admin/paper/edit.js \
         b/admin/nav/nav.js \
-        b/paper/paper.js
+        b/paper/paper.js \
+        b/xbd.js
 
 all: preload $(FILES)
 
@@ -40,6 +41,8 @@ b/admin/nav/nav.js: pub/jquery.mntips.js \
                     admin/admin.js admin/nav/nav.js
 
 b/paper/paper.js: pub/jquery.mnnav.js paper/paper.js
+
+b/xbd.js: pub/jquery-1.7.1.js xbd-gb.js
 
 %.js:
 	@echo -n > $@

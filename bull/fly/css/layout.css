@@ -28,10 +28,11 @@
 #bd-bot p {text-indent: 0; margin: 2px;}
 #bd-bot p.right {text-align: right;}
 
+#bd-logo {float:left;}
 #bd-personal {float: right; margin: 12px 0 0 0; display: inline;}
 #bd-personal ul li{display: inline; float: left; margin: 5px 0;    padding: 0 8px; border-right: 1px solid #101010; display: inline;}
 #bd-personal ul li.last{border-right: 0 none;}
-#bd-member {display: none;}
+/*#bd-member {display: none;}*/
 
 #bd-nav {
     background-color: #FFFFFF;
@@ -42,6 +43,7 @@
     float: left;
     list-style-type: none;
     margin: 0;
+    margin-top: 1ex;
     padding: 0 30px 0 30px;
     width: 900px;
 }

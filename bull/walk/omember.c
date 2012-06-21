@@ -41,6 +41,22 @@ NEOERR* member_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     return STATUS_OK;
 }
 
+NEOERR* member_logout_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
+{
+    mdb_conn *db = hash_lookup(dbh, "main");
+    char *mname;
+    NEOERR *err;
+    
+    MCS_NOT_NULLB(cgi->hdf, db);
+
+    MEMBER_CHECK_LOGIN();
+
+    MDB_EXEC(db, NULL, "UPDATE member SET mmsn='0' WHERE mname=$1",
+             "s", mname);
+
+    return STATUS_OK;
+}
+
 NEOERR* member_check_login_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
 {
     mdb_conn *db = hash_lookup(dbh, "main");

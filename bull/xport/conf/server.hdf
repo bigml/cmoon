@@ -3,7 +3,7 @@ Config {
 }
 
 Mevent {
-    logfile = /var/log/moon/voov/mevent
+    logfile = /var/log/moon/bull/mevent
     plugins {
         0 = skeleton
     }
