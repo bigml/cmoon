@@ -48,19 +48,19 @@ NEOERR* index_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
     mdb_conn *db = hash_lookup(dbh, "main");
     NEOERR *err;
 
-    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=11 AND statu=%d",
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=4 AND statu=%d",
                   NULL, PAPER_ST_OK);
     err = mdb_set_rows(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".papersone",
                        NULL, MDB_FLAG_EMPTY_OK);
     if (err != STATUS_OK) return nerr_pass(err);
 
-    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=12 AND statu=%d",
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=3 AND statu=%d",
                   NULL, PAPER_ST_OK);
     err = mdb_set_rows(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".paperstwo",
                        NULL, MDB_FLAG_EMPTY_OK);
     if (err != STATUS_OK) return nerr_pass(err);
 
-    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=13 AND statu=%d",
+    MDB_QUERY_RAW(db, "paper", _COL_PAPER, "pid=6 AND statu=%d",
                   NULL, PAPER_ST_OK);
     err = mdb_set_rows(cgi->hdf, db, _COL_PAPER, PRE_OUTPUT".papersthree",
                        NULL, MDB_FLAG_EMPTY_OK);
