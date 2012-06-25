@@ -1,5 +1,8 @@
 yctm.com
 
 
-hnycsb.com
-	61.155.152.160 	3600
+hnycsb.com A 61.155.152.160 	3600
+
+
+www.hnycsb.com CNAME unix-l200-g1.xincache.cn
+
