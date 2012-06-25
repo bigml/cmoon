@@ -66,6 +66,9 @@ NEOERR* index_data_get(CGI *cgi, HASH *dbh, HASH *evth, session_t *ses)
                        NULL, MDB_FLAG_EMPTY_OK);
     if (err != STATUS_OK) return nerr_pass(err);
 
+    hdf_set_value(cgi->hdf, PRE_QUERY".id", "1");
+    hdf_set_value(cgi->hdf, PRE_QUERY"._tab", "0");
+
     return nerr_pass(paper_data_get(cgi, dbh, evth, ses));
 }
 
