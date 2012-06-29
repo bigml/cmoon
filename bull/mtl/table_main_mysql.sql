@@ -10,7 +10,7 @@ CREATE TABLE member (
 
     intime timestamp DEFAULT now(),
     PRIMARY KEY (mname)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE paper (
     id SERIAL,
@@ -24,11 +24,11 @@ CREATE TABLE paper (
 
     uptime timestamp DEFAULT now() ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE nav (
 	pos SERIAL,
     statu smallint NOT NULL DEFAULT 0,
 	pid int NOT NULL DEFAULT 0,
     PRIMARY KEY(pos)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
