@@ -75,7 +75,9 @@ lighttpd
 
 nginx
 =====
-spawn-fcgi -d /var/www/dida/fly/run/ -f /var/www/dida/fly/run/viki -a 127.0.0.1 -p 9001
+tcp #spawn-fcgi -d /var/www/dida/fly/run/ -f /var/www/dida/fly/run/viki -a 127.0.0.1 -p 9001
+unix domain socket #spawn-fcgi -F 60 -d /var/www/dida/fly/run/ -f /var/www/dida/fly/run/viki -s /var/run/viki.socket -u www
+    (www is the nginx username)
 
 server
 {
@@ -90,7 +92,8 @@ server
     
     location ~ ^/run/.*$ {
         include fastcgi.conf;
-        fastcgi_pass 127.0.0.1:9001;
+tcp        fastcgi_pass 127.0.0.1:9001;
+unix domain socket        fastcgi_pass unix:/var/run/viki.socket;
         fastcgi_index viki;
         fastcgi_param SCRIPT_FILENAME  /var/www/dida/fly/run/$fastcgi_script_name;
         fastcgi_param QUERY_STRING     $query_string;
