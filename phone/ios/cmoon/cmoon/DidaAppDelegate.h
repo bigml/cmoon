@@ -7,12 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "DidaNetWorkEngine.h"
 #import "CommomDefine.h"
+#import "ArcHelper.h"
 
-@interface DidaAppDelegate : UIResponder <UIApplicationDelegate>
+@interface DidaAppDelegate : UIResponder <UIApplicationDelegate,UITabBarControllerDelegate>
+
+
 
 @property (retain, nonatomic) UIWindow *window;
 
 @property (retain,nonatomic) DidaNetWorkEngine * engine;
+
+@property (nonatomic,retain) UITabBarController *tabeViewController;
+
 @end
