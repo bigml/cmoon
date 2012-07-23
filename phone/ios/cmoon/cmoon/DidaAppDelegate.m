@@ -9,24 +9,50 @@
 #import "DidaAppDelegate.h"
 #import "DidaNetWorkEngine.h"
 #import "DidaViewController.h"
+#import "HomeMapController.h"
 
 @implementation DidaAppDelegate
 
 @synthesize window = _window;
 @synthesize engine = _engine;
 
+
+@synthesize tabeViewController;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     _window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    [_window setBackgroundColor:[UIColor whiteColor]];
+    //initial the networkengine
     [self initNetworkEngine];
     [_engine setReachabilityChangedHandler:networkChangedListener];
+    //initial the location manager
+        
     // Override point for customization after application launch.
     DidaViewController *controller = [[DidaViewController alloc ]init];
-    UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    //[controller release];
-    [_window addSubview:navigationController.view];
-    [navigationController release];
-    //[_window makeKeyAndVisible];
+    
+    tabeViewController = [[UITabBarController alloc] init];
+    tabeViewController.delegate = self;
+    NSMutableArray * childControllers = [[NSMutableArray alloc]initWithCapacity:2];
+    HomeMapController * mapController = [[HomeMapController alloc] init];
+    
+    UITabBarItem * firstItem = [[UITabBarItem alloc]initWithTabBarSystemItem:UITabBarSystemItemFavorites tag:1];
+    mapController.tabBarItem = firstItem;
+    [firstItem release];
+    
+    [childControllers addObject:mapController];
+    [mapController release];
+    
+    UITabBarItem *secondTab = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:2];
+    controller.tabBarItem = secondTab;
+    [secondTab release];
+    [childControllers addObject:controller];
+    [controller release];
+    
+    tabeViewController.viewControllers = childControllers;
+    _window.rootViewController = tabeViewController;
+    [_window makeKeyAndVisible];
+    [childControllers release];
     return YES;
 }
 /**
@@ -62,7 +88,7 @@ void (^networkChangedListener)(NetworkStatus netstatus) = ^(NetworkStatus nstatu
         DidaNetWorkEngine * engine = [[DidaNetWorkEngine alloc] initWithHostName:SERVER_HOST customHeaderFields:headerFields];
         self.engine = engine;
         [engine release];
-        NSLog(@"%d",[self.engine retainCount]);
+        //NSLog(@"%d",[self.engine retainCount]);
         [_engine useCache];
     }
     @catch (NSException *exception) {
@@ -98,7 +124,15 @@ void (^networkChangedListener)(NetworkStatus netstatus) = ^(NetworkStatus nstatu
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [_engine emptyCache];
     [_engine release];
+    [tabeViewController release];
+    
+    
 }
 
+#pragma tabviewbar click delegate
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    //click the item bar
+    NSLog(@"onClicked...");
+}
 
 @end
